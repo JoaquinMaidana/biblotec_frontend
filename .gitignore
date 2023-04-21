@@ -13,24 +13,24 @@ nbproject
 Thumbs.db
 
 # composer vendor dir
-/vendor
+##/vendor
 
 # composer itself is not needed
-composer.phar
+##composer.phar
 
 # composer lock
-composer.lock
+##composer.lock
 
 # Mac DS_Store Files
-.DS_Store
+##.DS_Store
 
 # phpunit itself is not needed
-phpunit.phar
+##phpunit.phar
 # local phpunit config
-/phpunit.xml
+##/phpunit.xml
 
 tests/_output/*
 tests/_support/_generated
 
 #vagrant folder
-/.vagrant
+##/.vagrant
