@@ -2,55 +2,17 @@
   "libros": [
     {
       "lib_id": 1,
-      "lib_isbn": "978-8467055345",
-      "lib_titulo": "Los pilares de la Tierra",
-      "lib_descripcion": "Una obra épica sobre la construcción de una catedral en la Edad Media.",
-      "lib_imagen": "https://images-na.ssl-images-amazon.com/images/I/71sJ00KsSBL.jpg",
-      "lib_categoria": 1,
-      "lib_sub_categoria": 4,
-      "lib_url": "https://www.amazon.es/Los-pilares-Tierra-Ken-Follett/dp/846705534X",
-      "lib_stock": 10,
-      "lib_autores": "Ken Follett",
-      "lib_edicion": "1ª edición",
-      "lib_fecha_lanzamiento": "1989-10-02",
-      "lib_novedades": "S",
-      "lib_idioma": "Español",
-      "lib_disponible": "S",
-      "lib_vigente": "S",
-      "lib_puntuacion": 4.7
-    }
-    {
-      "lib_id": 2,
-      "lib_isbn": "978-0307474278",
-      "lib_titulo": "Cien años de soledad",
-      "lib_descripcion": "Una novela que explora la historia de la familia Buendía en un pueblo imaginario de Colombia.",
-      "lib_imagen": "https://images-na.ssl-images-amazon.com/images/I/71s1L+Q2bpL.jpg",
-      "lib_categoria": 2,
-      "lib_sub_categoria": 3,
-      "lib_url": "https://www.amazon.es/Cien-a%C3%B1os-soledad-Gabriel-M%C3%A1rquez/dp/0307474275",
-      "lib_stock": 5,
-      "lib_autores": "Gabriel García Márquez",
-      "lib_edicion": "1ª edición",
-      "lib_fecha_lanzamiento": "1967-05-30",
-      "lib_novedades": "S",
-      "lib_idioma": "Español",
-      "lib_disponible": "S",
-      "lib_vigente": "S",
-      "lib_puntuacion": 4.6
-    }
-    {
-      "lib_id": 3,
-      "lib_isbn": "9788466347160",
-      "lib_titulo": "La Sombra del Viento",
-      "lib_descripcion": "Barcelona, 1945. Daniel Sempere y su padre, un librero de libros raros, llevan a cabo la misión secreta de ocultar un libro cuyo autor es perseguido por la dictadura franquista. El laberinto de intrigas que se despliega a su alrededor los lleva a una conspiración que puede cambiar el destino de la ciudad.",
-      "lib_imagen": "https://images-na.ssl-images-amazon.com/images/I/51PUf5AFzvL._SX306_BO1,204,203,200_.jpg",
+      "lib_isbn": "978-8490353787",
+      "lib_titulo": "Introducción a la programación con Python",
+      "lib_descripcion": "Este libro es una introducción a la programación en Python, un lenguaje de programación muy popular y poderoso que se utiliza en una gran variedad de campos, desde la informática hasta la biología.",
+      "lib_imagen": "https://images-na.ssl-images-amazon.com/images/I/51tODnAAhGL._SX415_BO1,204,203,200_.jpg",
       "lib_categoria": 1,
       "lib_sub_categoria": 3,
-      "lib_url": "https://www.amazon.es/Sombra-del-viento-El/dp/8466347162",
+      "lib_url": "https://www.amazon.es/Introducci%C3%B3n-la-programaci%C3%B3n-con-Python/dp/8490353788",
       "lib_stock": 10,
-      "lib_autores": "Carlos Ruiz Zafón",
-      "lib_edicion": "1",
-      "lib_fecha_lanzamiento": "2001-10-01",
+      "lib_autores": "John Guttag",
+      "lib_edicion": "3",
+      "lib_fecha_lanzamiento": "2015-07-28",
       "lib_novedades": "N",
       "lib_idioma": "Español",
       "lib_disponible": "N",
@@ -58,24 +20,68 @@
       "lib_puntuacion": 4.7
     }
     {
-      "lib_id": 4,
-      "lib_isbn": "9780307277671",
-      "lib_titulo": "The Brief Wondrous Life of Oscar Wao",
-      "lib_descripcion": "Oscar es un nerd gordo de origen dominicano que vive en un barrio pobre de New Jersey. Su familia está maldita: su abuela fue una devota de Trujillo y su hermana está en una institución mental. A medida que Oscar crece, se enamora de las mujeres equivocadas y se convierte en escritor.",
-      "lib_imagen": "https://images-na.ssl-images-amazon.com/images/I/51eTzMmlBkL._SX328_BO1,204,203,200_.jpg",
-      "lib_categoria": 2,
-      "lib_sub_categoria": 1,
-      "lib_url": "https://www.amazon.com/Brief-Wondrous-Life-Oscar-Wao/dp/1594483299",
+      "lib_id": 2,
+      "lib_isbn": "978-8429174243",
+      "lib_titulo": "Introducción a la inteligencia artificial",
+      "lib_descripcion": "Este libro es una introducción a la inteligencia artificial, una disciplina que busca crear máquinas que puedan realizar tareas que requieren inteligencia humana, como el reconocimiento de imágenes o la traducción automática.",
+      "lib_imagen": "https://images-na.ssl-images-amazon.com/images/I/51wiGlmI-GL._SX346_BO1,204,203,200_.jpg",
+      "lib_categoria": 1,
+      "lib_sub_categoria": 5,
+      "lib_url": "https://www.amazon.es/Introducci%C3%B3n-la-inteligencia-artificial-Computer/dp/8429174246",
       "lib_stock": 5,
-      "lib_autores": "Junot Diaz",
-      "lib_edicion": "1",
-      "lib_fecha_lanzamiento": "2007-09-06",
-      "lib_novedades": "N",
-      "lib_idioma": "Inglés",
+      "lib_autores": "Wolfgang Ertel",
+      "lib_edicion": "2",
+      "lib_fecha_lanzamiento": "2019-06-01",
+      "lib_novedades": "S",
+      "lib_idioma": "Español",
       "lib_disponible": "S",
       "lib_vigente": "S",
-      "lib_puntuacion": 4.0
+      "lib_puntuacion": 4.4
     }
+
+    {
+      "lib_id": 3,
+      "lib_isbn": "978-987-7393-33-2",
+      "lib_titulo": "Cálculo Diferencial e Integral: Una introducción",
+      "lib_descripcion": "Este libro ofrece una introducción al cálculo diferencial e integral, una rama fundamental de las matemáticas que se enfoca en el estudio de las funciones y sus propiedades. Incluye ejemplos y ejercicios prácticos para que el lector pueda aplicar lo aprendido en situaciones reales.",
+      "lib_imagen": "https://www.editorial.com/imagenes/libros/calculo-diferencial-e-integral-una-introduccion.jpg",
+      "lib_categoria": 2,
+      "lib_sub_categoria": 5,
+      "lib_url": "https://www.editorial.com/libros/calculo-diferencial-e-integral-una-introduccion",
+      "lib_stock": 8,
+      "lib_autores": "José García, Ana Martínez",
+      "lib_edicion": "4ta edición",
+      "lib_fecha_lanzamiento": "2022-09-10",
+      "lib_novedades": "S",
+      "lib_idioma": "Español",
+      "lib_disponible": "S",
+      "lib_vigente": "S",
+      "lib_puntuacion": 4.7
+    }
+
+    {
+      "lib_id": 4,
+      "lib_isbn": "978-0321570559",
+      "lib_titulo": "Discrete and Combinatorial Mathematics: An Applied Introduction",
+      "lib_descripcion": "Este libro es un texto de matemáticas discretas diseñado para estudiantes de ciencias de la computación, matemáticas y tecnología de la información. El autor, Ralph P. Grimaldi, cubre una amplia variedad de temas en matemáticas discretas, incluyendo conjuntos, funciones, teoría de grafos, combinatoria, teoría de números, álgebra booleana y lógica proposicional. El enfoque aplicado de este libro lo hace ideal para cursos introductorios en matemáticas discretas para estudiantes de ciencias de la computación y tecnología de la información.",
+      "lib_imagen": "https://images-na.ssl-images-amazon.com/images/I/51S3Y3qOaIL._SX394_BO1,204,203,200_.jpg",
+      "lib_categoria": 1,
+      "lib_sub_categoria": 2,
+      "lib_url": "https://www.amazon.com/Discrete-Combinatorial-Mathematics-Applied-Introduction/dp/032157055X",
+      "lib_stock": 10,
+      "lib_autores": "Ralph P. Grimaldi",
+      "lib_edicion": "5th Edition",
+      "lib_fecha_lanzamiento": "2002-06-11",
+      "lib_novedades": "N",
+      "lib_idioma": "Inglés",
+      "lib_disponible": "Y",
+      "lib_vigente": "Y",
+      "lib_puntuacion": 4.5
+    }
+
+
+
+
   ],
   "users": [
     {
