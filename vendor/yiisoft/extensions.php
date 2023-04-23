@@ -58,4 +58,13 @@ return array (
       '@yii/twig' => $vendorDir . '/yiisoft/yii2-twig',
     ),
   ),
+  'yiisoft/yii2-httpclient' => 
+  array (
+    'name' => 'yiisoft/yii2-httpclient',
+    'version' => '2.0.14.0',
+    'alias' => 
+    array (
+      '@yii/httpclient' => $vendorDir . '/yiisoft/yii2-httpclient/src',
+    ),
+  ),
 );
