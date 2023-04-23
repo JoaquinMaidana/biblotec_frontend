@@ -1,36 +1,42 @@
 <?php
 
-use app\models\Libro;
+
 use yii\helpers\Html;
-use yii\helpers\Url;
-use yii\grid\ActionColumn;
-use yii\grid\GridView;
+
 
 /** @var yii\web\View $this */
 
 $this->title = 'Libros';
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="libro-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-
-    <table id="myTable" >
+    <p>
+        <?= Html::a('Crear Libro', ['create'], ['class' => 'btn btn-success']) ?>
+    </p>
+ 
+     <table id="myTable">
     <thead>
         <tr>
-            <th>Column 1</th>
-            <th>Column 2</th>
+            <th>Libro id</th>
+            <th>Libro isbn</th>
+            <th>Accion</th>
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <td>Row 1 Data 1</td>
-            <td>Row 1 Data 2</td>
-        </tr>
-        <tr>
-            <td>Row 2 Data 1</td>
-            <td>Row 2 Data 2</td>
-        </tr>
+        <?php foreach ($libros_Array as $row): ?>
+            <tr>
+                <td><?= $row['id'] ?></td>
+                <td><?= $row['lib_isbn'] ?></td>
+                <td>
+                        <?= Html::a('Detalle libro', ['view', 'idlibros' => $row['id']], ['class' => 'btn btn-success']) ?>
+                        <?= Html::a('Modificar libro', ['update', 'idlibros' => $row['id']], ['class' => 'btn btn-secondary']) ?>
+                        <?= Html::a('Borrar libro', ['delete', 'idlibros' => $row['id']], ['class' => 'btn btn-danger']) ?>
+                </td>
+            </tr>
+        <?php endforeach; ?>
     </tbody>
 </table>
     
@@ -40,8 +46,3 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
 
-<script>
-    $(document).ready( function () {
-    $('#myTable').DataTable();
-} );
-</script>
