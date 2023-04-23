@@ -1,47 +1,47 @@
 <?php
 
-use app\models\Libro;
 use yii\helpers\Html;
-use yii\helpers\Url;
-use yii\grid\ActionColumn;
-use yii\grid\GridView;
 
 /** @var yii\web\View $this */
 
 $this->title = 'Libros';
-$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="libro-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <table id="myTable" >
-    <thead>
-        <tr>
-            <th>Column 1</th>
-            <th>Column 2</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>Row 1 Data 1</td>
-            <td>Row 1 Data 2</td>
-        </tr>
-        <tr>
-            <td>Row 2 Data 1</td>
-            <td>Row 2 Data 2</td>
-        </tr>
-    </tbody>
-</table>
-    
-
-
+    <table id="myTable">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Autor</th>
+                <th>Cantidad de paginas</th>
+                <th>Año de lanzamiento</th>
+            </tr>
+        </thead>
+    </table>
 </div>
 
-
-
 <script>
-    $(document).ready( function () {
-    $('#myTable').DataTable();
-} );
+    $(document).ready(function() {
+
+        var data = [
+            [
+                "El imperio final",
+                "Brandon Sanderson",
+                "541",
+                "2006"
+            ],
+            [
+                "Amanecer rojo",
+                "Pierce Brown",
+                "544",
+                "2014"
+            ]
+        ]
+
+        $('#myTable').DataTable({
+            data: data,
+        });
+    });
 </script>
