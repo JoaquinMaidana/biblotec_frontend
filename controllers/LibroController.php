@@ -36,16 +36,23 @@ class LibroController extends Controller
             // Decodificar el contenido JSON en un array asociativo 
             $data = json_decode($response->getContent(), true);
             $libros_array = array();
-           
+            $string = json_encode($data);
+           // var_dump($string);
             
             foreach ($data as $libro) {
                 // Agregar cada libro al arreglo de libros
                 array_push($libros_array, $libro);
             }
             
+           
+              
+              // Imprimir el string JSON
+              
+            
+
         }
         return $this->render('index',[
-            'librosJson' => $response->getContent(),
+            'librosJson' => $string,
             'libros_Array' => $libros_array
         ]);
     }
