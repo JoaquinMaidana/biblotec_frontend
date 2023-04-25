@@ -36,7 +36,24 @@ use yii\helpers\Url;
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="<?= Url::toRoute(['libro/index']); ?>">Index libros</a>
+                        <a class="nav-link" href="<?= Url::toRoute(['libro/index']); ?>">Libros</a>
+                       
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="<?= Url::toRoute(['reserva/index']); ?>">Reservas</a>
+
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="<?= Url::toRoute(['reserva/index']); ?>">Reservas</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="<?= Url::toRoute(['libro/sugerencias']); ?>">Sugerencias</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="<?= Url::toRoute(['libro/favoritos']); ?>">Favoritos</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="<?= Url::toRoute(['usuario/comentarios']); ?>">Comentarios</a>
                     </li>
                 </ul>
             </div>
