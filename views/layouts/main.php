@@ -3,12 +3,9 @@
 /** @var yii\web\View $this */
 /** @var string $content */
 
-use app\assets\AppAsset;
 use app\widgets\Alert;
-use yii\bootstrap5\Breadcrumbs;
 use yii\bootstrap5\Html;
-use yii\bootstrap5\Nav;
-use yii\bootstrap5\NavBar;
+use yii\helpers\Url;
 
 ?>
 
@@ -35,6 +32,31 @@ use yii\bootstrap5\NavBar;
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="<?= Url::toRoute(['libro/index']); ?>">Libros</a>
+                       
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="<?= Url::toRoute(['reserva/index']); ?>">Reservas</a>
+
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="<?= Url::toRoute(['reserva/index']); ?>">Reservas</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="<?= Url::toRoute(['libro/sugerencias']); ?>">Sugerencias</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="<?= Url::toRoute(['libro/favoritos']); ?>">Favoritos</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="<?= Url::toRoute(['usuario/comentarios']); ?>">Comentarios</a>
+                    </li>
+                </ul>
+            </div>
         </nav>
     </header>
 
@@ -45,13 +67,13 @@ use yii\bootstrap5\NavBar;
         </div>
     </main>
     <footer id="footer" class="mt-auto py-3 bg-light">
-    <div class="container">
-        <div class="row text-muted">
-            <div class="col-md-6 text-center text-md-start">&copy; My Company <?= date('Y') ?></div>
-            <div class="col-md-6 text-center text-md-end"><?= Yii::powered() ?></div>
+        <div class="container">
+            <div class="row text-muted">
+                <div class="col-md-6 text-center text-md-start">&copy; My Company <?= date('Y') ?></div>
+                <div class="col-md-6 text-center text-md-end"><?= Yii::powered() ?></div>
+            </div>
         </div>
-    </div>
-</footer>
+    </footer>
     <?php $this->endBody() ?>
 </body>
 
