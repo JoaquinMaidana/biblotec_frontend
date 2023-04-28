@@ -6,9 +6,11 @@
 use app\widgets\Alert;
 use yii\bootstrap5\Html;
 use yii\helpers\Url;
+use app\assets\AppAsset;
+
 
 ?>
-
+ 
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>" class="h-100">
@@ -29,34 +31,56 @@ use yii\helpers\Url;
     <header id="header">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <a class="navbar-brand" href="<?= Url::toRoute(['site/index']); ?>">Inicio</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent #navEnd" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="<?= Url::toRoute(['libro/index']); ?>">Libros</a>
-                       
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="<?= Url::toRoute(['reserva/index']); ?>">Reservas</a>
+                    
+                        <li class="nav-item active">
+                            <a class="nav-link" href="<?= Url::toRoute(['libro/index']); ?>">Libros</a>
+                        
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="<?= Url::toRoute(['reserva/index']); ?>">Reservas</a>
 
-                    </li>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="<?= Url::toRoute(['reserva/index']); ?>">Reservas</a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="<?= Url::toRoute(['libro/sugerencias']); ?>">Sugerencias</a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="<?= Url::toRoute(['libro/favoritos']); ?>">Favoritos</a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="<?= Url::toRoute(['usuario/comentarios']); ?>">Comentarios</a>
+                        </li>
+                   
+                </ul>
+                <ul class="navbar-nav mr-auto">
+                       
+                 <?php if (Yii::$app->user->isGuest) { ?>
                     <li class="nav-item active">
-                        <a class="nav-link" href="<?= Url::toRoute(['reserva/index']); ?>">Reservas</a>
+                        <a class="nav-link" href="<?= Url::toRoute(['site/login']); ?>">Login</a>
                     </li>
+                <?php } else { ?>
                     <li class="nav-item active">
-                        <a class="nav-link" href="<?= Url::toRoute(['libro/sugerencias']); ?>">Sugerencias</a>
+                        <form action="<?= Url::toRoute(['site/logout']); ?>" method="post">
+                        <?= Html::hiddenInput(Yii::$app->request->csrfParam, Yii::$app->request->csrfToken) ?>
+                            <?= Html::submitButton(
+                                'Logout (' . Yii::$app->user->identity->id . ')'."  Tipo:".Yii::$app->session['tipo_usuario'],
+                                ['class' => 'nav-link btn btn-link logout']
+                            ); ?>
+                        </form>
                     </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="<?= Url::toRoute(['libro/favoritos']); ?>">Favoritos</a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="<?= Url::toRoute(['usuario/comentarios']); ?>">Comentarios</a>
-                    </li>
+                <?php } ?>
+                   
                 </ul>
             </div>
+            
         </nav>
     </header>
 

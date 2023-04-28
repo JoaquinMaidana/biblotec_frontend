@@ -9,7 +9,7 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
-
+use app\models\User;
 class SiteController extends Controller
 {
 
@@ -60,11 +60,14 @@ class SiteController extends Controller
     /**
      * Displays homepage.
      *
-     * @return string
+     * @return Response|string
      */
     public function actionIndex()
     {
-        return $this->render('index');
+       
+        return $this->render('index'); //redirigir a la página de inicio
+      
+       
     }
 
     /**
@@ -80,10 +83,21 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
+
+         //   $user = User::findIdentity(Yii::$app->user->identity->id);
+        
+         $usuarioController = new UsuarioController(Yii::$app->id, Yii::$app);
+    //    $user = $usuarioController->findUser(Yii::$app->user->identity->usu_documento);
+        $user = $usuarioController->findUser(Yii::$app->user->getId());
+
+            // Almacenar el tipo de usuario en la variable de sesión
+           // Yii::$app->session->set('tipo_usuario', $user['usu_tipo_usuario']);
+          Yii::$app->session->set('tipo_usuario', $user['usu_tipo_usuario']);
             return $this->goBack();
+           
         }
 
-        $model->password = '';
+        $model->usu_clave = '';
         return $this->render('login', [
             'model' => $model,
         ]);

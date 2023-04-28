@@ -1,39 +1,55 @@
 <?php
 
 namespace app\models;
+use app\controllers\UsuarioController;
+use Yii;
 
 class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
 {
-    public $id;
-    public $username;
-    public $password;
-    public $authKey;
-    public $accessToken;
+      public $usu_id;
+      public $id;
+      public $usu_nombre;
+      public $usu_apellido;
+      public $usu_mail;
+      public $usu_clave;
+      public $usu_telefono;
+      public $usu_activo;
+      public $usu_tipo_usuario;
+      public $usu_habilitado;
+      public $usu_token;
 
+      public $authKey;
+
+    
+     
     private static $users = [
-        '100' => [
-            'id' => '100',
-            'username' => 'admin',
-            'password' => 'admin',
-            'authKey' => 'test100key',
-            'accessToken' => '100-token',
-        ],
-        '101' => [
-            'id' => '101',
-            'username' => 'demo',
-            'password' => 'demo',
-            'authKey' => 'test101key',
-            'accessToken' => '101-token',
-        ],
+        '40000005' => [
+            "id" => "40000005",
+            "usu_nombre" => "Matias",
+            "usu_apellido"=> "Fernandez",
+            "usu_mail"=> "estudiante@utec.com",
+            "usu_clave" => "estudiante",
+            "usu_telefono" => "1122334456",
+            "usu_activo"=> "S",
+            "usu_tipo_usuario"=> "Estudiante",
+            "usu_habilitado"=> "S",
+            "usu_token"=> "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiFWF0IjoxNjIyNjA5NTgxLCJleHAiOjE2MjI2MTMxODF9.H4v9D21MdrdN81FYIZeI-w5KjP5oRcOlf5I5LTHy-dB",
+            "authKey" => "test101key6"
+        ]
     ];
-
+    
 
     /**
      * {@inheritdoc}
      */
     public static function findIdentity($id)
     {
-        return isset(self::$users[$id]) ? new static(self::$users[$id]) : null;
+        //return isset(self::$users[$id]) ? new static(self::$users[$id]) : null;
+        $usuarioController = new UsuarioController(Yii::$app->id, Yii::$app);
+
+        $user = $usuarioController->findUser($id);
+
+        return new static($user);
     }
 
     /**
@@ -56,13 +72,16 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
      * @param string $username
      * @return static|null
      */
-    public static function findByUsername($username)
+    public static function findByDocumento($usu_documento)
     {
-        foreach (self::$users as $user) {
-            if (strcasecmp($user['username'], $username) === 0) {
-                return new static($user);
-            }
+        $usuarioController = new UsuarioController(Yii::$app->id, Yii::$app);
+
+        $user = $usuarioController->findUser($usu_documento);
+
+        if (strcasecmp($user['id'], $usu_documento) === 0) {
+            return new static($user);
         }
+    
 
         return null;
     }
@@ -75,9 +94,23 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
         return $this->id;
     }
 
+    
     /**
      * {@inheritdoc}
      */
+
+    public function getTipoUsuario()
+    {
+        return $this->usu_tipo_usuario;
+    }
+
+    
+
+    /**
+     * {@inheritdoc}
+     */
+
+    
     public function getAuthKey()
     {
         return $this->authKey;
@@ -86,10 +119,14 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
     /**
      * {@inheritdoc}
      */
+
+
     public function validateAuthKey($authKey)
     {
         return $this->authKey === $authKey;
     }
+
+    
 
     /**
      * Validates password
@@ -99,6 +136,6 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
      */
     public function validatePassword($password)
     {
-        return $this->password === $password;
+        return $this->usu_clave === $password;
     }
 }
