@@ -22,6 +22,12 @@ $config = [
         'user' => [
             'identityClass' => 'app\models\User',
             'enableAutoLogin' => true,
+            'identityCookie' => [
+                'name' => '_identity',
+                'httpOnly' => true,
+                'path' => '/',
+                'expire' => 3600 * 24 * 30, // Aquí puedes establecer el tiempo de expiración en segundos
+            ],
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
