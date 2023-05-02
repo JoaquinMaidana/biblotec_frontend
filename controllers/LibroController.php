@@ -60,6 +60,29 @@ class LibroController extends Controller
         }
         return $this->render('crearLibro');
     }
+    public function actionCompletado($isbn)
+    {   //conexion a la api para autocompletar el formulario de los libros
+        $client = new Client();
+        $response = $client->createRequest()
+            ->setMethod('get')
+            ->setUrl('https://openlibrary.org/api/books?bibkeys=ISBN:'.$isbn.'&jscmd=details&format=json')
+            ->send();
+            
+        if ($response->isOk) {
+            $data = json_decode($response->getContent(), true);
+            if (!empty($data)) {
+                $libro = $data['ISBN:'.$isbn];
+            } else {
+                $libro=$data;
+            }
+        } else {
+            $libro="";
+        }
+
+        return $this->render('crearLibro', [
+            'libro' => $libro,
+        ]);
+    }
 
     public function actionUpdate($idlibros)
     {
