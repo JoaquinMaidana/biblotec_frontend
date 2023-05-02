@@ -59,6 +59,9 @@ use yii\helpers\Url;
                     <li class="nav-item active">
                         <a class="nav-link" href="<?= Url::toRoute(['categoria/index']); ?>">Categorias</a>
                     </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="<?= Url::toRoute(['subcategoria/index']); ?>">Sub categorias</a>
+                    </li>
                 </ul>
             </div>
         </nav>

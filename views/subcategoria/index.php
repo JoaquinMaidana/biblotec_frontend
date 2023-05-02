@@ -5,7 +5,7 @@ use yii\helpers\Url;
 
 /** @var yii\web\View $this */
 
-$this->title = 'Categorias';
+$this->title = 'Subcategorias';
 ?>
 
 <div class="container-fluid">
@@ -14,17 +14,18 @@ $this->title = 'Categorias';
             <h1><?= Html::encode($this->title) ?></h1>
         </div>
         <div class="col d-flex justify-content-end">
-            <button class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#modalNuevaCategoria'>Nueva categoria</button>
+            <button class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#modalNuevaSubcategoria'>Nueva subcategoria</button>
         </div>
     </div>
 
     <div class="row">
         <div class="col-12">
-            <table id="tablaCategorias" class="row-border items table table-condensed hover nowrap">
+            <table id="tablaSubcategorias" class="row-border items table table-condensed hover nowrap">
                 <thead>
                     <tr>
                         <th>Id</th>
                         <th>Nombre</th>
+                        <th>Categoria</th>
                         <th>Vigente</th>
                         <th></th>
                     </tr>
@@ -35,15 +36,15 @@ $this->title = 'Categorias';
         </div>
     </div>
 
-    <div id="modalNuevaCategoria" class="modal" tabindex="-1">
+    <div id="modalNuevaSubcategoria" class="modal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Nueva categoria</h5>
+                    <h5 class="modal-title">Nueva subcategoria</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
-                <?= Html::beginForm(['categoria/create'], 'post') ?>
+                <?= Html::beginForm(['subcategoria/create'], 'post') ?>
                 <input type="hidden" name="<?= Yii::$app->request->csrfParam; ?>" value="<?= Yii::$app->request->csrfToken; ?>" />
                 <div class="modal-body">
                     <div class="container-fluid">
@@ -55,11 +56,25 @@ $this->title = 'Categorias';
                                 <input name="nombre" type="text" class="form-control" required></input>
                             </div>
                         </div>
+
+                        <div class="row justify-content-center mt-3">
+                            <div class="col-3 text-end">
+                                <label>Categoría:<span class="text-danger">*<span></label>
+                            </div>
+                            <div class="col">
+                                <select name="categoria" type="text" class="form-control" required>
+                                    <option value="">Seleccione una categoría</option>
+                                    <?php foreach ($categorias as $categoria) { ?>
+                                        <option value="<?= $categoria->cat_id ?>"><?= $categoria->cat_nombre ?></option>
+                                    <?php  } ?>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-primary" onclick="$('#modalNuevaCategoria').modal('hide');">Cancelar</button>
+                    <button type="button" class="btn btn-outline-primary" onclick="$('#modalNuevaSubcategoria').modal('hide');">Cancelar</button>
                     <button type="submit" class="btn btn-primary">Crear</button>
                 </div>
                 <?= Html::endForm() ?>
@@ -67,17 +82,17 @@ $this->title = 'Categorias';
         </div>
     </div>
 
-    <div id="modalEditarCategoria" class="modal" tabindex="-1">
+    <div id="modalEditarSubcategoria" class="modal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Editar categoria</h5>
+                    <h5 class="modal-title">Editar subcategoria</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
-                <?= Html::beginForm(['categoria/update'], 'post') ?>
+                <?= Html::beginForm(['subcategoria/update'], 'post') ?>
                 <input type="hidden" name="<?= Yii::$app->request->csrfParam; ?>" value="<?= Yii::$app->request->csrfToken; ?>" />
-                <input type="hidden" name="id" id="idCategoriaEditar"></input>
+                <input type="hidden" name="id" id="idSubcategoriaEditar"></input>
                 <div class="modal-body">
                     <div class="container-fluid">
                         <div class="row justify-content-center">
@@ -88,11 +103,25 @@ $this->title = 'Categorias';
                                 <input name="nombre" id="editarNombre" type="text" class="form-control" required></input>
                             </div>
                         </div>
+
+                        <div class="row justify-content-center mt-3">
+                            <div class="col-3 text-end">
+                                <label>Categoría:<span class="text-danger">*<span></label>
+                            </div>
+                            <div class="col">
+                                <select name="categoria" id="editarCategoria" type="text" class="form-control" required>
+                                    <option value="">Seleccione una categoría</option>
+                                    <?php foreach ($categorias as $categoria) { ?>
+                                        <option value="<?= $categoria->cat_id ?>"><?= $categoria->cat_nombre ?></option>
+                                    <?php  } ?>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-primary" onclick="$('#modalEditarCategoria').modal('hide');">Cancelar</button>
+                    <button type="button" class="btn btn-outline-primary" onclick="$('#modalEditarSubcategoria').modal('hide');">Cancelar</button>
                     <button type="submit" class="btn btn-primary">Editar</button>
                 </div>
                 <?= Html::endForm() ?>
@@ -100,17 +129,17 @@ $this->title = 'Categorias';
         </div>
     </div>
 
-    <div id="modalDesactivarCategoria" class="modal" tabindex="-1">
+    <div id="modalDesactivarSubcategoria" class="modal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Desactivar categoria</h5>
+                    <h5 class="modal-title">Desactivar subcategoria</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
-                <?= Html::beginForm(['categoria/delete'], 'post') ?>
+                <?= Html::beginForm(['subcategoria/delete'], 'post') ?>
                 <input type="hidden" name="<?= Yii::$app->request->csrfParam; ?>" value="<?= Yii::$app->request->csrfToken; ?>" />
-                <input type="hidden" name="id" id="idCategoriaDesactivar"></input>
+                <input type="hidden" name="id" id="idSubcategoriaDesactivar"></input>
                 <div class="modal-body">
                     <div class="container-fluid">
                         <div class="row justify-content-center">
@@ -121,7 +150,7 @@ $this->title = 'Categorias';
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-primary" onclick="$('#modalDesactivarCategoria').modal('hide');">Cancelar</button>
+                    <button type="button" class="btn btn-outline-primary" onclick="$('#modalDesactivarSubcategoria').modal('hide');">Cancelar</button>
                     <button type="submit" class="btn btn-primary">Desactivar</button>
                 </div>
                 <?= Html::endForm() ?>
@@ -132,21 +161,24 @@ $this->title = 'Categorias';
     <script>
         $(document).ready(function() {
 
-            $('#tablaCategorias').DataTable({
-                data: <?= $categorias ?>,
+            $('#tablaSubcategorias').DataTable({
+                data: <?= $sub_categorias ?>,
                 responsive: true,
                 bFilter: false,
                 paging: false,
                 ordering: false,
                 columns: [{
-                        data: 'cat_id'
+                        data: 'subcat_id'
                     },
                     {
-                        data: 'cat_nombre'
+                        data: 'subcat_nombre'
+                    },
+                    {
+                        data: 'subcat_cat_id'
                     },
                     {
                         data: function(data) {
-                            if (data.cat_vigente == "S") {
+                            if (data.subcat_vigente == "S") {
                                 return "<span>Si<span>";
                             } else {
                                 return "<span>No<span>";
@@ -155,25 +187,26 @@ $this->title = 'Categorias';
                     },
                     {
                         data: function(data) {
-                            return "<a class='me-2' onclick='editarCategoria(" + data.cat_id + ",`" + data.cat_nombre + "`)'><i class='fa-solid fa-pencil'></i></a><a class='' onclick='desactivarCategoria(" + data.cat_id + ",`" + data.cat_nombre + "`)'><i class='fa-solid fa-x'></i></a>";
+                            return "<a class='me-2' onclick='editarSubcategoria(" + data.subcat_id + ",`" + data.subcat_nombre + "`," + data.subcat_cat_id + ")'><i class='fa-solid fa-pencil'></i></a><a class='' onclick='desactivarSubcategoria(" + data.subcat_id + ",`" + data.subcat_nombre + "`)'><i class='fa-solid fa-x'></i></a>";
                         }
                     },
                 ],
             });
         });
 
-        function editarCategoria(id, nombre) {
+        function editarSubcategoria(id, nombre, categoria) {
 
-            $("#idCategoriaEditar").val(id);
+            $("#idSubcategoriaEditar").val(id);
             $("#editarNombre").val(nombre);
-            $("#modalEditarCategoria").modal("show");
+            $("#editarCategoria").val(categoria);
+            $("#modalEditarSubcategoria").modal("show");
         }
 
-        function desactivarCategoria(id, nombre) {
+        function desactivarSubcategoria(id, nombre) {
 
-            $("#idCategoriaDesactivar").val(id);
+            $("#idSubcategoriaDesactivar").val(id);
             $("#textoModalDesactivar").empty();
-            $("#textoModalDesactivar").append("<p>¿Desea desactivar la categoria " + nombre +"?</p>");
-            $("#modalDesactivarCategoria").modal("show");
+            $("#textoModalDesactivar").append("<p>¿Desea desactivar la subcategoria " + nombre + "?</p>");
+            $("#modalDesactivarSubcategoria").modal("show");
         }
     </script>
