@@ -14,6 +14,7 @@ use app\assets\AppAsset;
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>" class="h-100">
+<script src="https://kit.fontawesome.com/663d89665d.js" crossorigin="anonymous"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
@@ -45,40 +46,45 @@ use app\assets\AppAsset;
                         <li class="nav-item active">
                             <a class="nav-link" href="<?= Url::toRoute(['reserva/index']); ?>">Reservas</a>
 
-                        </li>
-                        <li class="nav-item active">
-                            <a class="nav-link" href="<?= Url::toRoute(['reserva/index']); ?>">Reservas</a>
-                        </li>
-                        <li class="nav-item active">
-                            <a class="nav-link" href="<?= Url::toRoute(['libro/sugerencias']); ?>">Sugerencias</a>
-                        </li>
-                        <li class="nav-item active">
-                            <a class="nav-link" href="<?= Url::toRoute(['libro/favoritos']); ?>">Favoritos</a>
-                        </li>
-                        <li class="nav-item active">
-                            <a class="nav-link" href="<?= Url::toRoute(['usuario/comentarios']); ?>">Comentarios</a>
-                        </li>
-                   
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="<?= Url::toRoute(['reserva/index']); ?>">Reservas</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="<?= Url::toRoute(['libro/sugerencias']); ?>">Sugerencias</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="<?= Url::toRoute(['libro/favoritos']); ?>">Favoritos</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="<?= Url::toRoute(['usuario/comentarios']); ?>">Comentarios</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="<?= Url::toRoute(['categoria/index']); ?>">Categorias</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="<?= Url::toRoute(['subcategoria/index']); ?>">Sub categorias</a>
+                    </li>
                 </ul>
                 <ul class="navbar-nav mr-auto">
                        
-                 <?php if (Yii::$app->user->isGuest) { ?>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="<?= Url::toRoute(['site/login']); ?>">Login</a>
-                    </li>
-                <?php } else { ?>
-                    <li class="nav-item active">
-                        <form action="<?= Url::toRoute(['site/logout']); ?>" method="post">
-                        <?= Html::hiddenInput(Yii::$app->request->csrfParam, Yii::$app->request->csrfToken) ?>
-                            <?= Html::submitButton(
-                                'Logout (' . Yii::$app->user->identity->id . ')'."  Tipo:".Yii::$app->session['tipo_usuario'],
-                                ['class' => 'nav-link btn btn-link logout']
-                            ); ?>
-                        </form>
-                    </li>
-                <?php } ?>
-                   
-                </ul>
+                       <?php if (Yii::$app->user->isGuest) { ?>
+                          <li class="nav-item active">
+                              <a class="nav-link" href="<?= Url::toRoute(['site/login']); ?>">Login</a>
+                          </li>
+                      <?php } else { ?>
+                          <li class="nav-item active">
+                              <form action="<?= Url::toRoute(['site/logout']); ?>" method="post">
+                              <?= Html::hiddenInput(Yii::$app->request->csrfParam, Yii::$app->request->csrfToken) ?>
+                                  <?= Html::submitButton(
+                                      'Logout (' . Yii::$app->user->identity->id . ')'."  Tipo:".Yii::$app->session['tipo_usuario'],
+                                      ['class' => 'nav-link btn btn-link logout']
+                                  ); ?>
+                              </form>
+                          </li>
+                      <?php } ?>
+                         
+                      </ul>
             </div>
             
         </nav>
