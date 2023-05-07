@@ -30,16 +30,22 @@ class CategoriaController extends Controller
     public function actionCreate()
     {
         $nombre = $_POST["nombre"];
+
+        return $this->redirect(['index']);
     }
 
     public function actionUpdate()
     {
         $id = $_POST["id"];
         $nombre = $_POST["nombre"];
+
+        return $this->redirect(['index']);
     }
 
     public function actionDelete()
     {
         $id = $_POST["id"];
+
+        return $this->redirect(['index']);
     }
 }

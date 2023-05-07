@@ -45,7 +45,7 @@ $this->title = 'Subcategorias';
                 </div>
 
                 <?= Html::beginForm(['subcategoria/create'], 'post') ?>
-                <input type="hidden" name="<?= Yii::$app->request->csrfParam; ?>" value="<?= Yii::$app->request->csrfToken; ?>" />
+
                 <div class="modal-body">
                     <div class="container-fluid">
                         <div class="row justify-content-center">
@@ -91,7 +91,7 @@ $this->title = 'Subcategorias';
                 </div>
 
                 <?= Html::beginForm(['subcategoria/update'], 'post') ?>
-                <input type="hidden" name="<?= Yii::$app->request->csrfParam; ?>" value="<?= Yii::$app->request->csrfToken; ?>" />
+
                 <input type="hidden" name="id" id="idSubcategoriaEditar"></input>
                 <div class="modal-body">
                     <div class="container-fluid">
@@ -138,7 +138,6 @@ $this->title = 'Subcategorias';
                 </div>
 
                 <?= Html::beginForm(['subcategoria/delete'], 'post') ?>
-                <input type="hidden" name="<?= Yii::$app->request->csrfParam; ?>" value="<?= Yii::$app->request->csrfToken; ?>" />
                 <input type="hidden" name="id" id="idSubcategoriaDesactivar"></input>
                 <div class="modal-body">
                     <div class="container-fluid">

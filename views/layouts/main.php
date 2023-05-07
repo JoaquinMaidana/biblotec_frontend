@@ -10,10 +10,14 @@ use app\assets\AppAsset;
 
 
 ?>
- 
+
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>" class="h-100">
+<script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2/dist/quagga.min.js"></script>
+<script src="Recursos/scanner.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2/dist/quagga.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 <script src="https://kit.fontawesome.com/663d89665d.js" crossorigin="anonymous"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
@@ -38,14 +42,8 @@ use app\assets\AppAsset;
 
             <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
-                    
-                        <li class="nav-item active">
-                            <a class="nav-link" href="<?= Url::toRoute(['libro/index']); ?>">Libros</a>
-                        
-                        </li>
-                        <li class="nav-item active">
-                            <a class="nav-link" href="<?= Url::toRoute(['reserva/index']); ?>">Reservas</a>
-
+                    <li class="nav-item active">
+                        <a class="nav-link" href="<?= Url::toRoute(['libro/index']); ?>">Libros</a>
                     </li>
                     <li class="nav-item active">
                         <a class="nav-link" href="<?= Url::toRoute(['reserva/index']); ?>">Reservas</a>
@@ -67,26 +65,26 @@ use app\assets\AppAsset;
                     </li>
                 </ul>
                 <ul class="navbar-nav mr-auto">
-                       
-                       <?php if (Yii::$app->user->isGuest) { ?>
-                          <li class="nav-item active">
-                              <a class="nav-link" href="<?= Url::toRoute(['site/login']); ?>">Login</a>
-                          </li>
-                      <?php } else { ?>
-                          <li class="nav-item active">
-                              <form action="<?= Url::toRoute(['site/logout']); ?>" method="post">
-                              <?= Html::hiddenInput(Yii::$app->request->csrfParam, Yii::$app->request->csrfToken) ?>
-                                  <?= Html::submitButton(
-                                      'Logout (' . Yii::$app->user->identity->id . ')'."  Tipo:".Yii::$app->session['tipo_usuario'],
-                                      ['class' => 'nav-link btn btn-link logout']
-                                  ); ?>
-                              </form>
-                          </li>
-                      <?php } ?>
-                         
-                      </ul>
+
+                    <?php if (Yii::$app->user->isGuest) { ?>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="<?= Url::toRoute(['site/login']); ?>">Login</a>
+                        </li>
+                    <?php } else { ?>
+                        <li class="nav-item active">
+                            <form action="<?= Url::toRoute(['site/logout']); ?>" method="post">
+                                <?= Html::hiddenInput(Yii::$app->request->csrfParam, Yii::$app->request->csrfToken) ?>
+                                <?= Html::submitButton(
+                                    'Logout (' . Yii::$app->user->identity->id . ')' . "  Tipo:" . Yii::$app->session['tipo_usuario'],
+                                    ['class' => 'nav-link btn btn-link logout']
+                                ); ?>
+                            </form>
+                        </li>
+                    <?php } ?>
+
+                </ul>
             </div>
-            
+
         </nav>
     </header>
 
