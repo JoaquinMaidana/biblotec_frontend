@@ -27,6 +27,19 @@ class CategoriaController extends Controller
         ]);
     }
 
+    public function actionGetCategorias(){
+        $client = new Client();
+        $response = $client->createRequest()
+            ->setMethod('get')
+            ->setUrl('http://localhost:3000/categorias')
+            ->send();
+
+        $data = json_decode($response->getContent(), true);
+        $categoria_array = array();
+        
+        return $categoria_array;
+    }
+
     public function actionCreate()
     {
         $nombre = $_POST["nombre"];

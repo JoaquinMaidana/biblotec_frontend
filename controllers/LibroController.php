@@ -62,6 +62,7 @@ class LibroController extends Controller
     }
     public function actionCompletado($isbn)
     {   //conexion a la api para autocompletar el formulario de los libros
+     
         $client = new Client();
         $response = $client->createRequest()
             ->setMethod('get')
@@ -69,16 +70,48 @@ class LibroController extends Controller
             ->send();
             
         if ($response->isOk) {
-            $data = json_decode($response->getContent(), true);
+            $data = json_decode($response->getContent(), true); 
             if (!empty($data)) {
-                $libro = $data['ISBN:'.$isbn];
+                $datoslibro = $data['ISBN:'.$isbn];
+                $lib_imagen = "";
+                $response_imagen = $client->createRequest()//obtener imagen
+                ->setMethod('get')
+                ->setUrl('https://openlibrary.org/api/books?bibkeys=ISBN:'.$isbn.'&jscmd=data&format=json')
+                ->send();
+
+                if($response_imagen->isOk){
+                    $data_imagen = json_decode($response_imagen->getContent(), true); 
+                    $lib_imagen = $data_imagen['ISBN:'.$isbn]['cover']['large'];
+                }
+                
+                //Para guardar los autores independiente de cuantos sean
+                foreach ($datoslibro['details']['authors'] as $autor) {
+                    $nombres_autores[] = $autor['name']; // añadir el nombre del autor al array de nombres de autores
+                  }
+                  
+                  $autores_concatenados = implode(', ', $nombres_autores); // unir los nombres de los autores con comas
+                //idiomas
+                
+                  
+                $libro=[
+                    "lib_isbn" => $isbn,
+                    "lib_titulo"=> $datoslibro['details']['title'],
+                    "lib_descripcion"=> isset($datoslibro['details']['description']) ? $datoslibro['details']['description'] : '',
+                    "lib_imagen"=> $lib_imagen,
+                    "lib_autores"=> $autores_concatenados,
+                    "lib_url"=>$datoslibro['info_url'],
+                    "lib_edicion"=> "1",
+                    "lib_fecha_lanzamiento"=> $datoslibro['details']['publish_date'],
+                    "lib_idioma"=> "Inglés",
+                ];
+
             } else {
                 $libro=$data;
             }
         } else {
             $libro="";
         }
-
+            
         return $this->render('crearLibro', [
             'libro' => $libro,
         ]);
