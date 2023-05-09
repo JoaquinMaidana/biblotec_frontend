@@ -1,7 +1,7 @@
 <?php 
     use yii\bootstrap5\Html;
     use yii\widgets\ActiveForm;
-
+    use yii\helpers\Url;
     /** @var yii\web\View $this */
 
    
@@ -9,6 +9,11 @@
     $this->registerCssFile('@web/scanner/scanner.css');
 
 ?>
+<style>
+  .titulo {
+    font-family: inherit;
+  }
+</style>
 
 <?php if (isset($libro) && !empty($libro)): ?>
 
@@ -160,52 +165,221 @@
 
 <?= Html::a('Completar campos', 'javascript:void(0);', ['class' => 'btn btn-success', 'onclick' => 'completarCampos();']) ?>
 
-<?php $form = ActiveForm::begin(['action' => ['libro/create'], 'options' => ['enctype' => 'multipart/form-data']]); 
+<div class="container-fluid">
+  <div class="row mt-3 align-items-center">
+    <div class="col-4">
+      <h1 class="titulo"><?= Html::encode($this->title) ?></h1>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      
+      
+    <?php $form = ActiveForm::begin(['action' => ['libro/create'], 'options' => ['enctype' => 'multipart/form-data']]); ?>
+        <div class="row justify-content-center">
+          <div class="col-3 text-end">
+            <label>ISBN:<span class="text-danger">*<span></label>
+          </div>
+          <div class="col">
+            <?= Html::textInput('lib_isbn', isset($libro) ? $libro['lib_isbn'] : null, ['class' => 'form-control']) ?>
+          </div>
+        </div>
+
+        <div class="row mt-3 justify-content-center">
+          <div class="col-3 text-end">
+            <label>Título:<span class="text-danger">*<span></label>
+          </div>
+          <div class="col">
+            <?= Html::textInput('lib_titulo', isset($libro) ? $libro['lib_titulo'] : null, ['class' => 'form-control', 'maxlength' => true])?>
+          </div>
+        </div>
+
+        <div class="row mt-3 justify-content-center">
+          <div class="col-3 text-end">
+            <label>Autor/es:<span class="text-danger">*<span></label>
+          </div>
+          <div class="col">
+          <?=Html::textInput('lib_autores', isset($libro) ? $libro['lib_autores'] : null, ['class' => 'form-control', 'maxlength' => true]) ?>
+
+          </div>
+        </div>
+
+        <div class="row mt-3 justify-content-center">
+          <div class="col-3 text-end">
+            <label>Edición:<span class="text-danger">*<span></label>
+          </div>
+          <div class="col">
+         <?= Html::textInput('lib_edicion', isset($libro) ? $libro['lib_edicion'] : null, ['class' => 'form-control', 'maxlength' => true]) ?>
+          </div>
+        </div>
+
+        <div class="row mt-3 justify-content-center">
+          <div class="col-3 text-end">
+            <label>Fecha de lanzamiento:<span class="text-danger">*<span></label>
+          </div>
+          <div class="col">
+          <?=Html::textInput('lib_fecha_lanzamiento', isset($libro) ? $libro['lib_fecha_lanzamiento'] : null, ['class' => 'form-control']) ?>
+          </div>
+        </div>
+
+        <div class="row mt-3 justify-content-center">
+          <div class="col-3 text-end">
+            <label>Idioma:<span class="text-danger">*<span></label>
+          </div>
+          <div class="col">
+          <?=Html::textInput('lib_idioma', isset($libro) ? $libro['lib_idioma'] : null, ['class' => 'form-control', 'maxlength' => true]) ?>
+          </div>
+        </div>
+
+        <div class="row mt-3 justify-content-center">
+          <div class="col-3 text-end">
+            <label>Descripción:<span class="text-danger">*<span></label>
+          </div>
+          <div class="col">
+            <?= Html::textarea('lib_descripcion', isset($libro) ? $libro['lib_descripcion'] : null, ['rows' => 6, 'class' => 'form-control']) ?>
+          </div>
+        </div>
+
+        <div class="row mt-3 justify-content-center">
+          <div class="col-3 text-end">
+            <label>Portada:<span class="text-danger">*<span></label>
+          </div>
+          <div class="col">
+            <?=Html::textInput('lib_imagen', isset($libro) ? $libro['lib_imagen'] : null, ['class' => 'form-control']) ?>
+          </div>
+          
+        </div>
+
+        <div class="row mt-3 justify-content-center">
+          <div class="col-3 text-end">
+            <label>URL:<span class="text-danger">*<span></label>
+          </div>
+          <div class="col">
+          <?=Html::textInput('lib_url', isset($libro) ? $libro['lib_url'] : null, ['class' => 'form-control', 'maxlength' => true]) ?>
+          </div>
+        </div>
 
 
- echo Html::label('ISBN', 'lib_isbn');
- echo Html::textInput('lib_isbn', isset($libro) ? $libro['lib_isbn'] : null, ['class' => 'form-control']) ;
+        <div class="row mt-3 justify-content-center">
+          <div class="col-3 text-end">
+            <label>Categoría:<span class="text-danger">*<span></label>
+          </div>
+          <div class="col">
+          <?= Html::dropDownList('lib_categoria', null, 
+            \yii\helpers\ArrayHelper::map($categorias, 'id', 'cat_nombre'), 
+            ['id' => 'categoria-dropdown', 'prompt' => 'Seleccione una categoría', 'class' => 'form-control', 'required' => true]) ?>
 
- echo Html::label('Título', 'lib_titulo') ;
- echo Html::textInput('lib_titulo', isset($libro) ? $libro['lib_titulo'] : null, ['class' => 'form-control', 'maxlength' => true]);
+          </div>
+        </div>
 
- echo Html::label('Descripción', 'lib_descripcion') ;
- echo Html::textarea('lib_descripcion', isset($libro) ? $libro['lib_descripcion'] : null, ['rows' => 6, 'class' => 'form-control']);
+        <div class="row mt-3 justify-content-center">
+          <div class="col-3 text-end">
+            <label>Sub Categoría:<span class="text-danger">*<span></label>
+          </div>
+          <div class="col">
+                <?= Html::dropDownList('lib_sub_categoria', null, [], ['prompt' => 'Seleccione una subcategoría', 'class' => 'form-control', 'required' => true, 'id' => 'subcategoria']) ?>   
+          </div>
+        </div>
 
- echo Html::label('Imagen', 'lib_imagen');
- echo Html::textInput('lib_imagen', isset($libro) ? $libro['lib_imagen'] : null, ['class' => 'form-control']);
 
- echo Html::label('Categoría', 'lib_categoria');
- echo Html::textInput('lib_categoria', null, ['class' => 'form-control']);
- echo Html::label('Subcategoría', 'lib_sub_categoria') ;
- echo Html::textInput('lib_sub_categoria', null, ['class' => 'form-control']);
+        <div class="row mt-3 justify-content-center">
+          <div class="col-3 text-end">
+            <label>Disponible:<span class="text-danger">*<span></label>
+          </div>
+          <div class="col">
+          <?= Html::dropDownList('lib_disponible', '1', [0 => 'No', 1 => 'Sí'], ['class' => 'form-control']) ?>
+          </div>
+        </div>
 
- echo Html::label('URL', 'lib_url') ;
- echo Html::textInput('lib_url', isset($libro) ? $libro['lib_url'] : null, ['class' => 'form-control', 'maxlength' => true]);
+        <div class="row mt-3 justify-content-center">
+          <div class="col-3 text-end">
+            <label>Novedad:<span class="text-danger">*<span></label>
+          </div>
+          <div class="col">
+            <?= Html::dropDownList('lib_novedades', '1', [0 => 'No', 1 => 'Sí'], ['class' => 'form-control']) ?>
+          </div>
+        </div>
 
- echo Html::label('Stock', 'lib_stock');
- echo Html::textInput('lib_stock', null, ['class' => 'form-control']);
+        <div class="row mt-3 justify-content-center">
+          <div class="col-3 text-end">
+            <label>Vigente:<span class="text-danger">*<span></label>
+          </div>
+          <div class="col">
+           <?= Html::dropDownList('lib_vigente', '1', [0 => 'No', 1 => 'Sí'], ['class' => 'form-control']) ?>
+          </div>
+        </div>
+       
 
- echo Html::label('Autores', 'lib_autores') ;
- echo Html::textInput('lib_autores', isset($libro) ? $libro['lib_autores'] : null, ['class' => 'form-control', 'maxlength' => true]);
+        <div class="row mt-3 justify-content-center">
+          <div class="col-3 text-end">
+            <label>Stock:<span class="text-danger">*<span></label>
+          </div>
+          <div class="col">
+            <?=Html::textInput('lib_stock', null, ['class' => 'form-control']) ?>
+          </div>
+        </div>
 
- echo Html::label('Edición', 'lib_edicion') ;
- echo Html::textInput('lib_edicion', isset($libro) ? $libro['lib_edicion'] : null, ['class' => 'form-control', 'maxlength' => true]);
+        <div class="row mt-3 justify-content-end">
+          <div class="col-1">
+            <a href="<?= Url::toRoute(['libro/index']); ?>" class="btn btn-outline-primary">Cancelar</a>
+          </div>
+          <div class="col-auto">
+            <button type="submit" id="botonSubmit" class="btn btn-primary">Crear</button>
+          </div>
+        </div>
 
- echo Html::label('Fecha de lanzamiento', 'lib_fecha_lanzamiento');
- echo Html::textInput('lib_fecha_lanzamiento', isset($libro) ? $libro['lib_fecha_lanzamiento'] : null, ['class' => 'form-control']);
+      </div>
+     
+    </div>
+  </div>
+</div>
 
- echo Html::label('Novedades', 'lib_novedades') ;
- echo Html::dropDownList('lib_novedades', null, [0 => 'No', 1 => 'Sí'], ['class' => 'form-control']);
 
- echo Html::label('Idioma', 'lib_idioma') ;
- echo Html::textInput('lib_idioma', isset($libro) ? $libro['lib_idioma'] : null, ['class' => 'form-control', 'maxlength' => true]);
+<?php
+ 
+ //echo Html::textInput('lib_isbn', isset($libro) ? $libro['lib_isbn'] : null, ['class' => 'form-control']) ;
 
- echo Html::label('Disponible', 'lib_disponible');
- echo Html::dropDownList('lib_disponible', null, [0 => 'No', 1 => 'Sí'], ['class' => 'form-control']);
+ //echo Html::label('Título', 'lib_titulo') ;
+ //echo Html::textInput('lib_titulo', isset($libro) ? $libro['lib_titulo'] : null, ['class' => 'form-control', 'maxlength' => true]);
 
- echo Html::label('Vigente', 'lib_vigente');
- echo Html::dropDownList('lib_vigente', null, [0 => 'No', 1 => 'Sí'], ['class' => 'form-control']);
+ //echo Html::label('Descripción', 'lib_descripcion') ;
+ //echo Html::textarea('lib_descripcion', isset($libro) ? $libro['lib_descripcion'] : null, ['rows' => 6, 'class' => 'form-control']);
+
+ //echo Html::label('Imagen', 'lib_imagen');
+ //echo Html::textInput('lib_imagen', isset($libro) ? $libro['lib_imagen'] : null, ['class' => 'form-control']);
+
+ //echo Html::label('Categoría', 'lib_categoria');
+ //echo Html::textInput('lib_categoria', null, ['class' => 'form-control']);
+ //echo Html::label('Subcategoría', 'lib_sub_categoria') ;
+ //echo Html::textInput('lib_sub_categoria', null, ['class' => 'form-control']);
+
+ //echo Html::label('URL', 'lib_url') ;
+ //echo Html::textInput('lib_url', isset($libro) ? $libro['lib_url'] : null, ['class' => 'form-control', 'maxlength' => true]);
+
+ //echo Html::label('Stock', 'lib_stock');
+ //echo Html::textInput('lib_stock', null, ['class' => 'form-control']);
+
+ //echo Html::label('Autores', 'lib_autores') ;
+ //echo Html::textInput('lib_autores', isset($libro) ? $libro['lib_autores'] : null, ['class' => 'form-control', 'maxlength' => true]);
+
+ //echo Html::label('Edición', 'lib_edicion') ;
+ //echo Html::textInput('lib_edicion', isset($libro) ? $libro['lib_edicion'] : null, ['class' => 'form-control', 'maxlength' => true]);
+
+ // echo Html::label('Fecha de lanzamiento', 'lib_fecha_lanzamiento');
+ // echo Html::textInput('lib_fecha_lanzamiento', isset($libro) ? $libro['lib_fecha_lanzamiento'] : null, ['class' => 'form-control']);
+
+ //echo Html::label('Novedades', 'lib_novedades') ;
+ //echo Html::dropDownList('lib_novedades', null, [0 => 'No', 1 => 'Sí'], ['class' => 'form-control']);
+
+ //echo Html::label('Idioma', 'lib_idioma') ;
+ //echo Html::textInput('lib_idioma', isset($libro) ? $libro['lib_idioma'] : null, ['class' => 'form-control', 'maxlength' => true]);
+
+ //echo Html::label('Disponible', 'lib_disponible');
+ //echo Html::dropDownList('lib_disponible', null, [0 => 'No', 1 => 'Sí'], ['class' => 'form-control']);
+
+ //echo Html::label('Vigente', 'lib_vigente');
+ //echo Html::dropDownList('lib_vigente', null, [0 => 'No', 1 => 'Sí'], ['class' => 'form-control']);
 
  ?>
 
@@ -224,3 +398,28 @@ $this->registerJsFile('@web/scanner/scanner.js');
 
 
 ?>
+<script>
+$(document).ready(function() {
+    $('#categoria-dropdown').change(function() {
+        var categoriaId = $(this).val();
+        $.ajax({
+            url: '<?= Yii::$app->urlManager->createUrl(["subcategoria/get-subcategoriasporid", "id_categoria" => ""]) ?>'+categoriaId,
+            data: {id_categoria: categoriaId},
+            success: function(response) {
+                var subcategorias = JSON.parse(response);
+                console.log(subcategorias);
+                var options = '';
+                for (var i = 0; i < subcategorias.length; i++) {
+                    options += '<option value="' + subcategorias[i].id + '">' + subcategorias[i].subcat_nombre + '</option>';
+                }
+                $('#subcategoria').html(options);
+              
+            },
+            error: function() {
+                alert('Error al cargar subcategorías.');
+            }
+        });
+    });
+});
+
+</script>

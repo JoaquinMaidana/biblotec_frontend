@@ -47,7 +47,7 @@ class LibroController extends Controller
 
         }
         return $this->render('index',[
-            'librosJson' => $string,
+            'libros' => $string,
             'libros_Array' => $libros_array
         ]);
     }
@@ -58,7 +58,20 @@ class LibroController extends Controller
         if ($this->request->post()) {
             $this->save();
         }
-        return $this->render('crearLibro');
+
+        $categoriaController = new CategoriaController(Yii::$app->id, Yii::$app);
+
+        $categorias = $categoriaController->runAction('get-categorias');
+
+        $subCategoriaController = new SubcategoriaController(Yii::$app->id, Yii::$app);
+
+        $subcategorias = $subCategoriaController->runAction('get-subcategorias');
+
+        
+        return $this->render('crearLibro', [
+            'categorias' => $categorias,
+            'sub_categorias' => $subcategorias,
+        ]);
     }
     public function actionCompletado($isbn)
     {   //conexion a la api para autocompletar el formulario de los libros
@@ -111,9 +124,20 @@ class LibroController extends Controller
         } else {
             $libro="";
         }
+
+        $categoriaController = new CategoriaController(Yii::$app->id, Yii::$app);
+
+        $categorias = $categoriaController->runAction('get-categorias');
+
+        $subCategoriaController = new SubcategoriaController(Yii::$app->id, Yii::$app);
+
+        $subcategorias = $subCategoriaController->runAction('get-subcategorias');
+
             
         return $this->render('crearLibro', [
             'libro' => $libro,
+            'categorias' => $categorias,
+            'sub_categorias' => $subcategorias,
         ]);
     }
 
@@ -139,10 +163,10 @@ class LibroController extends Controller
     }
 
 
-    public function actionView($idlibros)
+    public function actionView()
     {
-        $idlibros = intval($idlibros);
-        $libro = $this->findLibro($idlibros);
+        $id = $_POST['id'];
+        $libro = $this->findLibro($id);
         return $this->render('detalleLibro', [
             'libro' => $libro
         ]);
@@ -228,11 +252,11 @@ class LibroController extends Controller
                 "lib_autores"=>Yii::$app->request->post('lib_autores'),
                 "lib_edicion"=>Yii::$app->request->post('lib_edicion'),
                 "lib_fecha_lanzamiento"=>Yii::$app->request->post('lib_fecha_lanzamiento'),
-                "lib_novedades"=>Yii::$app->request->post('lib_novedades'),
+                "lib_novedades"=>Yii::$app->request->post('lib_novedades')== '1' ? 'Si' : 'No',
                 "lib_idioma" =>Yii::$app->request->post('lib_idioma'),
-                "lib_disponible"=>Yii::$app->request->post('lib_disponible'),
-                "lib_vigente"=>Yii::$app->request->post('lib_vigente'),
-                "lib_puntuacion"=>Yii::$app->request->post('lib_puntuacion'),
+                "lib_disponible"=>Yii::$app->request->post('lib_disponible')== '1' ? 'Si' : 'No',
+                "lib_vigente"=>Yii::$app->request->post('lib_vigente')== '1' ? 'Si' : 'No',
+                "lib_puntuacion"=>"0.0",
             ]))
             ->send();
     }

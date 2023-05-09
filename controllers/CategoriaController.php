@@ -37,22 +37,28 @@ class CategoriaController extends Controller
         $data = json_decode($response->getContent(), true);
         $categoria_array = array();
         
-        return $categoria_array;
+        return $data;
     }
 
     public function actionCreate()
     {
         $nombre = $_POST["nombre"];
+
+        return $this->redirect(['index']);
     }
 
     public function actionUpdate()
     {
         $id = $_POST["id"];
         $nombre = $_POST["nombre"];
+
+        return $this->redirect(['index']);
     }
 
     public function actionDelete()
     {
         $id = $_POST["id"];
+
+        return $this->redirect(['index']);
     }
 }

@@ -38,14 +38,8 @@ use app\assets\AppAsset;
 
             <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
-                    
-                        <li class="nav-item active">
-                            <a class="nav-link" href="<?= Url::toRoute(['libro/index']); ?>">Libros</a>
-                        
-                        </li>
-                        <li class="nav-item active">
-                            <a class="nav-link" href="<?= Url::toRoute(['reserva/index']); ?>">Reservas</a>
-
+                    <li class="nav-item active">
+                        <a class="nav-link" href="<?= Url::toRoute(['libro/index']); ?>">Libros</a>
                     </li>
                     <li class="nav-item active">
                         <a class="nav-link" href="<?= Url::toRoute(['reserva/index']); ?>">Reservas</a>
