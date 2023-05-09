@@ -63,6 +63,9 @@ use app\assets\AppAsset;
                     <li class="nav-item active">
                         <a class="nav-link" href="<?= Url::toRoute(['subcategoria/index']); ?>">Sub categorias</a>
                     </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="<?= Url::toRoute(['usuario/index']); ?>">Usuarios</a>
+                    </li>
                 </ul>
                 <ul class="navbar-nav mr-auto">
 
