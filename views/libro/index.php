@@ -43,8 +43,8 @@ $this->title = 'Libros';
     <input type="hidden" name="id" id="idLibroView"></input>
     <?= Html::endForm() ?>
 
-    <?= Html::beginForm(['libro/update'], 'post', ['id' => 'formLibroUpdate']) ?>
-    <input type="hidden" name="id" id="idLibroUpdate"></input>
+    <?= Html::beginForm(['libro/update'], 'get', ['id' => 'formLibroUpdate']) ?>
+    <input type="hidden" name="idlibros" id="idLibroUpdate"></input>
     <?= Html::endForm() ?>
 
     <div id="modalDesactivarLibro" class="modal" tabindex="-1">

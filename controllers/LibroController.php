@@ -149,8 +149,18 @@ class LibroController extends Controller
             $this->save('PUT');
         }
 
+        $categoriaController = new CategoriaController(Yii::$app->id, Yii::$app);
+
+        $categorias = $categoriaController->runAction('get-categorias');
+
+        $subCategoriaController = new SubcategoriaController(Yii::$app->id, Yii::$app);
+
+        $subcategorias = $subCategoriaController->runAction('get-subcategorias');
+
         return $this->render('modificarLibro', [
             'libro' => $libro,
+            'categorias' => $categorias,
+            'sub_categorias' => $subcategorias,
         ]);
     }
 
@@ -241,7 +251,7 @@ class LibroController extends Controller
             ->addHeaders(['content-type' => 'application/json'])
             ->setContent(Json::encode([
                 "id" =>Yii::$app->request->post('id'),
-                "lib_isbn"=>Yii::$app->request->post('lib_idbn'),
+                "lib_isbn"=>Yii::$app->request->post('lib_isbn'),
                 "lib_titulo"=>Yii::$app->request->post('lib_titulo'),
                 "lib_descripcion"=>Yii::$app->request->post('lib_descripcion'),
                 "lib_imagen" =>Yii::$app->request->post('lib_imagen'),

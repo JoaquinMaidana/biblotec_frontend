@@ -325,12 +325,12 @@
             <a href="<?= Url::toRoute(['libro/index']); ?>" class="btn btn-outline-primary">Cancelar</a>
           </div>
           <div class="col-auto">
-            <button type="submit" id="botonSubmit" class="btn btn-primary">Crear</button>
+            <?= Html::submitButton('Crear', ['class' => 'btn btn-primary']) ?>
           </div>
         </div>
 
       </div>
-     
+    <?php ActiveForm::end(); ?> 
     </div>
   </div>
 </div>
@@ -383,11 +383,8 @@
 
  ?>
 
-<div class="form-group pt-3">
-    <?= Html::submitButton('Guardar', ['class' => 'btn btn-primary']) ?>
-</div>
 
-<?php ActiveForm::end(); ?>
+
 
 <script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2/dist/quagga.min.js"></script>
 <script src="Recursos/scanner.js"></script>
