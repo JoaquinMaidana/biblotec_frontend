@@ -47,7 +47,7 @@ class LibroController extends Controller
 
         }
         return $this->render('index',[
-            'librosJson' => $string,
+            'libros' => $string,
             'libros_Array' => $libros_array
         ]);
     }
@@ -58,10 +58,24 @@ class LibroController extends Controller
         if ($this->request->post()) {
             $this->save();
         }
-        return $this->render('crearLibro');
+
+        $categoriaController = new CategoriaController(Yii::$app->id, Yii::$app);
+
+        $categorias = $categoriaController->runAction('get-categorias');
+
+        $subCategoriaController = new SubcategoriaController(Yii::$app->id, Yii::$app);
+
+        $subcategorias = $subCategoriaController->runAction('get-subcategorias');
+
+        
+        return $this->render('crearLibro', [
+            'categorias' => $categorias,
+            'sub_categorias' => $subcategorias,
+        ]);
     }
     public function actionCompletado($isbn)
     {   //conexion a la api para autocompletar el formulario de los libros
+     
         $client = new Client();
         $response = $client->createRequest()
             ->setMethod('get')
@@ -69,9 +83,41 @@ class LibroController extends Controller
             ->send();
             
         if ($response->isOk) {
-            $data = json_decode($response->getContent(), true);
+            $data = json_decode($response->getContent(), true); 
             if (!empty($data)) {
-                $libro = $data['ISBN:'.$isbn];
+                $datoslibro = $data['ISBN:'.$isbn];
+                $lib_imagen = "";
+                $response_imagen = $client->createRequest()//obtener imagen
+                ->setMethod('get')
+                ->setUrl('https://openlibrary.org/api/books?bibkeys=ISBN:'.$isbn.'&jscmd=data&format=json')
+                ->send();
+
+                if($response_imagen->isOk){
+                    $data_imagen = json_decode($response_imagen->getContent(), true); 
+                    $lib_imagen = $data_imagen['ISBN:'.$isbn]['cover']['large'];
+                }
+                
+                //Para guardar los autores independiente de cuantos sean
+                foreach ($datoslibro['details']['authors'] as $autor) {
+                    $nombres_autores[] = $autor['name']; // añadir el nombre del autor al array de nombres de autores
+                  }
+                  
+                  $autores_concatenados = implode(', ', $nombres_autores); // unir los nombres de los autores con comas
+                //idiomas
+                
+                  
+                $libro=[
+                    "lib_isbn" => $isbn,
+                    "lib_titulo"=> $datoslibro['details']['title'],
+                    "lib_descripcion"=> isset($datoslibro['details']['description']) ? $datoslibro['details']['description'] : '',
+                    "lib_imagen"=> $lib_imagen,
+                    "lib_autores"=> $autores_concatenados,
+                    "lib_url"=>$datoslibro['info_url'],
+                    "lib_edicion"=> "1",
+                    "lib_fecha_lanzamiento"=> $datoslibro['details']['publish_date'],
+                    "lib_idioma"=> "Inglés",
+                ];
+
             } else {
                 $libro=$data;
             }
@@ -79,8 +125,19 @@ class LibroController extends Controller
             $libro="";
         }
 
+        $categoriaController = new CategoriaController(Yii::$app->id, Yii::$app);
+
+        $categorias = $categoriaController->runAction('get-categorias');
+
+        $subCategoriaController = new SubcategoriaController(Yii::$app->id, Yii::$app);
+
+        $subcategorias = $subCategoriaController->runAction('get-subcategorias');
+
+            
         return $this->render('crearLibro', [
             'libro' => $libro,
+            'categorias' => $categorias,
+            'sub_categorias' => $subcategorias,
         ]);
     }
 
@@ -92,8 +149,18 @@ class LibroController extends Controller
             $this->save('PUT');
         }
 
+        $categoriaController = new CategoriaController(Yii::$app->id, Yii::$app);
+
+        $categorias = $categoriaController->runAction('get-categorias');
+
+        $subCategoriaController = new SubcategoriaController(Yii::$app->id, Yii::$app);
+
+        $subcategorias = $subCategoriaController->runAction('get-subcategorias');
+
         return $this->render('modificarLibro', [
             'libro' => $libro,
+            'categorias' => $categorias,
+            'sub_categorias' => $subcategorias,
         ]);
     }
 
@@ -106,10 +173,10 @@ class LibroController extends Controller
     }
 
 
-    public function actionView($idlibros)
+    public function actionView()
     {
-        $idlibros = intval($idlibros);
-        $libro = $this->findLibro($idlibros);
+        $id = $_POST['id'];
+        $libro = $this->findLibro($id);
         return $this->render('detalleLibro', [
             'libro' => $libro
         ]);
@@ -184,7 +251,7 @@ class LibroController extends Controller
             ->addHeaders(['content-type' => 'application/json'])
             ->setContent(Json::encode([
                 "id" =>Yii::$app->request->post('id'),
-                "lib_isbn"=>Yii::$app->request->post('lib_idbn'),
+                "lib_isbn"=>Yii::$app->request->post('lib_isbn'),
                 "lib_titulo"=>Yii::$app->request->post('lib_titulo'),
                 "lib_descripcion"=>Yii::$app->request->post('lib_descripcion'),
                 "lib_imagen" =>Yii::$app->request->post('lib_imagen'),
@@ -195,11 +262,11 @@ class LibroController extends Controller
                 "lib_autores"=>Yii::$app->request->post('lib_autores'),
                 "lib_edicion"=>Yii::$app->request->post('lib_edicion'),
                 "lib_fecha_lanzamiento"=>Yii::$app->request->post('lib_fecha_lanzamiento'),
-                "lib_novedades"=>Yii::$app->request->post('lib_novedades'),
+                "lib_novedades"=>Yii::$app->request->post('lib_novedades')== '1' ? 'Si' : 'No',
                 "lib_idioma" =>Yii::$app->request->post('lib_idioma'),
-                "lib_disponible"=>Yii::$app->request->post('lib_disponible'),
-                "lib_vigente"=>Yii::$app->request->post('lib_vigente'),
-                "lib_puntuacion"=>Yii::$app->request->post('lib_puntuacion'),
+                "lib_disponible"=>Yii::$app->request->post('lib_disponible')== '1' ? 'Si' : 'No',
+                "lib_vigente"=>Yii::$app->request->post('lib_vigente')== '1' ? 'Si' : 'No',
+                "lib_puntuacion"=>"0.0",
             ]))
             ->send();
     }

@@ -45,7 +45,7 @@ $this->title = 'Subcategorias';
                 </div>
 
                 <?= Html::beginForm(['subcategoria/create'], 'post') ?>
-                <input type="hidden" name="<?= Yii::$app->request->csrfParam; ?>" value="<?= Yii::$app->request->csrfToken; ?>" />
+
                 <div class="modal-body">
                     <div class="container-fluid">
                         <div class="row justify-content-center">
@@ -65,7 +65,7 @@ $this->title = 'Subcategorias';
                                 <select name="categoria" type="text" class="form-control" required>
                                     <option value="">Seleccione una categoría</option>
                                     <?php foreach ($categorias as $categoria) { ?>
-                                        <option value="<?= $categoria->cat_id ?>"><?= $categoria->cat_nombre ?></option>
+                                        <option value="<?= $categoria->id ?>"><?= $categoria->cat_nombre ?></option>
                                     <?php  } ?>
                                 </select>
                             </div>
@@ -91,7 +91,7 @@ $this->title = 'Subcategorias';
                 </div>
 
                 <?= Html::beginForm(['subcategoria/update'], 'post') ?>
-                <input type="hidden" name="<?= Yii::$app->request->csrfParam; ?>" value="<?= Yii::$app->request->csrfToken; ?>" />
+
                 <input type="hidden" name="id" id="idSubcategoriaEditar"></input>
                 <div class="modal-body">
                     <div class="container-fluid">
@@ -112,7 +112,7 @@ $this->title = 'Subcategorias';
                                 <select name="categoria" id="editarCategoria" type="text" class="form-control" required>
                                     <option value="">Seleccione una categoría</option>
                                     <?php foreach ($categorias as $categoria) { ?>
-                                        <option value="<?= $categoria->cat_id ?>"><?= $categoria->cat_nombre ?></option>
+                                        <option value="<?= $categoria->id ?>"><?= $categoria->cat_nombre ?></option>
                                     <?php  } ?>
                                 </select>
                             </div>
@@ -138,7 +138,6 @@ $this->title = 'Subcategorias';
                 </div>
 
                 <?= Html::beginForm(['subcategoria/delete'], 'post') ?>
-                <input type="hidden" name="<?= Yii::$app->request->csrfParam; ?>" value="<?= Yii::$app->request->csrfToken; ?>" />
                 <input type="hidden" name="id" id="idSubcategoriaDesactivar"></input>
                 <div class="modal-body">
                     <div class="container-fluid">
@@ -168,7 +167,7 @@ $this->title = 'Subcategorias';
                 paging: false,
                 ordering: false,
                 columns: [{
-                        data: 'subcat_id'
+                        data: 'id'
                     },
                     {
                         data: 'subcat_nombre'
@@ -187,7 +186,7 @@ $this->title = 'Subcategorias';
                     },
                     {
                         data: function(data) {
-                            return "<a class='me-2' onclick='editarSubcategoria(" + data.subcat_id + ",`" + data.subcat_nombre + "`," + data.subcat_cat_id + ")'><i class='fa-solid fa-pencil'></i></a><a class='' onclick='desactivarSubcategoria(" + data.subcat_id + ",`" + data.subcat_nombre + "`)'><i class='fa-solid fa-x'></i></a>";
+                            return "<a class='me-2' onclick='editarSubcategoria(" + data.id + ",`" + data.subcat_nombre + "`," + data.id + ")'><i class='fa-solid fa-pencil'></i></a><a class='' onclick='desactivarSubcategoria(" + data.id + ",`" + data.subcat_nombre + "`)'><i class='fa-solid fa-x'></i></a>";
                         }
                     },
                 ],

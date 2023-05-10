@@ -292,7 +292,8 @@ $(function() {
             $node.find("h4.code").html(code);
             $("#result_strip ul.thumbnails").prepend($node);
             $('#code_selected').html(code);
-           
+           // document.getElementById('code_selected').value = 'hola2';
+            console.log(code)
         }
     });
 

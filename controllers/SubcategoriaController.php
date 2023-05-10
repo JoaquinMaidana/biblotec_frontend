@@ -32,6 +32,32 @@ class SubcategoriaController extends Controller
             'categorias' => json_decode($response2->getContent())
         ]);
     }
+    public function actionGetSubcategorias(){
+        $client = new Client();
+        $response = $client->createRequest()
+            ->setMethod('get')
+            ->setUrl('http://localhost:3000/sub_categorias')
+            ->send();
+
+        $data = json_decode($response->getContent(), true);
+        $categoria_array = array();
+        
+        return $data;
+    }
+
+    public function actionGetSubcategoriasporid($id_categoria){
+        $client = new Client();
+        
+        $response = $client->createRequest()
+            ->setMethod('get')
+            ->setUrl('http://localhost:3000/sub_categorias?id='.$id_categoria)
+            ->send();
+
+        $categoriasHijas = json_decode($response->getContent(), true);
+        $categoria_array = array();
+        
+        return $response->getContent();
+    }
 
     public function actionCreate()
     {

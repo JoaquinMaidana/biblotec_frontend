@@ -1,7 +1,6 @@
 <?php
 
 use yii\helpers\Html;
-use yii\helpers\Url;
 
 /** @var yii\web\View $this */
 
@@ -44,7 +43,6 @@ $this->title = 'Categorias';
                 </div>
 
                 <?= Html::beginForm(['categoria/create'], 'post') ?>
-                <input type="hidden" name="<?= Yii::$app->request->csrfParam; ?>" value="<?= Yii::$app->request->csrfToken; ?>" />
                 <div class="modal-body">
                     <div class="container-fluid">
                         <div class="row justify-content-center">
@@ -76,7 +74,6 @@ $this->title = 'Categorias';
                 </div>
 
                 <?= Html::beginForm(['categoria/update'], 'post') ?>
-                <input type="hidden" name="<?= Yii::$app->request->csrfParam; ?>" value="<?= Yii::$app->request->csrfToken; ?>" />
                 <input type="hidden" name="id" id="idCategoriaEditar"></input>
                 <div class="modal-body">
                     <div class="container-fluid">
@@ -109,7 +106,6 @@ $this->title = 'Categorias';
                 </div>
 
                 <?= Html::beginForm(['categoria/delete'], 'post') ?>
-                <input type="hidden" name="<?= Yii::$app->request->csrfParam; ?>" value="<?= Yii::$app->request->csrfToken; ?>" />
                 <input type="hidden" name="id" id="idCategoriaDesactivar"></input>
                 <div class="modal-body">
                     <div class="container-fluid">
@@ -139,7 +135,7 @@ $this->title = 'Categorias';
                 paging: false,
                 ordering: false,
                 columns: [{
-                        data: 'cat_id'
+                        data: 'id'
                     },
                     {
                         data: 'cat_nombre'
@@ -155,7 +151,7 @@ $this->title = 'Categorias';
                     },
                     {
                         data: function(data) {
-                            return "<a class='me-2' onclick='editarCategoria(" + data.cat_id + ",`" + data.cat_nombre + "`)'><i class='fa-solid fa-pencil'></i></a><a class='' onclick='desactivarCategoria(" + data.cat_id + ",`" + data.cat_nombre + "`)'><i class='fa-solid fa-x'></i></a>";
+                            return "<a class='me-2' onclick='editarCategoria(" + data.id + ",`" + data.cat_nombre + "`)'><i class='fa-solid fa-pencil'></i></a><a class='' onclick='desactivarCategoria(" + data.id + ",`" + data.cat_nombre + "`)'><i class='fa-solid fa-x'></i></a>";
                         }
                     },
                 ],
