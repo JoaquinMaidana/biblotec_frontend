@@ -74,14 +74,6 @@ $this->title = 'Libros';
             </div>
         </div>
     </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-primary" onclick="$('#modalDesactivarLibro').modal('hide');">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Desactivar</button>
-                </div>
-                <?= Html::endForm() ?>
-            </div>
-        </div>
-    </div>
 
 </div>
 
@@ -117,47 +109,8 @@ $this->title = 'Libros';
                     }
                 }
             ],
-        $('#tablaLibros').DataTable({
-            data: <?= $libros ?>,
-            responsive: true,
-            bFilter: false,
-            paging: false,
-            ordering: false,
-            columns: [{
-                    data: 'id'
-                },
-                {
-                    data: 'lib_titulo'
-                },
-                {
-                    data: 'lib_sub_categoria'
-                },
-                {
-                    data: 'lib_stock'
-                },
-                {
-                    data: 'lib_disponible'
-                },
-                {
-                    data: 'lib_vigente'
-                },
-                {
-                    data: function(data) {
-                        return "<a class='me-2' onclick='$(`#idLibroView`).val(`" + data.id + "`);$(`#formLibroView`).submit()'><i class='fa-solid fa-plus'></i></a><a class='me-2' onclick='$(`#idLibroUpdate`).val(`" + data.id + "`);$(`#formLibroUpdate`).submit()'><i class='fa-solid fa-pencil'></i></a><a class='' onclick='desactivarLibro(" + data.id + ",`" + data.lib_titulo + "`)'><i class='fa-solid fa-x'></i></a>"
-                    }
-                }
-            ],
-        });
     });
-
-    function desactivarLibro(id, titulo) {
-
-        $("#idLibroDesactivar").val(id);
-        $("#textoModalDesactivar").empty();
-        $("#textoModalDesactivar").append("<p>¿Desea desactivar el libro " + titulo + "?</p>");
-        $("#modalDesactivarLibro").modal("show");
-    }
-
+    });
     function desactivarLibro(id, titulo) {
 
         $("#idLibroDesactivar").val(id);
