@@ -1,4 +1,27 @@
+{"sugerencias": [
+  {
+  "id":1,
+  "sug_sugerencia":"Agregar pagina de ayuda",
+  "sug_vigente":"S",
+  "sug_idusu":1,
+  "sug_fecha":"2023-05-03"
+  },
 {
+  "id":2,
+  "sug_sugerencia":"Agregar documentacion a pagina",
+  "sug_vigente":"S",
+  "sug_idusu":1,
+  "sug_fecha":"2023-05-03"
+},
+{
+  "id":3,
+  "sug_sugerencia":"Agregar acceso a libro en linea",
+  "sug_vigente":"S",
+  "sug_idusu":3,
+  "sug_fecha":"2023-05-03"
+}],
+  
+  
   "libros": [
     {
       "lib_id": 1,

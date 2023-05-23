@@ -22,6 +22,7 @@ class UsuarioController extends Controller
             $user = json_decode($response->getContent(), true);
             return $user;
         } else {
+            var_dump("no encontro usuarios");exit;
             return $user="";
         }
 

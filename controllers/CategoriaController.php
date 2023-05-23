@@ -25,6 +25,8 @@ class CategoriaController extends Controller
         return $this->render('index', [
             'categorias' => $response->getContent(),
         ]);
+
+        
     }
 
     public function actionCreate()

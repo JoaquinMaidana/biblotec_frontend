@@ -21,6 +21,7 @@ use app\assets\AppAsset;
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" />
 
+
 <head>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
@@ -39,22 +40,22 @@ use app\assets\AppAsset;
             <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     
-                        <li class="nav-item active">
-                            <a class="nav-link" href="<?= Url::toRoute(['libro/index']); ?>">Libros</a>
+                    <li class="nav-item active">
+                    <a class="nav-link" href="<?= Url::toRoute(['libro/index']); ?>">Libros</a>
                         
-                        </li>
+                    </li>
                         <li class="nav-item active">
-                            <a class="nav-link" href="<?= Url::toRoute(['reserva/index']); ?>">Reservas</a>
+                        <a class="nav-link" href="<?= Url::toRoute(['reserva/index']); ?>">Reservas</a>
 
                     </li>
                     <li class="nav-item active">
                         <a class="nav-link" href="<?= Url::toRoute(['reserva/index']); ?>">Reservas</a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" href="<?= Url::toRoute(['libro/sugerencias']); ?>">Sugerencias</a>
+                        <a class="nav-link" href="<?= Url::toRoute(['sugerencias/index']); ?>">Sugerencias</a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" href="<?= Url::toRoute(['libro/favoritos']); ?>">Favoritos</a>
+                        <a class="nav-link" href="<?= Url::toRoute(['favoritos/index']); ?>">Favoritos</a>
                     </li>
                     <li class="nav-item active">
                         <a class="nav-link" href="<?= Url::toRoute(['usuario/comentarios']); ?>">Comentarios</a>
@@ -65,6 +66,8 @@ use app\assets\AppAsset;
                     <li class="nav-item active">
                         <a class="nav-link" href="<?= Url::toRoute(['subcategoria/index']); ?>">Sub categorias</a>
                     </li>
+                  
+
                 </ul>
                 <ul class="navbar-nav mr-auto">
                        
