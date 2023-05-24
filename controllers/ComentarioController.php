@@ -7,7 +7,7 @@ use yii\web\Controller;
 use yii\httpclient\Client;
 use yii\helpers\Json;
 
-class UsuarioController extends Controller
+class ComentarioController extends Controller
 {
     public function actionIndex()
     {
