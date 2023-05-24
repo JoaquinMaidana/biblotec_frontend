@@ -6,11 +6,39 @@ use Yii;
 use yii\web\Controller;
 use yii\httpclient\Client;
 use yii\helpers\Json;
+use yii\filters\AccessControl;
 
 class LibroController extends Controller
 {
     
-
+       /**
+     * {@inheritdoc}
+     */
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'only' => ['create'],
+                'rules' => [
+                    [
+                        'actions' => ['create'],
+                        'allow' => true,
+                        //'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            if (Yii::$app->session->get('usu_tipo_usuario') != 'Administrador') {
+                                return $this->redirect(['site/index']);
+                            }
+                            return true;
+                        },
+                       
+                        
+                    ],
+                ],
+            ],
+         
+        ];
+    }
    
     
     /**
@@ -23,33 +51,57 @@ class LibroController extends Controller
         $client = new Client();
         $response = $client->createRequest()
             ->setMethod('get')
+        //    ->setUrl('http://localhost/proyectos%20php/bibliotec_backend/web/libros/obtener-libros')
             ->setUrl('http://localhost:3000/libros')
             ->send();
 
         if ($response->isOk) {
             
             // Decodificar el contenido JSON en un array asociativo 
-            $data = json_decode($response->getContent(), true);
+            $data2 = json_decode($response->getContent(), true);
+        //    $data2 =$data1['data'];
             $libros_array = array();
-            $string = json_encode($data);
+            $string = json_encode($data2);
            // var_dump($string);
             
-            foreach ($data as $libro) {
+            foreach ($data2 as $libro) {
                 // Agregar cada libro al arreglo de libros
                 array_push($libros_array, $libro);
             }
             
            
-              
-              // Imprimir el string JSON
-              
-            
-
         }
         return $this->render('index',[
             'libros' => $string,
             'libros_Array' => $libros_array
         ]);
+    }
+
+
+    public function actionGetLibros(){
+        $client = new Client();
+        $response = $client->createRequest()
+            ->setMethod('get')
+        //    ->setUrl('http://localhost/proyectos%20php/bibliotec_backend/web/libros/obtener-libros')
+            ->setUrl('http://localhost:3000/libros')
+            ->send();
+
+        if ($response->isOk) {
+            
+            // Decodificar el contenido JSON en un array asociativo 
+            $data2 = json_decode($response->getContent(), true);
+        //    $data2 =$data1['data'];
+            $libros_array = array();
+            $string = json_encode($data2);
+           // var_dump($string);
+            
+            foreach ($data2 as $libro) {
+                // Agregar cada libro al arreglo de libros
+                array_push($libros_array, $libro);
+            }
+        }
+        return  $libros_array;
+
     }
 
     public function actionCreate()
@@ -173,9 +225,16 @@ class LibroController extends Controller
     }
 
 
-    public function actionView()
+    public function actionView($id2="nada")
     {
-        $id = $_POST['id'];
+       
+        if ($this->request->post()) {
+            $id = $_POST['id'];
+        }
+        if ($this->request->get()) {
+            $id = $this->request->get('id2');
+            // Resto del código
+        }
         $libro = $this->findLibro($id);
         return $this->render('detalleLibro', [
             'libro' => $libro
@@ -215,7 +274,7 @@ class LibroController extends Controller
 
     protected function save($httpMethod='post')
 {
-    $url = 'http://localhost:3000/libros';
+    $url = 'http://localhost/proyectos%20php/bibliotec_backend/web/libros';
     $client = new Client();
 
     if ($httpMethod === 'PUT') {
@@ -226,49 +285,45 @@ class LibroController extends Controller
             ->addHeaders(['content-type' => 'application/json'])
             ->setContent(Json::encode([
                 "id" =>Yii::$app->request->post('id'),
-                "lib_isbn"=>Yii::$app->request->post('lib_idbn'),
-                "lib_titulo"=>Yii::$app->request->post('lib_titulo'),
-                "lib_descripcion"=>Yii::$app->request->post('lib_descripcion'),
-                "lib_imagen" =>Yii::$app->request->post('lib_imagen'),
-                "lib_categoria"=>Yii::$app->request->post('lib_categoria'),
-                "lib_sub_categoria"=>Yii::$app->request->post('lib_sub_categoria'),
-                "lib_url"=>Yii::$app->request->post('lib_url'),
-                "lib_stock"=>Yii::$app->request->post('lib_stock'),
-                "lib_autores"=>Yii::$app->request->post('lib_autores'),
-                "lib_edicion"=>Yii::$app->request->post('lib_edicion'),
-                "lib_fecha_lanzamiento"=>Yii::$app->request->post('lib_fecha_lanzamiento'),
-                "lib_novedades"=>Yii::$app->request->post('lib_novedades'),
-                "lib_idioma" =>Yii::$app->request->post('lib_idioma'),
-                "lib_disponible"=>Yii::$app->request->post('lib_disponible'),
-                "lib_vigente"=>Yii::$app->request->post('lib_vigente'),
-                "lib_puntuacion"=>Yii::$app->request->post('lib_puntuacion'),
+                "lib_isbn"=>Yii::$app->request->post('idbn'),
+                "lib_titulo"=>Yii::$app->request->post('titulo'),
+                "lib_descripcion"=>Yii::$app->request->post('descripcion'),
+                "lib_imagen" =>Yii::$app->request->post('imagen'),
+                "lib_categoria"=>Yii::$app->request->post('categoria'),
+                "lib_sub_categoria"=>Yii::$app->request->post('sub_categoria'),
+                "lib_url"=>Yii::$app->request->post('url'),
+                "lib_stock"=>Yii::$app->request->post('stock'),
+                "lib_autores"=>Yii::$app->request->post('autores'),
+                "lib_edicion"=>Yii::$app->request->post('edicion'),
+                "lib_fecha_lanzamiento"=>Yii::$app->request->post('fecha_lanzamiento'),
+                "lib_novedades"=>Yii::$app->request->post('novedades'),
+                "lib_idioma" =>Yii::$app->request->post('idioma'),
+                "lib_disponible"=>Yii::$app->request->post('disponible'),
+                "lib_vigente"=>Yii::$app->request->post('vigente'),
+                "lib_puntuacion"=>Yii::$app->request->post('puntuacion'),
             ]))
             ->send();
     } else {
         $response = $client->createRequest()
-            ->setMethod('post')
-            ->setUrl($url)
-            ->addHeaders(['content-type' => 'application/json'])
-            ->setContent(Json::encode([
-                "id" =>Yii::$app->request->post('id'),
-                "lib_isbn"=>Yii::$app->request->post('lib_isbn'),
-                "lib_titulo"=>Yii::$app->request->post('lib_titulo'),
-                "lib_descripcion"=>Yii::$app->request->post('lib_descripcion'),
-                "lib_imagen" =>Yii::$app->request->post('lib_imagen'),
-                "lib_categoria"=>Yii::$app->request->post('lib_categoria'),
-                "lib_sub_categoria"=>Yii::$app->request->post('lib_sub_categoria'),
-                "lib_url"=>Yii::$app->request->post('lib_url'),
-                "lib_stock"=>Yii::$app->request->post('lib_stock'),
-                "lib_autores"=>Yii::$app->request->post('lib_autores'),
-                "lib_edicion"=>Yii::$app->request->post('lib_edicion'),
-                "lib_fecha_lanzamiento"=>Yii::$app->request->post('lib_fecha_lanzamiento'),
-                "lib_novedades"=>Yii::$app->request->post('lib_novedades')== '1' ? 'Si' : 'No',
-                "lib_idioma" =>Yii::$app->request->post('lib_idioma'),
-                "lib_disponible"=>Yii::$app->request->post('lib_disponible')== '1' ? 'Si' : 'No',
-                "lib_vigente"=>Yii::$app->request->post('lib_vigente')== '1' ? 'Si' : 'No',
-                "lib_puntuacion"=>"0.0",
-            ]))
-            ->send();
+        ->setMethod('post')
+        ->setUrl($url.'/create')
+        ->addHeaders(['content-type' => 'application/x-www-form-urlencoded'])
+        ->setContent(http_build_query([
+            "Libro[isbn]" => Yii::$app->request->post('lib_isbn'),
+            "Libro[titulo]" => Yii::$app->request->post('lib_titulo'),
+            "Libro[descripcion]" => Yii::$app->request->post('lib_descripcion'),
+            "Libro[imagen]" => Yii::$app->request->post('lib_imagen'),
+            "Libro[categoria]" => Yii::$app->request->post('lib_categoria'),
+            "Libro[subcategoria]" => Yii::$app->request->post('lib_sub_categoria'),
+            "Libro[url]" => Yii::$app->request->post('lib_url'),
+            "Libro[stock]" => Yii::$app->request->post('lib_stock'),
+            "Libro[autores]" => Yii::$app->request->post('lib_autores'),
+            "Libro[edicion]" => Yii::$app->request->post('lib_edicion'),
+            "Libro[fecha_lanzamiento]" => Yii::$app->request->post('lib_fecha_lanzamiento'),
+            "Libro[novedad]" => Yii::$app->request->post('lib_novedades') == '1' ? 'S' : 'N',
+            "Libro[idioma]" => Yii::$app->request->post('lib_idioma'),
+        ]))
+        ->send();
     }
 
     if ($response->isOk) {

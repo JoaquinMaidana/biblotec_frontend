@@ -5,6 +5,7 @@ use yii\helpers\Html;
 /** @var yii\web\View $this */
 
 $this->title = 'Categorias';
+
 ?>
 
 <div class="container-fluid">
