@@ -51,7 +51,7 @@ use app\assets\AppAsset;
                         <a class="nav-link" href="<?= Url::toRoute(['libro/favoritos']); ?>">Favoritos</a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" href="<?= Url::toRoute(['usuario/comentarios']); ?>">Comentarios</a>
+                        <a class="nav-link" href="<?= Url::toRoute(['comentario/index']); ?>">Comentarios</a>
                     </li>
                     <li class="nav-item active">
                         <a class="nav-link" href="<?= Url::toRoute(['categoria/index']); ?>">Categorias</a>
