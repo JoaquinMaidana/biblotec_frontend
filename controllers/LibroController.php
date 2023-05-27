@@ -241,7 +241,7 @@ class LibroController extends Controller
         ]);
     }
 
-    protected function findLibro($idlibros)
+    static public function findLibro($idlibros)
     {
       
         $client = new Client();
