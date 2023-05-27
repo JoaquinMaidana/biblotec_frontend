@@ -7,7 +7,7 @@
    
 
     $this->registerCssFile('@web/scanner/scanner.css');
-
+   
 ?>
 <style>
   .titulo {
