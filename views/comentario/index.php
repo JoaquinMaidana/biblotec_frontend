@@ -25,7 +25,7 @@ $idLibro = $comentarios[0]['comet_lib_id'];
             <div class="row mt-3">
                 <hr>
                 <div class="col-12">
-                    <?= $this->render('_comentario', array('comentario' => $comentario['comet_comentario'], 'usuario' => $comentario['comet_usu'], 'fecha' => $comentario['comet_fecha_hora'], 'hijos' => $comentario['comentariosHijos'], 'id' => $comentario['comet_id'], 'referencia' => $comentario['comet_referencia_id'])); ?>
+                    <?= $this->render('_comentario', array('comentario' => $comentario['comet_comentario'], 'usuario' => $comentario['comet_usu'], 'fecha' => $comentario['comet_fecha_hora'], 'hijos' => $comentario['comentariosHijos'], 'id' => $comentario['comet_id'], 'referencia' => $comentario['comet_referencia_id'], 'padre' => $comentario['comet_padre_id'])); ?>
                 </div>
             </div>
         <?php } ?>
@@ -179,4 +179,16 @@ $idLibro = $comentarios[0]['comet_lib_id'];
             }
         });
     });
+
+    function ocultarMostrarComentarios(padre){
+        if($("#" + padre).is(":visible")){
+            $("#btn" + padre).removeClass("fa-arrow-up-long");
+            $("#btn" + padre).addClass("fa-arrow-down-long");
+            $("#" + padre).hide();
+        } else {
+            $("#btn" + padre).addClass("fa-arrow-up-long");
+            $("#btn" + padre).removeClass("fa-arrow-down-long");
+            $("#" + padre).show();
+        }
+    }
 </script>

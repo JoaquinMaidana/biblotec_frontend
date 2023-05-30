@@ -41,6 +41,7 @@ $this->title = 'Libros';
 
     <?= Html::beginForm(['libro/view'], 'post', ['id' => 'formLibroView']) ?>
     <input type="hidden" name="id" id="idLibroView"></input>
+    <input type="hidden" name="vuelta" id="vuelta"></input>
     <?= Html::endForm() ?>
 
     <?= Html::beginForm(['libro/update'], 'get', ['id' => 'formLibroUpdate']) ?>
@@ -105,7 +106,7 @@ $this->title = 'Libros';
                 },
                 {
                     data: function(data) {
-                        return "<a class='me-2' onclick='$(`#idLibroView`).val(`" + data.id + "`);$(`#formLibroView`).submit()'><i class='fa-solid fa-plus'></i></a><a class='me-2' onclick='$(`#idLibroUpdate`).val(`" + data.id + "`);$(`#formLibroUpdate`).submit()'><i class='fa-solid fa-pencil'></i></a><a class='' onclick='desactivarLibro(" + data.id + ",`" + data.lib_titulo + "`)'><i class='fa-solid fa-x'></i></a>"
+                        return "<a class='me-2' onclick='$(`#idLibroView`).val(`" + data.id + "`);$(`#vuelta`).val(`libro/index`);$(`#formLibroView`).submit()'><i class='fa-solid fa-plus'></i></a><a class='me-2' onclick='$(`#idLibroUpdate`).val(`" + data.id + "`);$(`#formLibroUpdate`).submit()'><i class='fa-solid fa-pencil'></i></a><a class='' onclick='desactivarLibro(" + data.id + ",`" + data.lib_titulo + "`)'><i class='fa-solid fa-x'></i></a>"
                     }
                 }
             ],

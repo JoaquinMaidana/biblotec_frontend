@@ -14,10 +14,20 @@ $this->title = 'Libro: ' . $libro['lib_titulo'];
         <div class="col">
             <h1 class="titulo"><?= Html::encode($this->title) ?></h1>
         </div>
+
     </div>
 
     <div class="row mt-3">
-        <div class="col-12">
+        <div class="col-4">
+            <div class="container-fluid">
+                <div class="row justify-content-center">
+                    <div class="col-auto">
+                        <input type="image" id="imagenPortada" src="<?= $libro['lib_imagen'] ?>"></input>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-8">
             <div class="container-fluid">
 
                 <div class="row justify-content-center">
@@ -137,47 +147,12 @@ $this->title = 'Libro: ' . $libro['lib_titulo'];
                     </div>
                 </div>
 
-                <div class="row mt-3 justify-content-center">
-                    <div class="col-3 text-end">
-                        <label>Portada:</label>
-                    </div>
-                    <div class="col">
-                        <button class="btn btn-primary" onclick="$('#modalPortada').modal('show')">Ver portada</button>
-                    </div>
-                </div>
-
                 <div class="row mt-3 justify-content-end">
                     <div class="col-auto">
-                        <a href="<?= Url::toRoute(['libro/index']); ?>" class="btn btn-primary">Volver</a>
+                        <a href="<?= Url::toRoute([$vuelta]); ?>" class="btn btn-primary">Volver</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-<div id="modalPortada" class="modal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Portada actual</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-
-            <div class="modal-body">
-                <div class="container-fluid">
-                    <div class="row justify-content-center">
-                        <div class="col-auto">
-                            <input type="image" id="imagenPortada" src="<?= $libro['lib_imagen'] ?>"></input>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="$('#modalPortada').modal('hide');">Aceptar</button>
-            </div>
-        </div>
-    </div>
-</div>
-
