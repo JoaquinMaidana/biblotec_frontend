@@ -52,7 +52,7 @@ class LibroController extends Controller
         $response = $client->createRequest()
             ->setMethod('get')
         //    ->setUrl('http://localhost/proyectos%20php/bibliotec_backend/web/libros/obtener-libros')
-            ->setUrl('http://localhost:3000/libros')
+            ->setUrl('http://152.70.212.112:3000/libros')
             ->send();
 
         if ($response->isOk) {
@@ -83,7 +83,7 @@ class LibroController extends Controller
         $response = $client->createRequest()
             ->setMethod('get')
         //    ->setUrl('http://localhost/proyectos%20php/bibliotec_backend/web/libros/obtener-libros')
-            ->setUrl('http://localhost:3000/libros')
+            ->setUrl('http://152.70.212.112:3000/libros')
             ->send();
 
         if ($response->isOk) {
@@ -229,13 +229,14 @@ class LibroController extends Controller
     {
        
         if ($this->request->post()) {
-            $id = $_POST['id'];
+            $idlibros="";
+            $idlibros = $_POST['id'];
         }
-        if ($this->request->get()) {
-            $id = $this->request->get('id2');
+        else {
+            $idlibros = $this->request->get('id2');
             // Resto del código
         }
-        $libro = $this->findLibro($id);
+        $libro = $this->findLibro($idlibros);
         return $this->render('detalleLibro', [
             'libro' => $libro
         ]);
@@ -247,7 +248,7 @@ class LibroController extends Controller
         $client = new Client();
         $response = $client->createRequest()
             ->setMethod('get')
-            ->setUrl('http://localhost:3000/libros/' . $idlibros)
+            ->setUrl('http://152.70.212.112:3000/libros/' . $idlibros)
             ->send();
             
         if ($response->isOk) {
@@ -265,7 +266,7 @@ class LibroController extends Controller
         $client = new Client();
         $response = $client->createRequest()
             ->setMethod('delete')
-            ->setUrl('http://localhost:3000/libros/' . $idlibros)
+            ->setUrl('http://152.70.212.112:3000/libros/' . $idlibros)
             ->send();
         return $response->isOk;
 

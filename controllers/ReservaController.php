@@ -16,7 +16,7 @@ class ReservaController extends Controller
         $client = new Client();
         $response = $client->createRequest()
             ->setMethod('get')
-            ->setUrl('http://localhost:3000/reservas?resv_usu_id=' . $usuario_id)
+            ->setUrl('http://152.70.212.112:3000/reservas?resv_usu_id=' . $usuario_id)
             ->send();
 
         $reservas = json_decode($response->getContent());

@@ -19,11 +19,15 @@ class CategoriaController extends Controller
         $client = new Client();
         $response = $client->createRequest()
             ->setMethod('get')
-            ->setUrl('http://localhost:3000/categorias')
+            ->setUrl('http://localhost/proyectos%20php/bibliotec_backend/web/categorias/listado')
+            ->addHeaders(['Authorization' => 'Bearer ' . 'user'])
             ->send();
 
+        $data = json_decode($response->getContent(), true);
+        $categorias= $data['data'];
+        $categorias_json = json_encode($categorias);
         return $this->render('index', [
-            'categorias' => $response->getContent(),
+            'categorias' => $categorias_json,
         ]);
     }
 
@@ -31,7 +35,7 @@ class CategoriaController extends Controller
         $client = new Client();
         $response = $client->createRequest()
             ->setMethod('get')
-            ->setUrl('http://localhost:3000/categorias')
+            ->setUrl('http://152.70.212.112:3000/categorias')
             ->send();
 
         $data = json_decode($response->getContent(), true);
@@ -40,25 +44,102 @@ class CategoriaController extends Controller
         return $data;
     }
 
+    public function actionGetCategorias2(){
+        $client = new Client();
+        $response = $client->createRequest()
+            ->setMethod('get')
+            ->setUrl('http://localhost/proyectos%20php/bibliotec_backend/web/categorias/listado')
+            ->addHeaders(['Authorization' => 'Bearer ' . 'user'])
+            ->send();
+
+        $data = json_decode($response->getContent(), true);
+        $categorias= $data['data'];
+        $categorias_json = json_encode($categorias);
+
+        return $categorias_json;
+
+    }
+
     public function actionCreate()
     {
-        $nombre = $_POST["nombre"];
+        if ($this->request->post()) {
+            $nombre = $_POST["nombre"];
+            $this->save();
+        }
+        
 
         return $this->redirect(['index']);
     }
 
     public function actionUpdate()
     {
-        $id = $_POST["id"];
-        $nombre = $_POST["nombre"];
-
+       
+       
+        if ($this->request->post()) {
+            $nombre = $_POST["nombre"];
+            $id = $_POST["id"];
+            $this->save('PUT');
+        }
         return $this->redirect(['index']);
     }
 
     public function actionDelete()
     {
-        $id = $_POST["id"];
-
+        if ($this->request->post()) {
+            $id = $_POST["id"];
+            $client = new Client();
+            $response = $client->createRequest()
+            ->setMethod('put')
+            ->setUrl('http://localhost/proyectos%20php/bibliotec_backend/web/categorias/delete?id='.$id)
+            ->addHeaders(['content-type' => 'application/json',
+                    'Authorization' => 'Bearer ' . 'user',
+            ])->send();
+        }
         return $this->redirect(['index']);
+    }
+
+
+    protected function save($httpMethod='post')
+    {
+        $url = 'http://localhost/proyectos%20php/bibliotec_backend/web/categorias';
+        $client = new Client();
+
+        if ($httpMethod === 'PUT') {
+            $url .= '/update';
+            $response = $client->createRequest()
+            ->setMethod('put')
+            ->setUrl($url)
+            ->addHeaders(['content-type' => 'application/json',
+                    'Authorization' => 'Bearer ' . 'user',
+            
+            
+            ])
+            ->setContent(Json::encode([   
+                "nombre" => Yii::$app->request->post('nombre'),
+                "id" => Yii::$app->request->post('id'),      
+            ]))
+            ->send();
+        } else {
+            $response = $client->createRequest()
+            ->setMethod('post')
+            ->setUrl($url.'/create')
+            ->addHeaders(['content-type' => 'application/json',
+                    'Authorization' => 'Bearer ' . 'user',
+            
+            
+            ])
+            ->setContent(Json::encode([   
+                "nombre" => Yii::$app->request->post('nombre'),
+                "vigente" => 'S',      
+            ]))
+            ->send();
+        }
+
+        if ($response->isOk) {
+            
+            return true;
+        } else {
+            return false;
+        }
     }
 }

@@ -139,11 +139,11 @@ $this->title = 'Categorias';
                         data: 'id'
                     },
                     {
-                        data: 'cat_nombre'
+                        data: 'nombre'
                     },
                     {
                         data: function(data) {
-                            if (data.cat_vigente == "S") {
+                            if (data.vigente == "S") {
                                 return "<span>Si<span>";
                             } else {
                                 return "<span>No<span>";
@@ -152,7 +152,7 @@ $this->title = 'Categorias';
                     },
                     {
                         data: function(data) {
-                            return "<a class='me-2' onclick='editarCategoria(" + data.id + ",`" + data.cat_nombre + "`)'><i class='fa-solid fa-pencil'></i></a><a class='' onclick='desactivarCategoria(" + data.id + ",`" + data.cat_nombre + "`)'><i class='fa-solid fa-x'></i></a>";
+                            return "<a class='me-2' onclick='editarCategoria(" + data.id + ",`" + data.nombre + "`)'><i class='fa-solid fa-pencil'></i></a><a class='' onclick='desactivarCategoria(" + data.id + ",`" + data.nombre + "`)'><i class='fa-solid fa-x'></i></a>";
                         }
                     },
                 ],

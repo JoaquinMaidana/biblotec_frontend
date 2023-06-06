@@ -40,7 +40,7 @@ $this->title = 'Libros';
     </div>
 
     <?= Html::beginForm(['libro/view'], 'post', ['id' => 'formLibroView']) ?>
-    <input type="hidden" name="id" id="idLibroView"></input>
+    <input type="text" name="id" id="idLibroView"></input>
     <?= Html::endForm() ?>
 
     <?= Html::beginForm(['libro/update'], 'get', ['id' => 'formLibroUpdate']) ?>

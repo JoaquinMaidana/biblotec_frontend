@@ -250,10 +250,10 @@ $this->title = 'Usuarios';
                 paging: false,
                 ordering: false,
                 columns: [{
-                        data: 'usu_id'
+                        data: 'id'
                     },
                     {
-                        data: 'usu_tipo'
+                        data: 'tipo_usuario'
                     },
                     {
                         data: function(data) {
@@ -261,16 +261,16 @@ $this->title = 'Usuarios';
                         }
                     },
                     {
-                        data: 'usu_correo'
+                        data: 'mail'
                     },
                     {
-                        data: 'usu_telefono'
+                        data: 'telefono'
                     },
                     {
-                        data: 'usu_documento'
+                        data: 'documento'
                     },
                     {
-                        data: 'usu_habilitado'
+                        data: 'habilitado'
                     },
                     {
                         data: 'usu_estado'

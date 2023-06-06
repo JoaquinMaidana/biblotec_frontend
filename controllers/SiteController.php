@@ -4,6 +4,8 @@ namespace app\controllers;
 
 use Yii;
 use yii\filters\AccessControl;
+use yii\helpers\Json;
+use yii\helpers\Url;
 use yii\httpclient\Client;
 use yii\web\Controller;
 use yii\web\Response;
@@ -14,7 +16,9 @@ use app\models\User;
 class SiteController extends Controller
 {
 
+    private array $usuario;
 
+    private $token;
     
     /**
      * {@inheritdoc}
@@ -41,7 +45,8 @@ class SiteController extends Controller
             ],
         ];
     }
-
+   
+    
     /**
      * {@inheritdoc}
      */
@@ -87,57 +92,91 @@ class SiteController extends Controller
             return $this->goHome();
         }
 
+
         if ($this->request->post()) {
             $usuarioController = new UsuarioController(Yii::$app->id, Yii::$app);
-            if (isset($_POST['documento'])){
-                $user = $usuarioController->findUser($_POST['documento']);
+            if (isset($this->usuario)){
+                $user = $this->usuario;
+                $token = $this->token;
+            }else{
+                $url = 'http://152.70.212.112/usuarios';
+                $client = new Client();
+            
+               
+                    $response = $client->createRequest()
+                    ->setMethod('post')
+                    ->setUrl($url.'/login')
+                    ->addHeaders(['content-type' => 'application/x-www-form-urlencoded'])
+                    ->setContent(http_build_query([
+                        "documento" => Yii::$app->request->post('documento'),  
+                        "clave" => Yii::$app->request->post('contrasena'),
+                       
+                    ]))
+                    ->send();
+              
+                    
+                if ($response->isOk) {
+                    
+                    $respuesta = json_decode($response->getContent(), true);
+                    if($respuesta['codigo']=='0'){
+        
+                        $token = $respuesta['data']['token'];
+                        $user = json_decode($respuesta['data']['datosUsuario'], true);
+        
+                    }else{
+                        global $mensaje;
+                        $mensaje = $respuesta['mensaje'];
+                    }
+                } 
+
             }
             
 
-            if($user['id'] == $_POST['documento'] && $user['usu_clave'] == $_POST['contrasena']){ //esto lo hace el back pero por mientras
-                
-                
-
                 $session = Yii::$app->session;
                 $session->open();
-
-                $session->set('usu_id', $user['usu_id']);
-                $session->set('usu_documento', $user['id']);
-                $session->set('usu_nombre', $user['usu_nombre']);
-                $session->set('usu_apellido', $user['usu_apellido']);
-                $session->set('usu_mail', $user['usu_mail']);
-                $session->set('usu_clave', $user['usu_clave']);
-                $session->set('usu_telefono', $user['usu_telefono']);
-                $session->set('usu_tipo_usuario', $user['usu_tipo_usuario']);
-
-
-
-            //    $client = new Client();
-            //    $response = $client->createRequest()
-            //        ->setMethod('get')
-            //        ->setUrl('http://localhost:3000/libros')
-            //        ->send();
-
-            //    if ($response->isOk) {
-                    
-                    // Decodificar el contenido JSON en un array asociativo 
-            //        $data = json_decode($response->getContent(), true);
-            //        $libros_array = array();
-            //        $string = json_encode($data);
-            //     var_dump($string);
-                    
-                    
+                if(isset($user['usu_id'])){
+                    $session->set('usu_id', $user['usu_id']);
+                }
+                if(isset($this->usuario)){
                 
+                    $session->set('usu_documento', $user['documento']); 
+                    $session->set('usu_nombre', $user['nombre']);
+                    $session->set('usu_apellido', $user['apellido']);
+                    $session->set('usu_mail', $user['mail']);
+                    $session->set('usu_clave', $user['clave']);
+                    $session->set('usu_telefono', $user['telefono']);                    
+                    $session->set('usu_tipo_usuario', 'Estudiante');
                     
-                  $script = <<< JS
+                    $script = <<< JS
                   <script>
-                      if (!localStorage.getItem('TokenBibliotec_$user[id]')) {
-                           localStorage.setItem('TokenBibliotec_$user[id]', '$user[usu_token]');
+                      if (!localStorage.getItem('TokenBibliotec_$user[documento]')) {
+                           localStorage.setItem('TokenBibliotec_$user[documento]', '$token');
                       }
                    </script>
                   JS;
-                    
-                    
+                }else{
+                    $session->set('usu_documento', $user['usu_documento']);
+                    $session->set('usu_nombre', $user['usu_nombre']);
+                    $session->set('usu_apellido', $user['usu_apellido']);
+                    $session->set('usu_mail', $user['usu_mail']);
+                    $session->set('usu_clave', $user['usu_clave']);
+                    $session->set('usu_telefono', $user['usu_telefono']);
+                    if($user['usu_tipo_usuario']==1){
+                        $session->set('usu_tipo_usuario', 'Administrador');
+                    }else{
+                        $session->set('usu_tipo_usuario', 'Estudiante');
+                    }
+                    $script = <<< JS
+                  <script>
+                      if (!localStorage.getItem('TokenBibliotec_$user[usu_documento]')) {
+                           localStorage.setItem('TokenBibliotec_$user[usu_documento]', '$token');
+                      }
+                   </script>
+                  JS;
+
+                }
+               
+            
 
              //   }
 
@@ -154,9 +193,6 @@ class SiteController extends Controller
                     'libros_Array' => $libros
                 ]).$script ;
                 
-                
-               
-
 
             }
      
@@ -165,7 +201,7 @@ class SiteController extends Controller
             // Almacenar el tipo de usuario en la variable de sesión
            // Yii::$app->session->set('tipo_usuario', $user['usu_tipo_usuario']);
          
-        }
+       
 
         return $this->render('login');
     
@@ -221,4 +257,53 @@ class SiteController extends Controller
     {
         return $this->render('about');
     }
+
+    public function actionRegistro()
+    {
+        $mensaje = "";
+        if ($this->request->post()) {
+            $url = 'http://152.70.212.112/usuarios';
+        $client = new Client();
+    
+       
+            $response = $client->createRequest()
+            ->setMethod('post')
+            ->setUrl($url.'/registro')
+            ->addHeaders(['content-type' => 'application/x-www-form-urlencoded'])
+            ->setContent(http_build_query([
+                "documento" => Yii::$app->request->post('usu_documento'),
+                "nombre" => Yii::$app->request->post('usu_nombre'),
+                "apellido" => Yii::$app->request->post('usu_apellido'),
+                "mail" => Yii::$app->request->post('usu_mail'),
+                "clave" => Yii::$app->request->post('usu_clave'),
+                "telefono" => Yii::$app->request->post('usu_telefono'),
+               
+            ]))
+            ->send();
+      
+            
+        if ($response->isOk) {
+            
+            $respuesta = json_decode($response->getContent(), true);
+            if($respuesta['codigo']=='0'){
+                   
+                $this->usuario = $respuesta['data']['datosUsuario'];
+                $this->token = $respuesta['data']['token'];
+                return $this->actionLogin();
+
+            }else{
+                global $mensaje;
+                $mensaje = $respuesta['mensaje'];
+            }
+        } else {
+            return false;
+        }
+    
+
+        }
+        return $this->render('registro');
+    }
+
+    
+        
 }
