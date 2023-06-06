@@ -15,11 +15,11 @@ class FavoritosController extends Controller{
         $client = new Client();
         $response2=$client->createRequest()
         ->setMethod('get')
-        ->setUrl('http://localhost:3000/favoritos')
+        ->setUrl('http://152.70.212.112:3000/favoritos')
         ->send();
         $response = $client->createRequest()
             ->setMethod('get')
-            ->setUrl('http://localhost:3000/libros')
+            ->setUrl('http://152.70.212.112:3000/libros')
             ->send();
 
         if ($response->isOk && $response2->isOk) {
@@ -79,7 +79,7 @@ class FavoritosController extends Controller{
         $client = new Client();
         $response = $client->createRequest()
             ->setMethod('get')
-            ->setUrl('http://localhost:3000/libros/' . $idlibro)
+            ->setUrl('http://152.70.212.112:3000/libros/' . $idlibro)
             ->send();
             
         if ($response->isOk) {
@@ -95,7 +95,7 @@ class FavoritosController extends Controller{
         $client = new Client();
         $response = $client->createRequest()
             ->setMethod('get')
-            ->setUrl('http://localhost:3000/favoritos/' . $idusu)
+            ->setUrl('http://152.70.212.112:3000/favoritos/' . $idusu)
             ->send();
             
         if ($response->isOk) {
@@ -109,7 +109,7 @@ class FavoritosController extends Controller{
 
     protected function deleteFav($httpMethod='post')
     {   //var_dump("favoritos controller delete fav",$_POST["idlibro"],$_POST["idusu"],$_POST["idfav"],$_POST["estado"]);exit;
-        $url = 'http://localhost:3000/favoritos';
+        $url = 'http://152.70.212.112:3000/favoritos';
         $client = new Client();
     
         if ($httpMethod === 'PUT') {

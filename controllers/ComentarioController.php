@@ -15,8 +15,8 @@ class ComentarioController extends Controller
         //$tituloLibro = $_POST['tituloLibro'];
         $idLibro = 20;
         $tituloLibro = "Ejemplo";
-        $comentarios = json_decode(ComentarioController::obtenerComentariosPadres($idLibro));
-        $comentarios = ComentarioController::obtenerComentariosLibro($comentarios);
+        $comentarios = json_decode($this->obtenerComentariosPadres($idLibro));
+        $comentarios = $this->obtenerComentariosLibro($comentarios);
 
         return $this->render('index', [
             'comentarios' => $comentarios,
@@ -66,7 +66,7 @@ class ComentarioController extends Controller
         $client = new Client();
         $response = $client->createRequest()
             ->setMethod('get')
-            ->setUrl('http://localhost:3000/comentarios?comt_vigente=S&comet_padre_id=0&comet_lib_id=' . $idLibro)
+            ->setUrl('http://152.70.212.112:3000/comentarios?comt_vigente=S&comet_padre_id=0&comet_lib_id=' . $idLibro)
             ->send();
 
         return $response->getContent();
@@ -77,7 +77,7 @@ class ComentarioController extends Controller
         $client = new Client();
         $response = $client->createRequest()
             ->setMethod('get')
-            ->setUrl('http://localhost:3000/comentarios?comt_vigente=S&comet_padre_id=' . $idComentario)
+            ->setUrl('http://152.70.212.112:3000/comentarios?comt_vigente=S&comet_padre_id=' . $idComentario)
             ->send();
 
         return $response->getContent();
@@ -97,8 +97,8 @@ class ComentarioController extends Controller
             $index['comet_referencia_id'] = $comentarioPadre->comet_referencia_id;
             $index['comet_padre_id'] = $comentarioPadre->comet_padre_id;
 
-            $comentariosHijos = json_decode(ComentarioController::obtenerComentariosHijos($comentarioPadre->comet_id));
-            $index['comentariosHijos'] = ComentarioController::obtenerComentariosLibro($comentariosHijos);
+            $comentariosHijos = json_decode($this->obtenerComentariosHijos($comentarioPadre->comet_id));
+            $index['comentariosHijos'] = $this->obtenerComentariosLibro($comentariosHijos);
 
             array_push($comentarios, $index);
         }

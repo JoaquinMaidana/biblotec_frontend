@@ -36,7 +36,7 @@ class SugerenciasController extends Controller{
         $client = new Client();
         $response = $client->createRequest()
             ->setMethod('get')
-            ->setUrl('http://localhost:3000/sugerencias')
+            ->setUrl('http://152.70.212.112:3000/sugerencias')
             ->send();
 
         if ($response->isOk) {
@@ -120,7 +120,7 @@ class SugerenciasController extends Controller{
         $client = new Client();
         $response = $client->createRequest()
             ->setMethod('get')
-            ->setUrl('http://localhost:3000/sugerencias/' . $idsugerencia)
+            ->setUrl('http://152.70.212.112:3000/sugerencias/' . $idsugerencia)
             ->send();
             
         if ($response->isOk) {
@@ -139,7 +139,7 @@ class SugerenciasController extends Controller{
         $client = new Client();
         $response = $client->createRequest()
             ->setMethod('get')
-            ->setUrl('http://localhost:3000/sugerencias')
+            ->setUrl('http://152.70.212.112:3000/sugerencias')
             ->send();
             
         if ($response->isOk) {
@@ -157,7 +157,7 @@ class SugerenciasController extends Controller{
 
     protected function saveSug($httpMethod='post')
     {
-        $url = 'http://localhost:3000/sugerencias';
+        $url = 'http://152.70.212.112:3000/sugerencias';
         $client = new Client();
         //var_dump($httpMethod='post');exit;
     
@@ -202,7 +202,7 @@ class SugerenciasController extends Controller{
     }
 
     protected function deleteSug($httpMethod='post'){
-         $url = 'http://localhost:3000/sugerencias';
+         $url = 'http://152.70.212.112:3000/sugerencias';
         $client = new Client();
         //var_dump($httpMethod='post');exit;
     

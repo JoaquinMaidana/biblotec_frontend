@@ -52,7 +52,7 @@ class LibroController extends Controller
         $response = $client->createRequest()
             ->setMethod('get')
         //    ->setUrl('http://localhost/proyectos%20php/bibliotec_backend/web/libros/obtener-libros')
-            ->setUrl('http://localhost:3000/libros')
+            ->setUrl('http://152.70.212.112:3000/libros')
             ->send();
 
         if ($response->isOk) {
@@ -83,7 +83,7 @@ class LibroController extends Controller
         $response = $client->createRequest()
             ->setMethod('get')
         //    ->setUrl('http://localhost/proyectos%20php/bibliotec_backend/web/libros/obtener-libros')
-            ->setUrl('http://localhost:3000/libros')
+            ->setUrl('http://152.70.212.112:3000/libros')
             ->send();
 
         if ($response->isOk) {
@@ -229,13 +229,14 @@ class LibroController extends Controller
     {
        
         if ($this->request->post()) {
-            $id = $_POST['id'];
+            $idlibros="";
+            $idlibros = $_POST['id'];
         }
-        if ($this->request->get()) {
-            $id = $this->request->get('id2');
+        else {
+            $idlibros = $this->request->get('id2');
             // Resto del código
         }
-        $libro = $this->findLibro($id);
+        $libro = $this->findLibro($idlibros);
         return $this->render('detalleLibro', [
             'libro' => $libro
         ]);
@@ -247,7 +248,7 @@ class LibroController extends Controller
         $client = new Client();
         $response = $client->createRequest()
             ->setMethod('get')
-            ->setUrl('http://localhost:3000/libros/' . $idlibros)
+            ->setUrl('http://152.70.212.112:3000/libros/' . $idlibros)
             ->send();
             
         if ($response->isOk) {
@@ -265,7 +266,7 @@ class LibroController extends Controller
         $client = new Client();
         $response = $client->createRequest()
             ->setMethod('delete')
-            ->setUrl('http://localhost:3000/libros/' . $idlibros)
+            ->setUrl('http://152.70.212.112:3000/libros/' . $idlibros)
             ->send();
         return $response->isOk;
 
@@ -290,8 +291,7 @@ class LibroController extends Controller
                 "lib_descripcion"=>Yii::$app->request->post('descripcion'),
                 "lib_imagen" =>Yii::$app->request->post('imagen'),
                 "lib_categoria"=>Yii::$app->request->post('categoria'),
-                "lib_sub_categoria"=>Yii::$app->request->post('sub_categoria'),
-                "lib_url"=>Yii::$app->request->post('url'),
+                "lib_sub_categoria"=>Yii::$app->request->post('sub_categoria'),        
                 "lib_stock"=>Yii::$app->request->post('stock'),
                 "lib_autores"=>Yii::$app->request->post('autores'),
                 "lib_edicion"=>Yii::$app->request->post('edicion'),
@@ -315,7 +315,6 @@ class LibroController extends Controller
             "Libro[imagen]" => Yii::$app->request->post('lib_imagen'),
             "Libro[categoria]" => Yii::$app->request->post('lib_categoria'),
             "Libro[subcategoria]" => Yii::$app->request->post('lib_sub_categoria'),
-            "Libro[url]" => Yii::$app->request->post('lib_url'),
             "Libro[stock]" => Yii::$app->request->post('lib_stock'),
             "Libro[autores]" => Yii::$app->request->post('lib_autores'),
             "Libro[edicion]" => Yii::$app->request->post('lib_edicion'),

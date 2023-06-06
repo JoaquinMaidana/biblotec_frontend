@@ -45,6 +45,9 @@ use app\assets\AppAsset;
                         <a class="nav-link" href="<?= Url::toRoute(['libro/index']); ?>">Libros</a>
                     </li>
                     <li class="nav-item active">
+                        <a class="nav-link" href="<?= Url::toRoute(['usuario/index']); ?>">Usuarios</a>
+                    </li>
+                    <li class="nav-item active">
                         <a class="nav-link" href="<?= Url::toRoute(['reserva/index']); ?>">Reservas</a>
                     </li>
                     <li class="nav-item active">

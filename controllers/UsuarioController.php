@@ -14,11 +14,15 @@ class UsuarioController extends Controller
         $client = new Client();
         $response = $client->createRequest()
             ->setMethod('get')
-            ->setUrl('http://localhost:3000/usuarios')
+            ->setUrl('http://localhost/proyectos%20php/bibliotec_backend/web/usuarios/listado')
+            ->addHeaders(['Authorization' => 'Bearer ' . 'user'])
             ->send();
 
+            $usuarios = json_decode($response->getContent(), true);
+            $usuarios_json = json_encode($usuarios['data']);
+
         return $this->render('index', [
-            'usuarios' => $response->getContent()
+            'usuarios' => $usuarios_json
         ]);
     }
 
@@ -88,7 +92,7 @@ class UsuarioController extends Controller
         $client = new Client();
         $response = $client->createRequest()
             ->setMethod('get')
-            ->setUrl('http://localhost:3000/users/' . $usu_documento)
+            ->setUrl('http://152.70.212.112:3000/users/' . $usu_documento)
             ->send();
             
         if ($response->isOk) {

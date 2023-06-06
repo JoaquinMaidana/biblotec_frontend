@@ -65,7 +65,7 @@ $this->title = 'Subcategorias';
                                 <select name="categoria" type="text" class="form-control" required>
                                     <option value="">Seleccione una categoría</option>
                                     <?php foreach ($categorias as $categoria) { ?>
-                                        <option value="<?= $categoria->id ?>"><?= $categoria->cat_nombre ?></option>
+                                        <option value="<?= $categoria['id'] ?>"><?= $categoria['nombre'] ?></option>
                                     <?php  } ?>
                                 </select>
                             </div>
@@ -112,7 +112,7 @@ $this->title = 'Subcategorias';
                                 <select name="categoria" id="editarCategoria" type="text" class="form-control" required>
                                     <option value="">Seleccione una categoría</option>
                                     <?php foreach ($categorias as $categoria) { ?>
-                                        <option value="<?= $categoria->id ?>"><?= $categoria->cat_nombre ?></option>
+                                        <option value="<?= $categoria['id'] ?>"><?= $categoria['nombre'] ?></option>
                                     <?php  } ?>
                                 </select>
                             </div>
@@ -170,10 +170,10 @@ $this->title = 'Subcategorias';
                         data: 'id'
                     },
                     {
-                        data: 'subcat_nombre'
+                        data: 'nombre'
                     },
                     {
-                        data: 'subcat_cat_id'
+                        data: 'id_categoria'
                     },
                     {
                         data: function(data) {
@@ -186,7 +186,7 @@ $this->title = 'Subcategorias';
                     },
                     {
                         data: function(data) {
-                            return "<a class='me-2' onclick='editarSubcategoria(" + data.id + ",`" + data.subcat_nombre + "`," + data.id + ")'><i class='fa-solid fa-pencil'></i></a><a class='' onclick='desactivarSubcategoria(" + data.id + ",`" + data.subcat_nombre + "`)'><i class='fa-solid fa-x'></i></a>";
+                            return "<a class='me-2' onclick='editarSubcategoria(" + data.id + ",`" + data.nombre + "`," + data.id + ")'><i class='fa-solid fa-pencil'></i></a><a class='' onclick='desactivarSubcategoria(" + data.id + ",`" + data.nombre + "`)'><i class='fa-solid fa-x'></i></a>";
                         }
                     },
                 ],

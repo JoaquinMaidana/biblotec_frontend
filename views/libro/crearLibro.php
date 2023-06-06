@@ -267,7 +267,7 @@
           </div>
           <div class="col">
           <?= Html::dropDownList('lib_categoria', null, 
-            \yii\helpers\ArrayHelper::map($categorias, 'id', 'cat_nombre'), 
+            \yii\helpers\ArrayHelper::map($categorias, 'id', 'nombre'), 
             ['id' => 'categoria-dropdown', 'prompt' => 'Seleccione una categoría', 'class' => 'form-control', 'required' => true]) ?>
 
           </div>
@@ -336,53 +336,6 @@
 </div>
 
 
-<?php
- 
- //echo Html::textInput('lib_isbn', isset($libro) ? $libro['lib_isbn'] : null, ['class' => 'form-control']) ;
-
- //echo Html::label('Título', 'lib_titulo') ;
- //echo Html::textInput('lib_titulo', isset($libro) ? $libro['lib_titulo'] : null, ['class' => 'form-control', 'maxlength' => true]);
-
- //echo Html::label('Descripción', 'lib_descripcion') ;
- //echo Html::textarea('lib_descripcion', isset($libro) ? $libro['lib_descripcion'] : null, ['rows' => 6, 'class' => 'form-control']);
-
- //echo Html::label('Imagen', 'lib_imagen');
- //echo Html::textInput('lib_imagen', isset($libro) ? $libro['lib_imagen'] : null, ['class' => 'form-control']);
-
- //echo Html::label('Categoría', 'lib_categoria');
- //echo Html::textInput('lib_categoria', null, ['class' => 'form-control']);
- //echo Html::label('Subcategoría', 'lib_sub_categoria') ;
- //echo Html::textInput('lib_sub_categoria', null, ['class' => 'form-control']);
-
- //echo Html::label('URL', 'lib_url') ;
- //echo Html::textInput('lib_url', isset($libro) ? $libro['lib_url'] : null, ['class' => 'form-control', 'maxlength' => true]);
-
- //echo Html::label('Stock', 'lib_stock');
- //echo Html::textInput('lib_stock', null, ['class' => 'form-control']);
-
- //echo Html::label('Autores', 'lib_autores') ;
- //echo Html::textInput('lib_autores', isset($libro) ? $libro['lib_autores'] : null, ['class' => 'form-control', 'maxlength' => true]);
-
- //echo Html::label('Edición', 'lib_edicion') ;
- //echo Html::textInput('lib_edicion', isset($libro) ? $libro['lib_edicion'] : null, ['class' => 'form-control', 'maxlength' => true]);
-
- // echo Html::label('Fecha de lanzamiento', 'lib_fecha_lanzamiento');
- // echo Html::textInput('lib_fecha_lanzamiento', isset($libro) ? $libro['lib_fecha_lanzamiento'] : null, ['class' => 'form-control']);
-
- //echo Html::label('Novedades', 'lib_novedades') ;
- //echo Html::dropDownList('lib_novedades', null, [0 => 'No', 1 => 'Sí'], ['class' => 'form-control']);
-
- //echo Html::label('Idioma', 'lib_idioma') ;
- //echo Html::textInput('lib_idioma', isset($libro) ? $libro['lib_idioma'] : null, ['class' => 'form-control', 'maxlength' => true]);
-
- //echo Html::label('Disponible', 'lib_disponible');
- //echo Html::dropDownList('lib_disponible', null, [0 => 'No', 1 => 'Sí'], ['class' => 'form-control']);
-
- //echo Html::label('Vigente', 'lib_vigente');
- //echo Html::dropDownList('lib_vigente', null, [0 => 'No', 1 => 'Sí'], ['class' => 'form-control']);
-
- ?>
-
 
 
 
@@ -392,31 +345,48 @@
 $this->registerJsFile('@web/scanner/scanner.js');
 
 
+if(isset($categorias)){
+  $categorias_string = json_encode($categorias);
 
+}
 
 ?>
 <script>
-$(document).ready(function() {
-    $('#categoria-dropdown').change(function() {
-        var categoriaId = $(this).val();
-        $.ajax({
-            url: '<?= Yii::$app->urlManager->createUrl(["subcategoria/get-subcategoriasporid", "id_categoria" => ""]) ?>'+categoriaId,
-            data: {id_categoria: categoriaId},
-            success: function(response) {
-                var subcategorias = JSON.parse(response);
-                console.log(subcategorias);
-                var options = '';
-                for (var i = 0; i < subcategorias.length; i++) {
-                    options += '<option value="' + subcategorias[i].id + '">' + subcategorias[i].subcat_nombre + '</option>';
-                }
-                $('#subcategoria').html(options);
-              
-            },
-            error: function() {
-                alert('Error al cargar subcategorías.');
-            }
-        });
-    });
-});
+  var categoriasSubcategorias = <?php echo $categorias_string ?>
 
+  var categoriaDropdown = document.getElementById("categoria-dropdown");
+var subcategoriaDropdown = document.getElementById("subcategoria");
+
+// Rellenar el dropdown de categorías
+for (var i = 0; i < categoriasSubcategorias.length; i++) {
+    var categoria = categoriasSubcategorias[i];
+    var option = document.createElement("option");
+    option.value = categoria.id;
+    option.text = categoria.nombre;
+    categoriaDropdown.appendChild(option);
+}
+
+// Evento de cambio de selección de categoría
+categoriaDropdown.addEventListener("change", function() {
+    var categoriaId = parseInt(this.value);
+
+    // Limpiar el dropdown de subcategorías
+    subcategoriaDropdown.innerHTML = "";
+
+    // Buscar la categoría seleccionada en el arreglo
+    var categoria = categoriasSubcategorias.find(function(c) {
+        return c.id === categoriaId;
+    });
+
+    if (categoria) {
+        // Rellenar el dropdown de subcategorías
+        for (var i = 0; i < categoria.subCategorias.length; i++) {
+            var subcategoria = categoria.subCategorias[i];
+            var option = document.createElement("option");
+            option.value = subcategoria.id;
+            option.text = subcategoria.nombre;
+            subcategoriaDropdown.appendChild(option);
+        }
+    }
+});
 </script>
