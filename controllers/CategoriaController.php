@@ -19,7 +19,7 @@ class CategoriaController extends Controller
         $client = new Client();
         $response = $client->createRequest()
             ->setMethod('get')
-            ->setUrl('http://localhost/proyectos%20php/bibliotec_backend/web/categorias/listado')
+            ->setUrl('http://152.70.212.112/categorias/listado')
             ->addHeaders(['Authorization' => 'Bearer ' . 'user'])
             ->send();
 
@@ -35,20 +35,20 @@ class CategoriaController extends Controller
         $client = new Client();
         $response = $client->createRequest()
             ->setMethod('get')
-            ->setUrl('http://152.70.212.112:3000/categorias')
+            ->setUrl('http://152.70.212.112/categorias/listado')
             ->send();
 
         $data = json_decode($response->getContent(), true);
-        $categoria_array = array();
+        $categoria = $data['data'];
         
-        return $data;
+        return $categoria;
     }
 
     public function actionGetCategorias2(){
         $client = new Client();
         $response = $client->createRequest()
             ->setMethod('get')
-            ->setUrl('http://localhost/proyectos%20php/bibliotec_backend/web/categorias/listado')
+            ->setUrl('http://152.70.212.112/categorias/listado')
             ->addHeaders(['Authorization' => 'Bearer ' . 'user'])
             ->send();
 

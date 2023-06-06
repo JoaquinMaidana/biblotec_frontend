@@ -19,7 +19,7 @@ class SubcategoriaController extends Controller
         $client = new Client();
         $response = $client->createRequest()
             ->setMethod('get')
-            ->setUrl('http://localhost/proyectos%20php/bibliotec_backend/web/sub-categorias/listado')
+            ->setUrl('http://152.70.212.112/sub-categorias/listado')
             ->addHeaders(['Authorization' => 'Bearer ' . 'user'])
             ->send();
 
