@@ -6,7 +6,12 @@ use yii\helpers\Url;
 
 /** @var yii\web\View $this */
 
-$this->title = 'Comentarios del libro ' . $tituloLibro;
+    $this->title = 'Comentarios del libro ' . $tituloLibro;
+    $idLibro = $comentarios[0]['comet_lib_id'];
+
+    if (Yii::$app->session->isActive) {      
+        $documento = Yii::$app->session->get('usu_documento');             
+    }
 ?>
 
 
@@ -41,6 +46,7 @@ $this->title = 'Comentarios del libro ' . $tituloLibro;
 
             <?= Html::beginForm(['comentario/delete'], 'post') ?>
             <input type="hidden" name="id" id="idComentarioEliminar"></input>
+            <input type="hidden" name="token" value="" >
             <input type="hidden" name="tituloLibro" value="<?= $tituloLibro ?>"></input>
             <div class="modal-body">
                 <div class="container-fluid">
@@ -70,6 +76,7 @@ $this->title = 'Comentarios del libro ' . $tituloLibro;
             </div>
             <?= Html::beginForm(['comentario/create'], 'post') ?>
             <input type="hidden" name="idLibro" value='<?= $idLibro ?>'></input>
+            <input type="hidden" name="token" value="" >
             <input type="hidden" name="tituloLibro" value="<?= $tituloLibro ?>"></input>
             <div class="modal-body">
                 <div class="container-fluid">
@@ -102,6 +109,7 @@ $this->title = 'Comentarios del libro ' . $tituloLibro;
             <input type="hidden" name="tituloLibro" value="<?= $tituloLibro ?>"></input>
             <input type="hidden" name="comentarioPadre" id="idComentarioPadre"></input>
             <input type="hidden" name="comentarioReferencia" id="idComentarioReferencia"></input>
+            <input type="hidden" name="token" value="" >
             <div class="modal-body">
                 <div class="container-fluid">
                     <div class="row justify-content-center">
@@ -136,6 +144,7 @@ $this->title = 'Comentarios del libro ' . $tituloLibro;
             </div>
             <?= Html::beginForm(['comentario/update'], 'post') ?>
             <input type="hidden" name="id" id="idComentario"></input>
+            <input type="hidden" name="token" value="" >
             <input type="hidden" name="tituloLibro" value="<?= $tituloLibro ?>"></input>
             <div class="modal-body">
                 <div class="container-fluid">
@@ -182,16 +191,20 @@ $this->title = 'Comentarios del libro ' . $tituloLibro;
             }
         });
     });
+</script>
 
-    function ocultarMostrarComentarios(padre){
-        if($("#" + padre).is(":visible")){
-            $("#btn" + padre).removeClass("fa-arrow-up-long");
-            $("#btn" + padre).addClass("fa-arrow-down-long");
-            $("#" + padre).hide();
+<script> 
+        let tokenElements = document.querySelectorAll('[name="token"]');
+
+        if (tokenElements.length > 0) {
+        let token = localStorage.getItem('TokenBibliotec_<?=$documento ?>');
+        if (token) {
+            tokenElements.forEach(function(element) {
+            element.value = token;
+            });
         } else {
-            $("#btn" + padre).addClass("fa-arrow-up-long");
-            $("#btn" + padre).removeClass("fa-arrow-down-long");
-            $("#" + padre).show();
+            console.log('El token no está disponible.');
         }
-    }
+        }
+
 </script>

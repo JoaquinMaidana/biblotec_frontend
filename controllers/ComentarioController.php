@@ -9,16 +9,16 @@ use yii\helpers\Json;
 
 class ComentarioController extends Controller
 {
-    public function actionIndex($idLibro = null, $tituloLibro = null)
+    private $idLibro;
+    public function actionIndex()
     {
-        if ($idLibro == null) {
-            $idLibro = $_POST['idLibro'];
-            $tituloLibro = $_POST['tituloLibro'];
-        }
-        //$idLibro = 20;
-        //$tituloLibro = "Ejemplo";
-        $comentarios = json_decode(ComentarioController::obtenerComentariosPadres($idLibro));
-        $comentarios = ComentarioController::obtenerComentariosLibro($comentarios);
+        //$idLibro = $_POST['idLibro'];
+        //$tituloLibro = $_POST['tituloLibro'];
+        $idLibro = 2;
+        $this->idLibro =2;
+        $tituloLibro = "Ejemplo";
+        $comentarios = json_decode($this->obtenerComentariosPadres($idLibro));
+        $comentarios = $this->obtenerComentariosLibro($comentarios);
 
         return $this->render('index', [
             'comentarios' => $comentarios,
@@ -42,6 +42,10 @@ class ComentarioController extends Controller
             $comentarioReferencia = $_POST['comentarioReferencia']; //Puede llegar nulo si es un nuevo comentario y no una respuesta
         } else {
             $comentarioReferencia = 0;
+        }
+
+        if ($this->request->post()) {
+            $this->save();
         }
 
         // $idUsuario = $_POST['idUsuario']; //No estoy seguro de como se consigue todavia
@@ -73,10 +77,22 @@ class ComentarioController extends Controller
         $client = new Client();
         $response = $client->createRequest()
             ->setMethod('get')
-            ->setUrl('http://152.70.212.112:3000/comentarios?comt_vigente=S&comet_padre_id=0&comet_lib_id=' . $idLibro)
+        //    ->setUrl('http://152.70.212.112:3000/comentarios?comt_vigente=S&comet_padre_id=0&comet_lib_id=' . $idLibro)
+             ->setUrl('http://152.70.212.112/comentarios/vigentes')
+             ->addHeaders(['content-type' => 'application/json'])
+            ->setContent(Json::encode([
+                "lib_id" =>$this->idLibro,
+            ]))
             ->send();
 
-        return $response->getContent();
+            $cometarios = json_decode($response->getContent(), true);
+
+            // Filtrar los comentarios que tienen comet_padre_id igual a null
+            $comentariosFiltrados = array_filter($cometarios, function ($comentario) {
+                return $comentario['comet_padre_id'] === null;
+            });
+            $comentariosFiltradosJson = json_encode($comentariosFiltrados);
+        return $comentariosFiltradosJson;
     }
 
     public function obtenerComentariosHijos($idComentario)
@@ -84,7 +100,9 @@ class ComentarioController extends Controller
         $client = new Client();
         $response = $client->createRequest()
             ->setMethod('get')
+        //    ->setUrl('http://152.70.212.112:3000/comentarios?comt_vigente=S&comet_padre_id=' . $idComentario)
             ->setUrl('http://152.70.212.112:3000/comentarios?comt_vigente=S&comet_padre_id=' . $idComentario)
+
             ->send();
 
         return $response->getContent();
@@ -110,5 +128,114 @@ class ComentarioController extends Controller
             array_push($comentarios, $index);
         }
         return $comentarios;
+    }
+
+        protected function save($httpMethod='post')
+    {
+        $url = 'http://localhost/proyectos%20php/bibliotec_backend/web/comentarios';
+        $client = new Client();
+        $token = Yii::$app->request->post('token');
+        
+        $referenciaid = Yii::$app->request->post('comet_referencia_id');
+            $padreid = Yii::$app->request->post('comet_padre_id');
+            $fecha_hora = Yii::$app->request->post('comet_fecha_hora');
+            
+            if(isset($fecha_hora)){
+                $fecha_convertida = date("Y-m-d", strtotime($fecha_hora));
+                // Obtener la hora actual
+                $hora_actual = date("H:i:s");
+
+                // Combinar la fecha y la hora
+                $fecha_hora_actual = $fecha_convertida . " " . $hora_actual;
+            }
+
+
+        if ($httpMethod === 'PUT') {
+            $url .= '/update?id=' . Yii::$app->request->post('id');
+            if(isset($referenciaid)&& $referenciaid != '' && isset($padreid)&& $padreid != ''){
+                $response = $client->createRequest()
+
+                ->setMethod('put')
+                ->setUrl($url)
+                ->addHeaders(['content-type' => 'application/json'])
+                ->setContent(Json::encode([
+                    "comet_fecha_hora" => $fecha_hora_actual,
+                    "comet_usu_id" => Yii::$app->request->post('comet_usu_id'),
+                    "comet_lib_id" => Yii::$app->request->post('comet_lib_id'),
+                    "comet_comentario" => Yii::$app->request->post('comet_comentario'),
+                    "comet_referencia_id" => $referenciaid,
+                    "comet_padre_id" => $padreid,
+                    
+                ]))
+                ->send();
+            }else{
+                
+                $response = $client->createRequest()
+                
+                ->setMethod('put')
+                ->setUrl($url.'/create')
+                ->addHeaders(['content-type' => 'application/json',
+                        'Authorization' => 'Bearer ' . $token,
+                
+                
+                ])
+                
+                ->setContent(Json::encode([
+                    "comet_fecha_hora" => $fecha_hora_actual,
+                    "comet_usu_id" => Yii::$app->request->post('comet_usu_id'),
+                    "comet_lib_id" => Yii::$app->request->post('comet_lib_id'),
+                    "comet_comentario" => Yii::$app->request->post('comet_comentario'),
+                    
+                    
+                ]))
+                ->send();
+
+            }
+            
+        } else {
+            
+            if(isset($referenciaid)&& $referenciaid != '' && isset($padreid)&& $padreid != ''){
+                $response = $client->createRequest()
+
+                ->setMethod('post')
+                ->setUrl($url.'/create')
+                ->addHeaders(['content-type' => 'application/json'])
+                ->setContent(Json::encode([
+                    "comet_fecha_hora" => $fecha_hora_actual,
+                    "comet_usu_id" => Yii::$app->request->post('comet_usu_id'),
+                    "comet_lib_id" => Yii::$app->request->post('comet_lib_id'),
+                    "comet_comentario" => Yii::$app->request->post('comet_comentario'),
+                    "comet_referencia_id" => $referenciaid,
+                    "comet_padre_id" => $padreid,
+                    
+                ]))
+                ->send();
+            }else{
+                
+                $response = $client->createRequest()
+                
+                ->setMethod('post')
+                ->setUrl($url.'/create')
+                ->addHeaders(['content-type' => 'application/json',
+                        'Authorization' => 'Bearer ' . $token,
+                
+                
+                ])
+                
+                ->setContent(Json::encode([
+                    "comet_fecha_hora" => $fecha_hora_actual,
+                    "comet_usu_id" => Yii::$app->request->post('comet_usu_id'),
+                    "comet_lib_id" => Yii::$app->request->post('comet_lib_id'),
+                    "comet_comentario" => Yii::$app->request->post('comet_comentario'),
+                    
+                    
+                ]))
+                ->send();
+
+            }
+            
+        }
+
+        return $response->isOk ? true : false;
     }
 }

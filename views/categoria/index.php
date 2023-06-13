@@ -6,6 +6,10 @@ use yii\helpers\Html;
 
 $this->title = 'Categorias';
 
+if (Yii::$app->session->isActive) {      
+    $documento = Yii::$app->session->get('usu_documento');             
+}
+
 ?>
 
 <div class="container-fluid">
@@ -44,6 +48,7 @@ $this->title = 'Categorias';
                 </div>
 
                 <?= Html::beginForm(['categoria/create'], 'post') ?>
+                <input type="hidden" name="token" value="" >
                 <div class="modal-body">
                     <div class="container-fluid">
                         <div class="row justify-content-center">
@@ -76,6 +81,7 @@ $this->title = 'Categorias';
 
                 <?= Html::beginForm(['categoria/update'], 'post') ?>
                 <input type="hidden" name="id" id="idCategoriaEditar"></input>
+                <input type="hidden" name="token" value="" >
                 <div class="modal-body">
                     <div class="container-fluid">
                         <div class="row justify-content-center">
@@ -108,6 +114,7 @@ $this->title = 'Categorias';
 
                 <?= Html::beginForm(['categoria/delete'], 'post') ?>
                 <input type="hidden" name="id" id="idCategoriaDesactivar"></input>
+                <input type="hidden" name="token" value="" >
                 <div class="modal-body">
                     <div class="container-fluid">
                         <div class="row justify-content-center">
@@ -174,3 +181,19 @@ $this->title = 'Categorias';
             $("#modalDesactivarCategoria").modal("show");
         }
     </script>
+
+<script> 
+        let tokenElements = document.querySelectorAll('[name="token"]');
+
+        if (tokenElements.length > 0) {
+        let token = localStorage.getItem('TokenBibliotec_<?=$documento ?>');
+        if (token) {
+            tokenElements.forEach(function(element) {
+            element.value = token;
+            });
+        } else {
+            console.log('El token no está disponible.');
+        }
+        }
+
+</script>

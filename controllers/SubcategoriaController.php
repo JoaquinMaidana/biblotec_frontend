@@ -6,9 +6,36 @@ use Yii;
 use yii\web\Controller;
 use yii\httpclient\Client;
 use yii\helpers\Json;
-
+use yii\filters\AccessControl;
 class SubcategoriaController extends Controller
 {
+
+
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'only' => ['create','index','update','delete','save'],
+                'rules' => [
+                    [
+                        'actions' => ['create','index','update','delete','save'],
+                        'allow' => true,
+                        //'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            if (Yii::$app->session->get('usu_tipo_usuario') != 'Administrador') {
+                                return $this->redirect(['site/index']);
+                            }
+                            return true;
+                        },
+                       
+                        
+                    ],
+                ],
+            ],
+         
+        ];
+    }
     /**
      * Displays homepage.
      *
@@ -90,12 +117,13 @@ class SubcategoriaController extends Controller
     public function actionDelete()
     {
         $id = $_POST["id"];
+        $token = Yii::$app->request->post('token');
             $client = new Client();
             $response = $client->createRequest()
             ->setMethod('put')
-            ->setUrl('http://localhost/proyectos%20php/bibliotec_backend/web/sub-categorias/delete?id='.$id)
+            ->setUrl('http://152.70.212.112/sub-categorias/delete?id='.$id)
             ->addHeaders(['content-type' => 'application/json',
-                    'Authorization' => 'Bearer ' . 'user',
+                    'Authorization' => 'Bearer ' . $token,
             ])->send();
 
             return $this->redirect(['index']);
@@ -105,16 +133,16 @@ class SubcategoriaController extends Controller
 
     protected function save($httpMethod='post')
     {
-        $url = 'http://localhost/proyectos%20php/bibliotec_backend/web/sub-categorias';
+        $url = 'http://152.70.212.112/sub-categorias';
         $client = new Client();
-
+        $token = Yii::$app->request->post('token');
         if ($httpMethod === 'PUT') {
             $url .= '/update';
             $response = $client->createRequest()
             ->setMethod('put')
             ->setUrl($url)
             ->addHeaders(['content-type' => 'application/json',
-                    'Authorization' => 'Bearer ' . 'user',
+                    'Authorization' => 'Bearer ' . $token,
             
             
             ])
@@ -128,7 +156,7 @@ class SubcategoriaController extends Controller
             ->setMethod('post')
             ->setUrl($url.'/create')
             ->addHeaders(['content-type' => 'application/json',
-                    'Authorization' => 'Bearer ' . 'user',
+                    'Authorization' => 'Bearer ' . $token,
             
             
             ])

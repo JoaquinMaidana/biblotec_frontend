@@ -104,6 +104,8 @@ class FavoritosController extends Controller{
         }
     }
 
+    
+
 
     protected function deleteFav($httpMethod='post')
     {   //var_dump("favoritos controller delete fav",$_POST["idlibro"],$_POST["idusu"],$_POST["idfav"],$_POST["estado"]);exit;
@@ -123,6 +125,7 @@ class FavoritosController extends Controller{
                 ->setMethod('PUT')
                 ->setUrl($url)
                 ->addHeaders(['content-type' => 'application/json'])
+                ->addHeaders(['Authorization' => 'Bearer ' . 'user'])
                 ->setContent(Json::encode([
                     "id" =>$_POST["idfav"],
                     "fav_usu_id"=>$_POST["idusu"],
@@ -136,6 +139,7 @@ class FavoritosController extends Controller{
                 ->setMethod('post')
                 ->setUrl($url)
                 ->addHeaders(['content-type' => 'application/json'])
+                ->addHeaders(['Authorization' => 'Bearer ' . 'user'])
                 ->setContent(Json::encode([
                     "id" =>Yii::$app->request->post('id'),
                     "sug_sugerencia"=>Yii::$app->request->post('sug_sugerencia'),

@@ -6,6 +6,10 @@ use yii\helpers\Url;
 /** @var yii\web\View $this */
 
 $this->title = 'Subcategorias';
+
+if (Yii::$app->session->isActive) {      
+    $documento = Yii::$app->session->get('usu_documento');             
+}
 ?>
 
 <div class="container-fluid">
@@ -45,6 +49,7 @@ $this->title = 'Subcategorias';
                 </div>
 
                 <?= Html::beginForm(['subcategoria/create'], 'post') ?>
+                <input type="hidden" name="token" value="" >
 
                 <div class="modal-body">
                     <div class="container-fluid">
@@ -93,6 +98,7 @@ $this->title = 'Subcategorias';
                 <?= Html::beginForm(['subcategoria/update'], 'post') ?>
 
                 <input type="hidden" name="id" id="idSubcategoriaEditar"></input>
+                <input type="hidden" name="token" value="" >
                 <div class="modal-body">
                     <div class="container-fluid">
                         <div class="row justify-content-center">
@@ -139,6 +145,7 @@ $this->title = 'Subcategorias';
 
                 <?= Html::beginForm(['subcategoria/delete'], 'post') ?>
                 <input type="hidden" name="id" id="idSubcategoriaDesactivar"></input>
+                <input type="hidden" name="token" value="" >
                 <div class="modal-body">
                     <div class="container-fluid">
                         <div class="row justify-content-center">
@@ -177,7 +184,7 @@ $this->title = 'Subcategorias';
                     },
                     {
                         data: function(data) {
-                            if (data.subcat_vigente == "S") {
+                            if (data.vigente == "S") {
                                 return "<span>Si<span>";
                             } else {
                                 return "<span>No<span>";
@@ -208,4 +215,20 @@ $this->title = 'Subcategorias';
             $("#textoModalDesactivar").append("<p>¿Desea desactivar la subcategoria " + nombre + "?</p>");
             $("#modalDesactivarSubcategoria").modal("show");
         }
+    </script>
+
+    <script> 
+            let tokenElements = document.querySelectorAll('[name="token"]');
+
+            if (tokenElements.length > 0) {
+            let token = localStorage.getItem('TokenBibliotec_<?=$documento ?>');
+            if (token) {
+                tokenElements.forEach(function(element) {
+                element.value = token;
+                });
+            } else {
+                console.log('El token no está disponible.');
+            }
+            }
+
     </script>

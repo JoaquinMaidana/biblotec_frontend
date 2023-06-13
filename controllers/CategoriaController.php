@@ -6,9 +6,40 @@ use Yii;
 use yii\web\Controller;
 use yii\httpclient\Client;
 use yii\helpers\Json;
+use yii\filters\AccessControl;
 
 class CategoriaController extends Controller
 {
+       /**
+     * {@inheritdoc}
+     */
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'only' => ['create','index','update','delete'],
+                'rules' => [
+                    [
+                        'actions' => ['create','index','update','delete'],
+                        'allow' => true,
+                        //'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            if (Yii::$app->session->get('usu_tipo_usuario') != 'Administrador') {
+                                return $this->redirect(['site/index']);
+                            }
+                            return true;
+                        },
+                       
+                        
+                    ],
+                ],
+            ],
+         
+        ];
+    }
+
+
     /**
      * Displays homepage.
      *
@@ -86,13 +117,14 @@ class CategoriaController extends Controller
     public function actionDelete()
     {
         if ($this->request->post()) {
+            $token = Yii::$app->request->post('token');
             $id = $_POST["id"];
             $client = new Client();
             $response = $client->createRequest()
             ->setMethod('put')
-            ->setUrl('http://localhost/proyectos%20php/bibliotec_backend/web/categorias/delete?id='.$id)
+            ->setUrl('http://152.70.212.112/categorias/delete?id='.$id)
             ->addHeaders(['content-type' => 'application/json',
-                    'Authorization' => 'Bearer ' . 'user',
+                    'Authorization' => 'Bearer ' . $token,
             ])->send();
         }
         return $this->redirect(['index']);
@@ -101,7 +133,8 @@ class CategoriaController extends Controller
 
     protected function save($httpMethod='post')
     {
-        $url = 'http://localhost/proyectos%20php/bibliotec_backend/web/categorias';
+        $token = Yii::$app->request->post('token');
+        $url = 'http://152.70.212.112/categorias';
         $client = new Client();
 
         if ($httpMethod === 'PUT') {
@@ -110,7 +143,7 @@ class CategoriaController extends Controller
             ->setMethod('put')
             ->setUrl($url)
             ->addHeaders(['content-type' => 'application/json',
-                    'Authorization' => 'Bearer ' . 'user',
+                    'Authorization' => 'Bearer ' . $token,
             
             
             ])
@@ -124,7 +157,7 @@ class CategoriaController extends Controller
             ->setMethod('post')
             ->setUrl($url.'/create')
             ->addHeaders(['content-type' => 'application/json',
-                    'Authorization' => 'Bearer ' . 'user',
+                    'Authorization' => 'Bearer ' . $token,
             
             
             ])

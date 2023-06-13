@@ -26,11 +26,11 @@ $this->title = 'Libros';
             <table id="tablaLibros" class="row-border items table table-condensed hover nowrap">
                 <thead>
                     <tr>
-                        <th>Id</th>
+                        <th>Isbn</th>
                         <th>Titulo</th>
                         <th>Sub Categoria</th>
                         <th>Stock</th>
-                        <th>Disponible</th>
+                        <th>idioma</th>
                         <th>Vigente</th>
                         <th></th>
                     </tr>
@@ -87,26 +87,26 @@ $this->title = 'Libros';
             paging: false,
             ordering: false,
             columns: [{
-                    data: 'id'
+                    data: 'isbn'
                 },
                 {
-                    data: 'lib_titulo'
+                    data: 'titulo'
                 },
                 {
-                    data: 'lib_sub_categoria'
+                    data: 'categorias[0].subCategoria'
                 },
                 {
-                    data: 'lib_stock'
+                    data: 'stock'
                 },
                 {
-                    data: 'lib_disponible'
+                    data: 'idioma'
                 },
                 {
-                    data: 'lib_vigente'
+                    data: 'vigencia'
                 },
                 {
                     data: function(data) {
-                        return "<a class='me-2' onclick='$(`#idLibroView`).val(`" + data.id + "`);$(`#vuelta`).val(`libro/index`);$(`#formLibroView`).submit()'><i class='fa-solid fa-plus'></i></a><a class='me-2' onclick='$(`#idLibroUpdate`).val(`" + data.id + "`);$(`#formLibroUpdate`).submit()'><i class='fa-solid fa-pencil'></i></a><a class='' onclick='desactivarLibro(" + data.id + ",`" + data.lib_titulo + "`)'><i class='fa-solid fa-x'></i></a>"
+                        return "<a class='me-2' onclick='$(`#idLibroView`).val(`" + data.isbn + "`);$(`#formLibroView`).submit()'><i class='fa-solid fa-plus'></i></a><a class='me-2' onclick='$(`#idLibroUpdate`).val(`" + data.id + "`);$(`#formLibroUpdate`).submit()'><i class='fa-solid fa-pencil'></i></a><a class='' onclick='desactivarLibro(" + data.id + ",`" + data.lib_titulo + "`)'><i class='fa-solid fa-x'></i></a>"
                     }
                 }
             ],

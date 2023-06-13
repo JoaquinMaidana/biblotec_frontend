@@ -7,13 +7,14 @@ use yii\helpers\Url;
 
 
 $this->title = 'My Yii Application';
-if (isset($libros_Array)) {
-
-    $novedadesArray = array_filter($libros_Array, function ($item) {
-        return $item['lib_novedades'] === 'S';
-    });
-}
-
+   if(isset($libros_Array)){
+      
+      $novedadesArray = array_filter($libros_Array, function($item) {
+         return $item['novedades'] === 'S';
+     });
+    
+   }
+ 
 ?>
 <style>
     .card {
@@ -281,9 +282,9 @@ if (isset($libros_Array)) {
         const containerImg = document.createElement('div');
         containerImg.classList.add('conteiner-img');
 
-        const image = document.createElement('img');
-        image.src = item.lib_imagen;
-        image.alt = '';
+  const image = document.createElement('img');
+  image.src = item.imagen;
+  image.alt = '';
 
         containerImg.appendChild(image);
         anchor.appendChild(containerImg);

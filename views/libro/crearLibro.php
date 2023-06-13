@@ -15,7 +15,7 @@
   }
 </style>
 
-<?php if (isset($libro) && !empty($libro)): ?>
+<?php if (isset($libro) && !empty($libro) && $isGet ==='No' ): ?>
 
   
   <div class="alert alert-success alert-dismissible fade show mb-3" role="alert">
@@ -26,14 +26,20 @@
       <img src="<?php echo  $libro['lib_imagen'] ?>" class="img-fluid shadow-lg border" alt="imagen del libro">
   </div>
   
-<?php elseif (isset($libro) && empty($libro)): ?>
+<?php elseif (isset($libro) && count($libro) === 0 && $isGet ==='No') : ?>
   <div class="alert alert-danger alert-dismissible fade show mb-3" role="alert">
     <strong>Libro no encontrado!</strong> 
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
   </div>
   
-<?php endif; 
+<?php endif; ?>
 
+<?php if (isset($mensaje) && !empty($mensaje)): ?>
+  <div class="alert alert-primary alert-dismissible fade show mb-3" role="alert">
+    <strong>Mensaje</strong> Descripcion: <?php echo $mensaje; ?> 
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+<?php endif; 
 
 ?>
 
@@ -171,7 +177,7 @@
       <h1 class="titulo"><?= Html::encode($this->title) ?></h1>
     </div>
   </div>
-
+  
   <div class="row">
     <div class="col-12">
       
@@ -182,7 +188,7 @@
             <label>ISBN:<span class="text-danger">*<span></label>
           </div>
           <div class="col">
-            <?= Html::textInput('lib_isbn', isset($libro) ? $libro['lib_isbn'] : null, ['class' => 'form-control']) ?>
+            <?= Html::textInput('lib_isbn', isset($libro) && !empty($libro) ? $libro['lib_isbn'] : null, ['class' => 'form-control']) ?>
           </div>
         </div>
 
@@ -191,7 +197,7 @@
             <label>Título:<span class="text-danger">*<span></label>
           </div>
           <div class="col">
-            <?= Html::textInput('lib_titulo', isset($libro) ? $libro['lib_titulo'] : null, ['class' => 'form-control', 'maxlength' => true])?>
+            <?= Html::textInput('lib_titulo', isset($libro) && !empty($libro) ? $libro['lib_titulo'] : null, ['class' => 'form-control', 'maxlength' => true])?>
           </div>
         </div>
 
@@ -200,7 +206,7 @@
             <label>Autor/es:<span class="text-danger">*<span></label>
           </div>
           <div class="col">
-          <?=Html::textInput('lib_autores', isset($libro) ? $libro['lib_autores'] : null, ['class' => 'form-control', 'maxlength' => true]) ?>
+          <?=Html::textInput('lib_autores', isset($libro) && !empty($libro) ? $libro['lib_autores'] : null, ['class' => 'form-control', 'maxlength' => true]) ?>
 
           </div>
         </div>
@@ -210,7 +216,7 @@
             <label>Edición:<span class="text-danger">*<span></label>
           </div>
           <div class="col">
-         <?= Html::textInput('lib_edicion', isset($libro) ? $libro['lib_edicion'] : null, ['class' => 'form-control', 'maxlength' => true]) ?>
+         <?= Html::textInput('lib_edicion', isset($libro) && !empty($libro) ? $libro['lib_edicion'] : null, ['class' => 'form-control', 'maxlength' => true]) ?>
           </div>
         </div>
 
@@ -219,7 +225,7 @@
             <label>Fecha de lanzamiento:<span class="text-danger">*<span></label>
           </div>
           <div class="col">
-          <?=Html::textInput('lib_fecha_lanzamiento', isset($libro) ? $libro['lib_fecha_lanzamiento'] : null, ['class' => 'form-control']) ?>
+          <?=Html::textInput('lib_fecha_lanzamiento', isset($libro) && !empty($libro) ? $libro['lib_fecha_lanzamiento'] : null, ['class' => 'form-control']) ?>
           </div>
         </div>
 
@@ -228,7 +234,7 @@
             <label>Idioma:<span class="text-danger">*<span></label>
           </div>
           <div class="col">
-          <?=Html::textInput('lib_idioma', isset($libro) ? $libro['lib_idioma'] : null, ['class' => 'form-control', 'maxlength' => true]) ?>
+          <?=Html::textInput('lib_idioma', isset($libro) && !empty($libro) ? $libro['lib_idioma'] : null, ['class' => 'form-control', 'maxlength' => true]) ?>
           </div>
         </div>
 
@@ -237,7 +243,7 @@
             <label>Descripción:<span class="text-danger">*<span></label>
           </div>
           <div class="col">
-            <?= Html::textarea('lib_descripcion', isset($libro) ? $libro['lib_descripcion'] : null, ['rows' => 6, 'class' => 'form-control']) ?>
+            <?= Html::textarea('lib_descripcion', isset($libro) && !empty($libro) ? $libro['lib_descripcion'] : null, ['rows' => 6, 'class' => 'form-control']) ?>
           </div>
         </div>
 
@@ -246,27 +252,19 @@
             <label>Portada:<span class="text-danger">*<span></label>
           </div>
           <div class="col">
-            <?=Html::textInput('lib_imagen', isset($libro) ? $libro['lib_imagen'] : null, ['class' => 'form-control']) ?>
+            <?=Html::textInput('lib_imagen', isset($libro) && !empty($libro) ? $libro['lib_imagen'] : null, ['class' => 'form-control']) ?>
           </div>
           
         </div>
 
-        <div class="row mt-3 justify-content-center">
-          <div class="col-3 text-end">
-            <label>URL:<span class="text-danger">*<span></label>
-          </div>
-          <div class="col">
-          <?=Html::textInput('lib_url', isset($libro) ? $libro['lib_url'] : null, ['class' => 'form-control', 'maxlength' => true]) ?>
-          </div>
-        </div>
-
+        
 
         <div class="row mt-3 justify-content-center">
           <div class="col-3 text-end">
             <label>Categoría:<span class="text-danger">*<span></label>
           </div>
           <div class="col">
-          <?= Html::dropDownList('lib_categoria', null, 
+          <?= Html::dropDownList('lib_categoria', isset($libro) && !empty($libro) ? $libro['lib_categoria'] : null, 
             \yii\helpers\ArrayHelper::map($categorias, 'id', 'nombre'), 
             ['id' => 'categoria-dropdown', 'prompt' => 'Seleccione una categoría', 'class' => 'form-control', 'required' => true]) ?>
 
@@ -278,7 +276,7 @@
             <label>Sub Categoría:<span class="text-danger">*<span></label>
           </div>
           <div class="col">
-                <?= Html::dropDownList('lib_sub_categoria', null, [], ['prompt' => 'Seleccione una subcategoría', 'class' => 'form-control', 'required' => true, 'id' => 'subcategoria']) ?>   
+                <?= Html::dropDownList('lib_sub_categoria', isset($libro) && !empty($libro) ? $libro['lib_sub_categoria'] : null, [], ['prompt' => 'Seleccione una subcategoría', 'class' => 'form-control', 'required' => true, 'id' => 'subcategoria']) ?>   
           </div>
         </div>
 
@@ -332,6 +330,8 @@
       </div>
     <?php ActiveForm::end(); ?> 
     </div>
+
+   
   </div>
 </div>
 
@@ -345,48 +345,52 @@
 $this->registerJsFile('@web/scanner/scanner.js');
 
 
+
+
 if(isset($categorias)){
   $categorias_string = json_encode($categorias);
 
 }
 
 ?>
-<script>
-  var categoriasSubcategorias = <?php echo $categorias_string ?>
 
-  var categoriaDropdown = document.getElementById("categoria-dropdown");
+<script>
+ var categoriasSubcategorias = <?php echo $categorias_string ?>;
+
+var categoriaDropdown = document.getElementById("categoria-dropdown");
 var subcategoriaDropdown = document.getElementById("subcategoria");
 
-// Rellenar el dropdown de categorías
-for (var i = 0; i < categoriasSubcategorias.length; i++) {
-    var categoria = categoriasSubcategorias[i];
-    var option = document.createElement("option");
-    option.value = categoria.id;
-    option.text = categoria.nombre;
-    categoriaDropdown.appendChild(option);
+// Función para llenar el dropdown de subcategorías
+function llenarSubcategorias() {
+  var categoriaId = parseInt(categoriaDropdown.value);
+
+  // Limpiar el dropdown de subcategorías
+  subcategoriaDropdown.innerHTML = "";
+
+  // Buscar la categoría seleccionada en el arreglo
+  var categoria = categoriasSubcategorias.find(function(c) {
+    return c.id === categoriaId;
+  });
+
+  if (categoria) {
+    // Rellenar el dropdown de subcategorías
+    for (var i = 0; i < categoria.subCategorias.length; i++) {
+      var subcategoria = categoria.subCategorias[i];
+      var option = document.createElement("option");
+      option.value = subcategoria.id;
+      option.text = subcategoria.nombre;
+      subcategoriaDropdown.appendChild(option);
+    }
+  }
+  var libroSubCategoria = <?= isset($libro) && !empty($libro) ? $libro['lib_sub_categoria'] : 'null' ?>;
+    if (libroSubCategoria !== null) {
+      subcategoriaDropdown.value = libroSubCategoria;
+    }
 }
 
 // Evento de cambio de selección de categoría
-categoriaDropdown.addEventListener("change", function() {
-    var categoriaId = parseInt(this.value);
+categoriaDropdown.addEventListener("change", llenarSubcategorias);
 
-    // Limpiar el dropdown de subcategorías
-    subcategoriaDropdown.innerHTML = "";
-
-    // Buscar la categoría seleccionada en el arreglo
-    var categoria = categoriasSubcategorias.find(function(c) {
-        return c.id === categoriaId;
-    });
-
-    if (categoria) {
-        // Rellenar el dropdown de subcategorías
-        for (var i = 0; i < categoria.subCategorias.length; i++) {
-            var subcategoria = categoria.subCategorias[i];
-            var option = document.createElement("option");
-            option.value = subcategoria.id;
-            option.text = subcategoria.nombre;
-            subcategoriaDropdown.appendChild(option);
-        }
-    }
-});
+// Llamar a la función para llenar el dropdown por primera vez
+llenarSubcategorias();
 </script>
