@@ -10,8 +10,8 @@ use yii\filters\AccessControl;
 
 class LibroController extends Controller
 {
-    
-       /**
+
+    /**
      * {@inheritdoc}
      */
     public function behaviors()
@@ -31,16 +31,16 @@ class LibroController extends Controller
                             }
                             return true;
                         },
-                       
-                        
+
+
                     ],
                 ],
             ],
-         
+
         ];
     }
-   
-    
+
+
     /**
      * Displays homepage.
      *
@@ -56,29 +56,28 @@ class LibroController extends Controller
             ->send();
 
         if ($response->isOk) {
-            
+
             // Decodificar el contenido JSON en un array asociativo 
             $data2 = json_decode($response->getContent(), true);
-        //    $data2 =$data1['data'];
+            //    $data2 =$data1['data'];
             $libros_array = array();
             $string = json_encode($data2);
-           // var_dump($string);
-            
+            // var_dump($string);
+
             foreach ($data2 as $libro) {
                 // Agregar cada libro al arreglo de libros
                 array_push($libros_array, $libro);
             }
-            
-           
         }
-        return $this->render('index',[
+        return $this->render('index', [
             'libros' => $string,
             'libros_Array' => $libros_array
         ]);
     }
 
 
-    public function actionGetLibros(){
+    public function actionGetLibros()
+    {
         $client = new Client();
         $response = $client->createRequest()
             ->setMethod('get')
@@ -87,21 +86,20 @@ class LibroController extends Controller
             ->send();
 
         if ($response->isOk) {
-            
+
             // Decodificar el contenido JSON en un array asociativo 
             $data2 = json_decode($response->getContent(), true);
-        //    $data2 =$data1['data'];
+            //    $data2 =$data1['data'];
             $libros_array = array();
             $string = json_encode($data2);
-           // var_dump($string);
-            
+            // var_dump($string);
+
             foreach ($data2 as $libro) {
                 // Agregar cada libro al arreglo de libros
                 array_push($libros_array, $libro);
             }
         }
         return  $libros_array;
-
     }
 
     public function actionCreate()
@@ -119,7 +117,7 @@ class LibroController extends Controller
 
         $subcategorias = $subCategoriaController->runAction('get-subcategorias');
 
-        
+
         return $this->render('crearLibro', [
             'categorias' => $categorias,
             'sub_categorias' => $subcategorias,
@@ -127,54 +125,53 @@ class LibroController extends Controller
     }
     public function actionCompletado($isbn)
     {   //conexion a la api para autocompletar el formulario de los libros
-     
+
         $client = new Client();
         $response = $client->createRequest()
             ->setMethod('get')
-            ->setUrl('https://openlibrary.org/api/books?bibkeys=ISBN:'.$isbn.'&jscmd=details&format=json')
+            ->setUrl('https://openlibrary.org/api/books?bibkeys=ISBN:' . $isbn . '&jscmd=details&format=json')
             ->send();
-            
-        if ($response->isOk) {
-            $data = json_decode($response->getContent(), true); 
-            if (!empty($data)) {
-                $datoslibro = $data['ISBN:'.$isbn];
-                $lib_imagen = "";
-                $response_imagen = $client->createRequest()//obtener imagen
-                ->setMethod('get')
-                ->setUrl('https://openlibrary.org/api/books?bibkeys=ISBN:'.$isbn.'&jscmd=data&format=json')
-                ->send();
 
-                if($response_imagen->isOk){
-                    $data_imagen = json_decode($response_imagen->getContent(), true); 
-                    $lib_imagen = $data_imagen['ISBN:'.$isbn]['cover']['large'];
+        if ($response->isOk) {
+            $data = json_decode($response->getContent(), true);
+            if (!empty($data)) {
+                $datoslibro = $data['ISBN:' . $isbn];
+                $lib_imagen = "";
+                $response_imagen = $client->createRequest() //obtener imagen
+                    ->setMethod('get')
+                    ->setUrl('https://openlibrary.org/api/books?bibkeys=ISBN:' . $isbn . '&jscmd=data&format=json')
+                    ->send();
+
+                if ($response_imagen->isOk) {
+                    $data_imagen = json_decode($response_imagen->getContent(), true);
+                    $lib_imagen = $data_imagen['ISBN:' . $isbn]['cover']['large'];
                 }
-                
+
                 //Para guardar los autores independiente de cuantos sean
                 foreach ($datoslibro['details']['authors'] as $autor) {
                     $nombres_autores[] = $autor['name']; // añadir el nombre del autor al array de nombres de autores
-                  }
-                  
-                  $autores_concatenados = implode(', ', $nombres_autores); // unir los nombres de los autores con comas
-                //idiomas
-                
-                  
-                $libro=[
-                    "lib_isbn" => $isbn,
-                    "lib_titulo"=> $datoslibro['details']['title'],
-                    "lib_descripcion"=> isset($datoslibro['details']['description']) ? $datoslibro['details']['description'] : '',
-                    "lib_imagen"=> $lib_imagen,
-                    "lib_autores"=> $autores_concatenados,
-                    "lib_url"=>$datoslibro['info_url'],
-                    "lib_edicion"=> "1",
-                    "lib_fecha_lanzamiento"=> $datoslibro['details']['publish_date'],
-                    "lib_idioma"=> "Inglés",
-                ];
+                }
 
+                $autores_concatenados = implode(', ', $nombres_autores); // unir los nombres de los autores con comas
+                //idiomas
+
+
+                $libro = [
+                    "lib_isbn" => $isbn,
+                    "lib_titulo" => $datoslibro['details']['title'],
+                    "lib_descripcion" => isset($datoslibro['details']['description']) ? $datoslibro['details']['description'] : '',
+                    "lib_imagen" => $lib_imagen,
+                    "lib_autores" => $autores_concatenados,
+                    "lib_url" => $datoslibro['info_url'],
+                    "lib_edicion" => "1",
+                    "lib_fecha_lanzamiento" => $datoslibro['details']['publish_date'],
+                    "lib_idioma" => "Inglés",
+                ];
             } else {
-                $libro=$data;
+                $libro = $data;
             }
         } else {
-            $libro="";
+            $libro = "";
         }
 
         $categoriaController = new CategoriaController(Yii::$app->id, Yii::$app);
@@ -185,7 +182,7 @@ class LibroController extends Controller
 
         $subcategorias = $subCategoriaController->runAction('get-subcategorias');
 
-            
+
         return $this->render('crearLibro', [
             'libro' => $libro,
             'categorias' => $categorias,
@@ -221,62 +218,60 @@ class LibroController extends Controller
         $libro = $this->findLibro($idlibros);
         $this->delete($libro['id']);
         return $this->redirect(['index']);
-       
     }
 
 
-    public function actionView($id2="nada")
+    public function actionView($id2 = "nada")
     {
-       
+
         if ($this->request->post()) {
-            $idlibros="";
-            $idlibros = $_POST['id'];
+            $id = $_POST['id'];
+            $vuelta = $_POST['vuelta'];
+        } else  if ($this->request->get()) {
+            $id = $this->request->get('id2');
+            $vuelta = $this->request->get('vuelta');
+            // Resto del código     
         }
-        else {
-            $idlibros = $this->request->get('id2');
-            // Resto del código
-        }
-        $libro = $this->findLibro($idlibros);
+
+        $libro = $this->findLibro($id);
         return $this->render('detalleLibro', [
-            'libro' => $libro
+            'libro' => $libro,
+            'vuelta' => $vuelta
         ]);
     }
 
     static public function findLibro($idlibros)
     {
-      
+
         $client = new Client();
         $response = $client->createRequest()
             ->setMethod('get')
             ->setUrl('http://152.70.212.112:3000/libros/' . $idlibros)
             ->send();
-            
+
         if ($response->isOk) {
             $libro = json_decode($response->getContent(), true);
             return $libro;
         } else {
-            return $libro="";
+            return $libro = "";
         }
-
-
     }
 
 
-    protected function delete($idlibros=""){
+    protected function delete($idlibros = "")
+    {
         $client = new Client();
         $response = $client->createRequest()
             ->setMethod('delete')
             ->setUrl('http://152.70.212.112:3000/libros/' . $idlibros)
             ->send();
         return $response->isOk;
-
-        
     }
 
-    protected function save($httpMethod='post')
-{
-    $url = 'http://localhost/proyectos%20php/bibliotec_backend/web/libros';
-    $client = new Client();
+    protected function save($httpMethod = 'post')
+    {
+        $url = 'http://localhost/proyectos%20php/bibliotec_backend/web/libros';
+        $client = new Client();
 
     if ($httpMethod === 'PUT') {
         $url .= '/' . Yii::$app->request->post('id');
@@ -325,13 +320,11 @@ class LibroController extends Controller
         ->send();
     }
 
-    if ($response->isOk) {
-        
-        return true;
-    } else {
-        return false;
+        if ($response->isOk) {
+
+            return true;
+        } else {
+            return false;
+        }
     }
-}
-    
-    
 }

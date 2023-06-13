@@ -13,6 +13,7 @@ use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\User;
+
 class SiteController extends Controller
 {
 
@@ -70,15 +71,14 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        
+
         $libroController = new LibroController(Yii::$app->id, Yii::$app);
 
         $libros = $libroController->runAction('get-libros');
-        return $this->render('index',[
+        return $this->render('index', [
             'libros_Array' => $libros
         ]); //redirigir a la página de inicio
-      
-       
+
     }
 
     /**
@@ -130,7 +130,7 @@ class SiteController extends Controller
                 } 
 
             }
-            
+
 
                 $session = Yii::$app->session;
                 $session->open();
@@ -178,25 +178,25 @@ class SiteController extends Controller
                
             
 
-             //   }
+                //   }
 
 
-                
+
                 // Agregar el token al local storage utilizando JavaScript
                 $libroController = new LibroController(Yii::$app->id, Yii::$app);
 
                 $libros = $libroController->runAction('get-libros');
-                
-                
+
+
                 // Renderizar la vista 'index' y ejecutar el script de JavaScript
-                return $this->render('index',[
+                return $this->render('index', [
                     'libros_Array' => $libros
                 ]).$script ;
                 
 
             }
-     
-         
+
+
 
             // Almacenar el tipo de usuario en la variable de sesión
            // Yii::$app->session->set('tipo_usuario', $user['usu_tipo_usuario']);
@@ -204,7 +204,6 @@ class SiteController extends Controller
        
 
         return $this->render('login');
-    
     }
 
     /**
@@ -213,20 +212,18 @@ class SiteController extends Controller
      * @return Response|string
      */
     public function actionLogout()
-    {   if ($this->request->post()) {
+    {
+        if ($this->request->post()) {
 
 
-        $session = Yii::$app->session;
-        if ($session->isActive) {
-            $session->destroy();
-            $session->close();
+            $session = Yii::$app->session;
+            if ($session->isActive) {
+                $session->destroy();
+                $session->close();
+            }
         }
 
 
-
-        }
-        
-       
         return $this->render('index');
     }
 
