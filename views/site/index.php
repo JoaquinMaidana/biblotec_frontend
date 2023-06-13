@@ -5,7 +5,7 @@ use yii\helpers\Url;
 
 /** @var yii\web\View $this */
 
-
+//var_dump($libros_Array);exit;
 $this->title = 'My Yii Application';
    if(isset($libros_Array)){
       
@@ -93,21 +93,22 @@ $this->title = 'My Yii Application';
     </div>
     <hr>
     <div class="row mt-3 justify-content-center">
-        <?php foreach ($libros_Array as $libro) { ?>
+        <?php foreach ($libros_Array as $libro) { 
+            ?>
             <div class="col-3 mb-3 ms-2 me-2">
                 <div class="card">
                     <div class="card-body ps-0 pt-0 pe-0">
-                        <img class="card-img-top img" src="<?= $libro['lib_imagen'] ?>" alt="Card image cap">
+                        <img class="card-img-top img" src="<?= $libro['imagen'] ?>" alt="Card image cap">
                     </div>
                     <div class="card-footer">
-                        <h5 class="card-title text-truncate"><?= $libro['lib_titulo'] ?></h5>
+                        <h5 class="card-title text-truncate"><?= $libro['titulo'] ?></h5>
                         <hr>
                         <div class="row">
                             <div class="col-7 text-start">
                                 <label>Categoría:</label>
                             </div>
                             <div class="col text-end text-truncate">
-                                <p class="card-text"><?= $libro['lib_categoria'] ?></p>
+                                <p class="card-text"><?= $libro['categorias'][0]['categoria'] ?></p>
                             </div>
                         </div>
                         <div class="row mt-2">
@@ -115,7 +116,7 @@ $this->title = 'My Yii Application';
                                 <label>Sub Categoría:</label>
                             </div>
                             <div class="col text-end text-truncate">
-                                <p class="card-text"><?= $libro['lib_sub_categoria'] ?></p>
+                                <p class="card-text"><?= $libro['categorias'][0]['subCategoria'] ?></p>
                             </div>
                         </div>
                         <hr>
@@ -124,7 +125,7 @@ $this->title = 'My Yii Application';
                                 <label>Autor/es:</label>
                             </div>
                             <div class="col text-end text-truncate">
-                                <p class="card-text"><?= $libro['lib_autores'] ?></p>
+                                <p class="card-text"><?= $libro['autores'] ?></p>
                             </div>
                         </div>
                         <div class="row mt-2">
@@ -132,15 +133,7 @@ $this->title = 'My Yii Application';
                                 <label>Idioma:</label>
                             </div>
                             <div class="col text-end text-truncate">
-                                <p class="card-text"><?= $libro['lib_idioma'] ?></p>
-                            </div>
-                        </div>
-                        <div class="row mt-2">
-                            <div class="col-4 text-start">
-                                <label>Disponible:</label>
-                            </div>
-                            <div class="col text-end text-truncate">
-                                <p class="card-text"><?= $libro['lib_disponible'] ?></p>
+                                <p class="card-text"><?= $libro['idioma'] ?></p>
                             </div>
                         </div>
                         <div class="row mt-2">
@@ -149,7 +142,7 @@ $this->title = 'My Yii Application';
                             </div>
                         </div>
                         <div class="row mt-2">
-                            <?php if ($libro['lib_disponible'] == 'S') { ?>
+                            <?php if ($libro['vigencia'] == 'Si') { ?>
                                 <div class="col">
                                     <button onclick="reservarLibro(<?= $libro['id'] ?>)" class="btn btn-primary">Reservar</button>
                                 </div>
@@ -166,7 +159,7 @@ $this->title = 'My Yii Application';
                         <?= Html::endForm() ?>
                         <?= Html::beginForm(['comentario/index']) ?>
                         <input type="hidden" name="idLibro" value="<?= $libro['id'] ?>"></input>
-                        <input type="hidden" name="tituloLibro" value="<?= $libro['lib_titulo'] ?>"></input>
+                        <input type="hidden" name="tituloLibro" value="<?= $libro['titulo'] ?>"></input>
                         <div class="row mt-2">
                             <div class="col">
                                 <button type="submit" class="btn btn-primary">Comentarios</button>
@@ -266,7 +259,7 @@ $this->title = 'My Yii Application';
         containerImg.classList.add('conteiner-img');
 
         const image = document.createElement('img');
-        image.src = item.lib_imagen;
+        image.src = item.imagen;
         image.alt = '';
 
         containerImg.appendChild(image);
