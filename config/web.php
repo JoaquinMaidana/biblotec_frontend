@@ -84,12 +84,12 @@ if (YII_ENV_DEV) {
     $config['bootstrap'][] = 'debug';
     $config['modules']['debug'] = [
         'class' => 'yii\debug\Module',
-    //    'panels' => [
-    //        'user' => false, // Desactivar el panel de usuario
-    //        // ... otros paneles ...
-    //    ],
-        // uncomment the following to add your IP if you are not connecting from localhost.
-        //'allowedIPs' => ['127.0.0.1', '::1'],
+    'panels' => [
+           'user' => false, // Desactivar el panel de usuario
+           // ... otros paneles ...
+        ],
+         //uncomment the following to add your IP if you are not connecting from localhost.
+        'allowedIPs' => ['127.0.0.1', '::1'],
     ];
 
     $config['bootstrap'][] = 'gii';

@@ -1,127 +1,137 @@
 <?php
 
-
-use PHPUnit\Framework\Constraint\IsEmpty;
-use yii\bootstrap5\ActiveForm;
+use app\controllers\FavoritosController;
 use yii\helpers\Html;
 use yii\helpers\Url;
-
+use yii\httpclient\Client;
 
 /** @var yii\web\View $this */
 
-$this->title = 'Libros favoritos';
-$this->params['breadcrumbs'][] = $this->title;
-
+$this->title = 'Mis libros favoritos';
 ?>
 
 <!DOCTYPE html>
-<html lang="es-UY">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Libros favoritos</title>
+    <title>Favoritos</title>
 
 <script>
     $(document).ready(function () {
-    $('#todas').DataTable();
+        $('#todas').DataTable();
     });
-</script>   
 
-<style> 
+</script>
 
-    .btn {
-        padding: 10px;
-        margin: 10px;
-    }
-    img {
-        width: 50px;   
-    }
-    
-</style>
 </head>
 <body>
-    <div class="favoritos-index">
-    
-        <?php $favoritos = json_decode($favoritos); $libros = json_decode($libros);  ?>
-
-        <table id="todas" class="display compact">
-            <thead>
-                <tr>
-                    <td><h1><?= Html::encode($this->title) ?></h1></td>
-                    <td><input type="button" class="btn btn-primary" onclick="history.back()" value="Volver"></td>      
-                <tr>
-            </thead>
-            <tbody> 
-                <?= Html::beginForm(['favoritos/update'], 'post', ['id' => 'formFav']) ?>
-                                        <input type="hidden" name="id" id="idLibroView"></input>
-                                        <input type="hidden" name="idlibro" id="id_lib" value=""></input>
-                                        <input type="hidden" name="idusu" value="<?= Yii::$app->session->get('usu_documento') ?>" ></input>
-                                        <input type="hidden" name="estado" value="<?= 0 ?>"></input>
-                                        <input type="hidden" name="idfav" id="id_fav" value=""></input>
-                <?= Html::endForm() ?>
-                <?php
-                //var_dump($favoritos);exit;
-                
-                foreach($favoritos as $fav){
-                    
-                    
-                    if ($fav->fav_usu_id == Yii::$app->session->get('usu_documento') && $fav->fav_estado > 0){ //si el id de usuario de favoritos es igual al id del usuario logueado
-                        
-                        foreach($libros as $libro){
-                            if($libro->id == $fav->fav_lib_id){//si el id del libro de favoritos es igual al id de libro de libros
-                            ?>
-                                <tr>
-                                    <td><p><?=$libro->lib_titulo?>
-                                    <img src="<?=$libro->lib_imagen ?>" alt="https://upload.wikimedia.org/wikipedia/commons/0/0a/No-image-available.png"></p> </td>
-                                    <td>
-                                    
-                                        <?= Html::a('Ver mas', ['libro/view', 'id2'=> $libro->id], ['class' => 'btn btn-success']) ?> 
-                                        <?php $array = ['idlibro'=> $libro->id, 'libid'=>$libro->id, 'idusu'=>$fav->fav_usu_id, 'titulo'=>$libro->lib_titulo];
-                                     //   var_dump($array) ?>
-                                        <a class='btn btn-warning' onclick="$('#modalQuitarFavorito<?=$libro->id ?>').modal('show');">Quitar</a>
-                                        
-                                    
-                                    </td>
-                                </tr>
-                                
-                                <div id="modalQuitarFavorito<?= $libro->id?>" class="modal" tabindex="-1">
-                                    <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title">Desactivar libro</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                                        </div>
-                                        
-                                       
-                                        <div class="modal-body">
-                                            <div class="container-fluid">
-                                                <div class="row justify-content-center">
-                                                    <div class="col" id="textoModalDesactivar">
-                                                    <p>¿Desea quitar el libro <?= "<strong> ".$libro->lib_titulo."</strong> " ?> de favoritos?</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                        
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-outline-primary"  onclick="$('#modalQuitarFavorito<?=$libro->id ?>').modal('hide');">Cancelar</button>
-                                            <button type="submit" class="btn btn-primary" onclick='$(`#id_lib`).val(`<?= $libro->id?>`);$(`#id_fav`).val(`<?= $fav->id?>`);$(`#formFav`).submit()'>Confirmar</button>
-                                        </div>
-                                </div>
-                            </div>  
-                            </div>  
-                           
-                        <?php
-                         }
-                        }
-                    };
-                };
-                ?>
-            </tbody>
-        </table>   
+    <h1><?= Html::encode($this->title) ?></h1>
+        
+    <div class="col d-flex justify-content-end">
+        <?= Html::a('Agregar favoritos', ['libro/index'], ['class' => 'btn btn-primary']) ?>
     </div>
 
-</body>
+    <?php 
+    /*     let token = localStorage.getItem('TokenBibliotec_50541551');
+    if (token) {
+    document.getElementById('token-field').value = token;
+    console.log(token);
+  } else {
+    // El contenido de token es nulo o no existe
+    // Puedes manejar esta situación según tus necesidades
+    console.log('El token no está disponible.');
+  }
+*/
 
+      
+    ?>
+
+    <table id="todas" class="display compact">
+        <thead>
+            <tr>
+                <th>Titulo</th>
+                <th>Portada</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <?= Html::beginForm(['favoritos/update'], 'post', ['id' => 'formFav']) ?>
+                                    <input type="hidden" id="id_fav" name="id" value=""></input>
+            <?= Html::endForm() ?>
+            <?php 
+
+            foreach($favoritos as $favorito){
+               
+                
+                ?>
+                <tr>
+                    <td><?= $favorito['titulo']; ?></td>
+                    <td><button class="btn btn-primary" onclick="$('#modalPortada').modal('show')">Ver portada</button></td>
+                    <td><a class='btn btn-warning' onclick="$('#modalCambiarEstado<?=$favorito['fav_id'] ?>').modal('show');">Quitar de favoritos</a></td> 
+                </tr>
+                    
+                <div id="modalPortada" class="modal" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Portada actual</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+
+                            <div class="modal-body">
+                                <div class="container-fluid">
+                                    <div class="row justify-content-center">
+                                        <div class="col-auto">
+                                            <input type="image" id="imagenPortada" src="<?= $favorito['imagen'] ?>"></input>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" onclick="$('#modalPortada').modal('hide');">Aceptar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                                    
+                <div id="modalCambiarEstado<?= $favorito['fav_id']?>" class="modal" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+
+                            <div class="modal-header">
+                                <h5 class="modal-title">Quitar de favoritos</h5>
+                                <label for="estact">
+                                    A : <input type="text" value="<?= $favorito['titulo']?>" >
+                                </label>
+                            </div>
+
+                            <div class="modal-body">
+                                <div class="container-fluid">
+                                    <div class="row justify-content-center">
+                                        <div class="col" id="textoModalDesactivar">
+                                        <p>Confirmar</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+            
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-primary"  onclick="$('#modalCambiarEstado<?=$favorito['fav_id']  ?>').modal('hide');">Cancelar</button>
+                                <button type="button" class="btn btn-primary" onclick='$(`#id`).val(`<?= $favorito["fav_id"] ?>`);$(`#formFav`).submit()'> Quitar de favoritos</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    
+            
+               
+            <?php }?>
+        </tbody>
+    </table>
+
+</body>
 </html>

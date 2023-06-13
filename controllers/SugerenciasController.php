@@ -36,29 +36,22 @@ class SugerenciasController extends Controller{
         $client = new Client();
         $response = $client->createRequest()
             ->setMethod('get')
-            ->setUrl('http://152.70.212.112:3000/sugerencias')
+            ->setUrl('http://152.70.212.112/sugerencias')
             ->send();
 
         if ($response->isOk) {
             
             // Decodificar el contenido JSON en un array asociativo 
             $data = json_decode($response->getContent(), true);
-            $sugerencias_array = array();
-            $string = json_encode($data);
-          //  var_dump($string);exit;
             
-            foreach ($data as $sugerencia) {
-                // Agregar cada libro al arreglo de libros
-                array_push($sugerencias_array, $sugerencia);
-            }
-              
-              // Imprimir el string JSON
+            $sugerencias =$data;
+            
 
         }else {var_dump("No fue ok");exit;}
 
         return $this->render('index',[
-            'sugerenciasJson' => $string,
-            'sugerencias_Array' => $sugerencias_array
+            'sugerencias' => $sugerencias,
+            
         ]);
        /* return $this->render('admin',[
             'dataProvider'=>$sugerencias_array,

@@ -58,7 +58,8 @@ $this->params['breadcrumbs'][] = $this->title;
     ?= Html::a('Editar Sugerencias',$url , ['class' => 'btn btn-success'])  ?>
 </p> -->
 
-<?php $sugerencias = json_decode($sugerenciasJson); ?>
+<?php //var_dump($sugerencias);exit; 
+ ?>
 
 <h2>Todas las sugerenciasss</h2>
 <hr>
@@ -84,27 +85,27 @@ $this->params['breadcrumbs'][] = $this->title;
             foreach($sugerencias as $sugerencia){
                 ?>
                 <tr>
-                    <td><?= $sugerencia->id; ?></td>
-                    <td><?= $sugerencia->sug_sugerencia; ?></td>
-                    <td><?= $estado = $sugerencia->sug_vigente=='S' ? 'Activa' : 'Revisada'; ?></td>
-                    <td><?= $sugerencia->sug_idusu; ?></td>
-                    <td><?= $sugerencia->sug_fecha; ?></td>
-                    <td><a class='btn btn-warning' onclick="$('#modalCambiarEstado<?=$sugerencia->id ?>').modal('show');">Cambiar estado</a></td>
+                    <td><?= $sugerencia['sug_id']; ?></td>
+                    <td><?= $sugerencia['sug_sugerencia']; ?></td>
+                    <td><?= $estado = $sugerencia['sug_vigente']=='S' ? 'Activa' : 'Revisada'; ?></td>
+                    <td><?= $sugerencia['sug_usu_id']; ?></td>
+                    <td><?= $sugerencia['sug_fecha_hora']; ?></td>
+                    <td><a class='btn btn-warning' onclick="$('#modalCambiarEstado<?=$sugerencia['sug_id'] ?>').modal('show');">Cambiar estado</a></td>
                     
                 </tr>
                   
                                     
-                    <div id="modalCambiarEstado<?= $sugerencia->id?>" class="modal" tabindex="-1">
+                    <div id="modalCambiarEstado<?= $sugerencia['sug_id']?>" class="modal" tabindex="-1">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title">Cambiar de estado</h5>
                                     <label for="estact">
-                                        Estado actual: <input type="text" name="estact" value="<?= $estado = $sugerencia->sug_vigente=='S' ? 'Activa' : 'Revisada'; ?>" disabled>
+                                        Estado actual: <input type="text" name="estact" value="<?= $estado = $sugerencia['sug_vigente']=='S' ? 'Activa' : 'Revisada'; ?>" disabled>
                                     </label>
                                     <div>Pasar a estado: 
                                         <select name="nuevoEstado">
-                                            <?php if ($sugerencia->sug_vigente=='S'){
+                                            <?php if ($sugerencia['sug_vigente']=='S'){
                                             echo '<option value="N">Revisada</option>'; 
                                             } else { 
                                             echo '<option value="S">Activa</option>';
@@ -124,9 +125,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 </div>
                 
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-outline-primary"  onclick="$('#modalCambiarEstado<?=$sugerencia->id ?>').modal('hide');">Cancelar</button>
-                                    <button type="button" class="btn btn-primary" onclick='$(`#id_sug`).val(`<?= $sugerencia->id?>`);$(`#sug`).val(`<?= $sugerencia->sug_sugerencia?>`);$(`#usu`).val(`<?= $sugerencia->sug_idusu?>`);
-                                    $(`#fech_sug`).val(`<?= $sugerencia->sug_fecha?>`);$(`#formSug`).submit()'>Confirmar</button>
+                                    <button type="button" class="btn btn-outline-primary"  onclick="$('#modalCambiarEstado<?=$sugerencia['sug_id'] ?>').modal('hide');">Cancelar</button>
+                                    <button type="button" class="btn btn-primary" onclick='$(`#id_sug`).val(`<?= $sugerencia["sug_id"]?>`);$(`#sug`).val(`<?= $sugerencia["sug_sugerencia"]?>`);$(`#usu`).val(`<?= $sugerencia["sug_usu_id"]?>`);
+                                    $(`#fech_sug`).val(`<?= $sugerencia["sug_fecha_hora"]?>`);$(`#formSug`).submit()'>Confirmar</button>
                                 </div>
                             </div>
                         </div>

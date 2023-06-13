@@ -83,7 +83,7 @@ class LibroController extends Controller
         $response = $client->createRequest()
             ->setMethod('get')
         //    ->setUrl('http://localhost/proyectos%20php/bibliotec_backend/web/libros/obtener-libros')
-            ->setUrl('http://152.70.212.112:3000/libros')
+            ->setUrl('http://152.70.212.112/libros/obtener-libros')
             ->send();
 
         if ($response->isOk) {
@@ -91,14 +91,11 @@ class LibroController extends Controller
             // Decodificar el contenido JSON en un array asociativo 
             $data2 = json_decode($response->getContent(), true);
         //    $data2 =$data1['data'];
-            $libros_array = array();
+            $libros_array = $data2['data'];
             $string = json_encode($data2);
            // var_dump($string);
             
-            foreach ($data2 as $libro) {
-                // Agregar cada libro al arreglo de libros
-                array_push($libros_array, $libro);
-            }
+            
         }
         return  $libros_array;
 
