@@ -66,7 +66,7 @@ class FavoritosController extends Controller{
         if ($this->request->post()) {
             //var_dump("del if",$fav);exit;
            // var_dump($this->request->post());exit;
-            $this->deleteFav('PUT');
+            $this->updateFav('post');
         }
 
         return $this->actionIndex();
@@ -111,7 +111,7 @@ class FavoritosController extends Controller{
         $client = new Client();
     
         if ($httpMethod === 'post') {
-            $url .= '/delete?id=' . $_POST["id"];
+            $url .= '/delete?id=' . $_POST["id_fav"];
             
            
           //var_dump($favorito['fav_usu_id']);exit;

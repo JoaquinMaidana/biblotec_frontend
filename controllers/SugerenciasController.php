@@ -130,20 +130,25 @@ class SugerenciasController extends Controller{
     {
       
         $client = new Client();
+        $client = new Client();
         $response = $client->createRequest()
             ->setMethod('get')
-            ->setUrl('http://152.70.212.112:3000/sugerencias')
+            ->setUrl('http://152.70.212.112/sugerencias')
             ->send();
-            
+
         if ($response->isOk) {
+            
+            // Decodificar el contenido JSON en un array asociativo 
             $data = json_decode($response->getContent(), true);
-            $string = json_encode($data);
-           
-          //  var_dump($string);exit;
-            return $string;
+            
+            $sugerencias =$data;
+            
+
         } else {
             return $sugerencia="";
         }
+
+        return $sugerencias; 
 
 
     }

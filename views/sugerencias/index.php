@@ -47,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <h1><?= Html::encode($this->title) ?></h1>
 <p>
-    <?= Html::a('Crear Sugerencias', ['create'], ['class' => 'btn btn-success']) ?>
+    <!--  //Html::a('Crear Sugerencias', ['create'], ['class' => 'btn btn-success']) ?> -->
     <?= Html::a('Mis Sugerencias', ['view'], ['class' => 'btn btn-primary']) ?>
 </p>
 
@@ -61,7 +61,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php //var_dump($sugerencias);exit; 
  ?>
 
-<h2>Todas las sugerenciasss</h2>
+<h2>Todas las sugerencias</h2>
 <hr>
     <table id="todas" class="display compact">
         <thead>

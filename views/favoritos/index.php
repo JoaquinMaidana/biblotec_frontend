@@ -59,7 +59,7 @@ $this->title = 'Mis libros favoritos';
         <tbody>
 
             <?= Html::beginForm(['favoritos/update'], 'post', ['id' => 'formFav']) ?>
-                                    <input type="hidden" id="id_fav" name="id" value=""></input>
+                                    <input type="hidden" id="id_fav" name="id_fav" value=""></input>
             <?= Html::endForm() ?>
             <?php 
 
@@ -105,20 +105,9 @@ $this->title = 'Mis libros favoritos';
                             <div class="modal-header">
                                 <h5 class="modal-title">Quitar de favoritos</h5>
                                 <label for="estact">
-                                    A : <input type="text" value="<?= $favorito['titulo']?>" >
+                                  <strong>A : <input style="border: none;"  type="text" value="<?= $favorito['titulo']?>" ></strong>  
                                 </label>
                             </div>
-
-                            <div class="modal-body">
-                                <div class="container-fluid">
-                                    <div class="row justify-content-center">
-                                        <div class="col" id="textoModalDesactivar">
-                                        <p>Confirmar</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-            
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-outline-primary"  onclick="$('#modalCambiarEstado<?=$favorito['fav_id']  ?>').modal('hide');">Cancelar</button>
                                 <button type="button" class="btn btn-primary" onclick='$(`#id`).val(`<?= $favorito["fav_id"] ?>`);$(`#formFav`).submit()'> Quitar de favoritos</button>

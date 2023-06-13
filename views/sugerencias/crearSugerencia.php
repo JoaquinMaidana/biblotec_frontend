@@ -17,9 +17,10 @@ $form = ActiveForm::begin(['action' => ['sugerencias/new'], 'options' => ['encty
     <label for="sug_sugerencia">
         Texto:<input type="text" name="sug_sugerencia" id="sug_sugerencia" required>
     </label>
-
+    <?= //Yii::$app->user->identity->id
+    $a=0; ?>
     <label for="sug_idusu">
-        Usuario:<input type="text" name="sug_idusu" id="sug_idusu" disabled value="<?= Yii::$app->user->identity->id ?>" >
+        Usuario:<input type="text" name="sug_idusu" id="sug_idusu" disabled value="" >
     </label>
 
     <?= Html::submitButton('Eviar sugerencia', ['class' => 'btn btn-success']) ?>
