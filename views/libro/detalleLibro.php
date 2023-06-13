@@ -83,14 +83,7 @@ $this->title = 'Libro: ' . $libro['lib_titulo'];
                     </div>
                 </div>
 
-                <div class="row mt-3 justify-content-center">
-                    <div class="col-3 text-end">
-                        <label>URL:</label>
-                    </div>
-                    <div class="col">
-                        <input disabled name="url" type="text" class="form-control" value="<?= $libro['lib_url'] ?>"></input>
-                    </div>
-                </div>
+               
 
                 <div class="row mt-3 justify-content-center">
                     <div class="col-3 text-end">
@@ -100,15 +93,18 @@ $this->title = 'Libro: ' . $libro['lib_titulo'];
                         <input disabled name="puntuacion" type="text" class="form-control" value="<?= $libro['lib_puntuacion'] ?>"></input>
                     </div>
                 </div>
-
-                <div class="row mt-3 justify-content-center">
+<!-- 
+    <div class="row mt-3 justify-content-center">
                     <div class="col-3 text-end">
                         <label>Subcategoría:</label>
                     </div>
                     <div class="col">
-                        <input disabled name="subcategoria" type="text" class="form-control" value="<?= $libro['lib_sub_categoria'] ?>"></input>
+                        <input disabled name="subcategoria" type="text" class="form-control" value=" //$libro['lib_sub_categoria'] "></input>
                     </div>
                 </div>
+
+ -->
+                
 
                 <div class="row mt-3 justify-content-center">
                     <div class="col-3 text-end">
@@ -149,6 +145,9 @@ $this->title = 'Libro: ' . $libro['lib_titulo'];
                 <div class="row mt-3 justify-content-end">
                     <div class="col-auto">
                         <a href="<?= Url::toRoute(['libro/index']); ?>" class="btn btn-primary">Volver</a>
+                    </div>
+                    <div class="col-auto">
+                        <a href="<?= Url::toRoute(['reserva/create','isbn' => $libro['lib_isbn']]); ?>" class="btn btn-secondary">Reservar</a>
                     </div>
                 </div>
             </div>

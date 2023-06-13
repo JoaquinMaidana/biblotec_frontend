@@ -6,8 +6,12 @@ use yii\helpers\Url;
 
 /** @var yii\web\View $this */
 
-$this->title = 'Comentarios del libro ' . $tituloLibro;
-$idLibro = $comentarios[0]['comet_lib_id'];
+    $this->title = 'Comentarios del libro ' . $tituloLibro;
+    $idLibro = $comentarios[0]['comet_lib_id'];
+
+    if (Yii::$app->session->isActive) {      
+        $documento = Yii::$app->session->get('usu_documento');             
+    }
 ?>
 
 
@@ -42,6 +46,7 @@ $idLibro = $comentarios[0]['comet_lib_id'];
 
             <?= Html::beginForm(['comentario/delete'], 'post') ?>
             <input type="hidden" name="id" id="idComentarioEliminar"></input>
+            <input type="hidden" name="token" value="" >
             <div class="modal-body">
                 <div class="container-fluid">
                     <div class="row justify-content-center">
@@ -70,6 +75,7 @@ $idLibro = $comentarios[0]['comet_lib_id'];
             </div>
             <?= Html::beginForm(['comentario/create'], 'post') ?>
             <input type="hidden" name="idLibro" value='<?= $idLibro ?>'></input>
+            <input type="hidden" name="token" value="" >
             <div class="modal-body">
                 <div class="container-fluid">
                     <div class="row justify-content-center">
@@ -100,6 +106,7 @@ $idLibro = $comentarios[0]['comet_lib_id'];
             <input type="hidden" name="idLibro" value='<?= $idLibro ?>'></input>
             <input type="hidden" name="comentarioPadre" id="idComentarioPadre"></input>
             <input type="hidden" name="comentarioReferencia" id="idComentarioReferencia"></input>
+            <input type="hidden" name="token" value="" >
             <div class="modal-body">
                 <div class="container-fluid">
                     <div class="row justify-content-center">
@@ -134,6 +141,7 @@ $idLibro = $comentarios[0]['comet_lib_id'];
             </div>
             <?= Html::beginForm(['comentario/update'], 'post') ?>
             <input type="hidden" name="id" id="idComentario"></input>
+            <input type="hidden" name="token" value="" >
             <div class="modal-body">
                 <div class="container-fluid">
                     <div class="row justify-content-center">
@@ -179,4 +187,20 @@ $idLibro = $comentarios[0]['comet_lib_id'];
             }
         });
     });
+</script>
+
+<script> 
+        let tokenElements = document.querySelectorAll('[name="token"]');
+
+        if (tokenElements.length > 0) {
+        let token = localStorage.getItem('TokenBibliotec_<?=$documento ?>');
+        if (token) {
+            tokenElements.forEach(function(element) {
+            element.value = token;
+            });
+        } else {
+            console.log('El token no está disponible.');
+        }
+        }
+
 </script>

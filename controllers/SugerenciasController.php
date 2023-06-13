@@ -36,7 +36,7 @@ class SugerenciasController extends Controller{
         $client = new Client();
         $response = $client->createRequest()
             ->setMethod('get')
-            ->setUrl('http://152.70.212.112:3000/sugerencias')
+            ->setUrl('http://152.70.212.112/sugerencias')
             ->send();
 
         if ($response->isOk) {
@@ -157,25 +157,26 @@ class SugerenciasController extends Controller{
 
     protected function saveSug($httpMethod='post')
     {
-        $url = 'http://152.70.212.112:3000/sugerencias';
+        $url = 'http://152.70.212.112/sugerencias';
         $client = new Client();
         //var_dump($httpMethod='post');exit;
-    
+        $token = Yii::$app->request->post('token');
         if ($httpMethod === 'PUT') {
             //var_dump(Yii::$app->request->post('nuevoEstado'),"get",Yii::$app->request->get('sugerencia')['id'] );exit;
-            $url .= '/' . Yii::$app->request->post('id');
-            $newEstado = Yii::$app->request->post('nuevoEstado');
+            $url .= '/modificar-estado' ;
+            $newEstado = Yii::$app->request->post('nuevo_e');
+            
             //var_dump($url, $newEstado); exit;
             $response = $client->createRequest()
-                ->setMethod('PUT')
+                ->setMethod('put')
                 ->setUrl($url)
-                ->addHeaders(['content-type' => 'application/json'])
+                ->addHeaders(['content-type' => 'application/json',
+                'Authorization' => 'Bearer ' . $token])
                 ->setContent(Json::encode([
-                    "id" => intval(Yii::$app->request->post('id')),
-                    "sug_sugerencia"=>Yii::$app->request->post('sug_sugerencia'),
+                    "sug_id" => Yii::$app->request->post('id'),
+                    
                     "sug_vigente"=>$newEstado,
-                    "sug_idusu"=>Yii::$app->request->post('sug_idusu'),
-                    "sug_fecha" =>Yii::$app->request->post('sug_fecha'),
+                  
                 ])) 
                 ->send();
         } else {

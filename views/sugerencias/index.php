@@ -9,6 +9,11 @@ use yii\helpers\Url;
 
 $this->title = 'Sugerencias';
 $this->params['breadcrumbs'][] = $this->title;
+if (Yii::$app->session->isActive) {      
+    $documento = Yii::$app->session->get('usu_documento');       
+    $id_usuario =  Yii::$app->session->get('usu_id');       
+}
+
 
 ?>
 <?php //var_dump($params);exit;?>
@@ -57,7 +62,14 @@ $this->params['breadcrumbs'][] = $this->title;
    // var_dump($url);exit; [Url::to(['sugerencias/modificar-sugerencia', 'idsugerencia'=>1 ])] ?>
     ?= Html::a('Editar Sugerencias',$url , ['class' => 'btn btn-success'])  ?>
 </p> -->
-
+<?= Html::beginForm(['sugerencias/update'], 'post', ['id' => 'formSug2']) ?>
+                                    <input type="hidden" id="id_sug" name="id" value=""></input>
+                                    <input type="hidden" id="sug" name="sug_sugerencia" value=""></input>
+                                    <input type="hidden" id="usu" name="sug_idusu" value=""></input>
+                                    <input type="hidden" id="fech_sug" name="sug_fecha" value=""></input>
+                                    <input type="hidden" id="new_e" name="nuevo_e" value=""></input>
+                                    <input type="hidden" id="token-field" name="token" value="" >
+            <?= Html::endForm() ?>
 <?php $sugerencias = json_decode($sugerenciasJson); ?>
 
 <h2>Todas las sugerenciasss</h2>
@@ -74,27 +86,22 @@ $this->params['breadcrumbs'][] = $this->title;
             </tr>
         </thead>
         <tbody>
-            <?= Html::beginForm(['sugerencias/update'], 'post', ['id' => 'formSug']) ?>
-                                    <input type="hidden" id="id_sug" name="id" value=""></input>
-                                    <input type="hidden" id="sug" name="sug_sugerencia" value=""></input>
-                                    <input type="hidden" id="usu" name="sug_idusu" value=""></input>
-                                    <input type="hidden" id="fech_sug" name="sug_fecha" value=""></input>
-            <?= Html::endForm() ?>
+        
             <?php 
             foreach($sugerencias as $sugerencia){
                 ?>
                 <tr>
-                    <td><?= $sugerencia->id; ?></td>
+                    <td><?= $sugerencia->sug_id; ?></td>
                     <td><?= $sugerencia->sug_sugerencia; ?></td>
                     <td><?= $estado = $sugerencia->sug_vigente=='S' ? 'Activa' : 'Revisada'; ?></td>
-                    <td><?= $sugerencia->sug_idusu; ?></td>
-                    <td><?= $sugerencia->sug_fecha; ?></td>
-                    <td><a class='btn btn-warning' onclick="$('#modalCambiarEstado<?=$sugerencia->id ?>').modal('show');">Cambiar estado</a></td>
+                    <td><?= $sugerencia->sug_usu_id; ?></td>
+                    <td><?= $sugerencia->sug_fecha_hora; ?></td>
+                    <td><a class='btn btn-warning' onclick="$('#modalCambiarEstado<?=$sugerencia->sug_id ?>').modal('show');">Cambiar estado</a></td>
                     
                 </tr>
                   
                                     
-                    <div id="modalCambiarEstado<?= $sugerencia->id?>" class="modal" tabindex="-1">
+                    <div id="modalCambiarEstado<?= $sugerencia->sug_id?>" class="modal" tabindex="-1">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -118,15 +125,29 @@ $this->params['breadcrumbs'][] = $this->title;
                                         <div class="row justify-content-center">
                                             <div class="col" id="textoModalDesactivar">
                                             <p>Confirmar cambio de estado</p>
+                                            <p> <?php  var_dump($sugerencia) ?></p>
+                                            
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                                <script>
+                                    $(document).ready(function() {
+                                        var formSug2HTML = $('#formSug2').html(); // Obtén el HTML del formulario #formSug2
+                                        $('#formSug2Info').html(formSug2HTML); // Imprime el HTML del formulario en el elemento <p>
+                                    });
+                                </script>
                 
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-outline-primary"  onclick="$('#modalCambiarEstado<?=$sugerencia->id ?>').modal('hide');">Cancelar</button>
-                                    <button type="button" class="btn btn-primary" onclick='$(`#id_sug`).val(`<?= $sugerencia->id?>`);$(`#sug`).val(`<?= $sugerencia->sug_sugerencia?>`);$(`#usu`).val(`<?= $sugerencia->sug_idusu?>`);
-                                    $(`#fech_sug`).val(`<?= $sugerencia->sug_fecha?>`);$(`#formSug`).submit()'>Confirmar</button>
+                                    <button type="button" class="btn btn-outline-primary"  onclick="$('#modalCambiarEstado<?=$sugerencia->sug_id ?>').modal('hide');">Cancelar</button>
+                                    <button type="submit" class="btn btn-primary" 
+                                    onclick='$(`#id_sug`).val(`<?= $sugerencia->sug_id?>`);
+                                    $(`#sug`).val(`<?= $sugerencia->sug_sugerencia?>`);
+                                    $(`#usu`).val(`<?= $sugerencia->sug_usu_id?>`);
+                                    $(`#fech_sug`).val(`<?= $sugerencia->sug_fecha_hora?>`);
+                                    $(`#new_e`).val($(`select[name="nuevoEstado"]`).val());
+                                    $(`#formSug2`).submit()'>
+                                    Confirmar</button>
                                 </div>
                             </div>
                         </div>
@@ -139,3 +160,15 @@ $this->params['breadcrumbs'][] = $this->title;
     </table>
 </body>
 </html>
+
+<script> 
+    let token = localStorage.getItem('TokenBibliotec_<?=$documento ?>');
+    if (token) {
+    document.getElementById('token-field').value = token;
+  } else {
+    // El contenido de token es nulo o no existe
+    // Puedes manejar esta situación según tus necesidades
+    console.log('El token no está disponible.');
+  }
+
+</script>

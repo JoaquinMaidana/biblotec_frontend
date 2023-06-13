@@ -28,6 +28,7 @@ class UsuarioController extends Controller
 
     public function actionCreate()
     {
+        //en desuso
         $nombre = $_POST['nombre'];
         $apellido = $_POST['apellido'];
         $correo = $_POST['correo'];

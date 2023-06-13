@@ -8,9 +8,9 @@ $this->title = 'My Yii Application';
    if(isset($libros_Array)){
       
       $novedadesArray = array_filter($libros_Array, function($item) {
-         return $item['lib_novedades'] === 'S';
+         return $item['novedades'] === 'S';
      });
-     
+    
    }
  
 ?>
@@ -128,7 +128,7 @@ novedadesArrayValues.forEach(item => {
   containerImg.classList.add('conteiner-img');
 
   const image = document.createElement('img');
-  image.src = item.lib_imagen;
+  image.src = item.imagen;
   image.alt = '';
 
   containerImg.appendChild(image);

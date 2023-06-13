@@ -88,9 +88,9 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
-        if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
+     //   if (!Yii::$app->user->isGuest) {
+     //       return $this->goHome();
+     //   }
 
 
         if ($this->request->post()) {
@@ -170,6 +170,8 @@ class SiteController extends Controller
                   <script>
                       if (!localStorage.getItem('TokenBibliotec_$user[usu_documento]')) {
                            localStorage.setItem('TokenBibliotec_$user[usu_documento]', '$token');
+                      }else{
+                            localStorage.setItem('TokenBibliotec_$user[usu_documento]', '$token');
                       }
                    </script>
                   JS;
