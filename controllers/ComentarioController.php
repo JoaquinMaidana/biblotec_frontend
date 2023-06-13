@@ -9,25 +9,30 @@ use yii\helpers\Json;
 
 class ComentarioController extends Controller
 {
-    public function actionIndex()
+    public function actionIndex($idLibro = null, $tituloLibro = null)
     {
-        //$idLibro = $_POST['idLibro'];
-        //$tituloLibro = $_POST['tituloLibro'];
-        $idLibro = 20;
-        $tituloLibro = "Ejemplo";
+        if ($idLibro == null) {
+            $idLibro = $_POST['idLibro'];
+            $tituloLibro = $_POST['tituloLibro'];
+        }
+        //$idLibro = 20;
+        //$tituloLibro = "Ejemplo";
         $comentarios = json_decode(ComentarioController::obtenerComentariosPadres($idLibro));
         $comentarios = ComentarioController::obtenerComentariosLibro($comentarios);
 
         return $this->render('index', [
             'comentarios' => $comentarios,
-            'tituloLibro' => $tituloLibro
+            'tituloLibro' => $tituloLibro,
+            'idLibro' => $idLibro
         ]);
     }
 
     public function actionCreate()
     {
         $idLibro = $_POST['idLibro'];
+        $tituloLibro = $_POST['tituloLibro'];
         $comentario = $_POST['comentario'];
+
         if (isset($_POST['comentarioPadre'])) {
             $comentarioPadre = $_POST['comentarioPadre']; //Puede llegar nulo si es un nuevo comentario y no una respuesta
         } else {
@@ -41,24 +46,26 @@ class ComentarioController extends Controller
 
         // $idUsuario = $_POST['idUsuario']; //No estoy seguro de como se consigue todavia
         //Llamada a la API para crear
-        return $this->redirect(['index']);
+        return $this->redirect(['index', "idLibro" => $idLibro, "tituloLibro" => $tituloLibro]);
     }
 
     public function actionUpdate()
     {
         $id = $_POST['id'];
+        $tituloLibro = $_POST['tituloLibro'];
         $comentario = $_POST['comentario'];
 
         //Llamada a la API para actualizar
-        return $this->redirect(['index']);
+        return $this->redirect(['index', "idLibro" => $id, "tituloLibro" => $tituloLibro]);
     }
 
     public function actionDelete()
     {
         $id = $_POST['id'];
+        $tituloLibro = $_POST['tituloLibro'];
 
         //Llamada a la API para desactivar
-        return $this->redirect(['index']);
+        return $this->redirect(['index', "idLibro" => $id, "tituloLibro" => $tituloLibro]);
     }
 
     public function obtenerComentariosPadres($idLibro)

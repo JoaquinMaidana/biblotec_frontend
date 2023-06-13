@@ -11,11 +11,12 @@ use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\User;
+
 class SiteController extends Controller
 {
 
 
-    
+
     /**
      * {@inheritdoc}
      */
@@ -65,15 +66,14 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        
+
         $libroController = new LibroController(Yii::$app->id, Yii::$app);
 
         $libros = $libroController->runAction('get-libros');
-        return $this->render('index',[
+        return $this->render('index', [
             'libros_Array' => $libros
         ]); //redirigir a la página de inicio
-      
-       
+
     }
 
     /**
@@ -89,14 +89,14 @@ class SiteController extends Controller
 
         if ($this->request->post()) {
             $usuarioController = new UsuarioController(Yii::$app->id, Yii::$app);
-            if (isset($_POST['documento'])){
+            if (isset($_POST['documento'])) {
                 $user = $usuarioController->findUser($_POST['documento']);
             }
-            
 
-            if($user['id'] == $_POST['documento'] && $user['usu_clave'] == $_POST['contrasena']){ //esto lo hace el back pero por mientras
-                
-                
+
+            if ($user['id'] == $_POST['documento'] && $user['usu_clave'] == $_POST['contrasena']) { //esto lo hace el back pero por mientras
+
+
 
                 $session = Yii::$app->session;
                 $session->open();
@@ -112,63 +112,57 @@ class SiteController extends Controller
 
 
 
-            //    $client = new Client();
-            //    $response = $client->createRequest()
-            //        ->setMethod('get')
-            //        ->setUrl('http://localhost:3000/libros')
-            //        ->send();
+                //    $client = new Client();
+                //    $response = $client->createRequest()
+                //        ->setMethod('get')
+                //        ->setUrl('http://localhost:3000/libros')
+                //        ->send();
 
-            //    if ($response->isOk) {
-                    
-                    // Decodificar el contenido JSON en un array asociativo 
-            //        $data = json_decode($response->getContent(), true);
-            //        $libros_array = array();
-            //        $string = json_encode($data);
-            //     var_dump($string);
-                    
-                    
-                
-                    
-                  $script = <<< JS
+                //    if ($response->isOk) {
+
+                // Decodificar el contenido JSON en un array asociativo 
+                //        $data = json_decode($response->getContent(), true);
+                //        $libros_array = array();
+                //        $string = json_encode($data);
+                //     var_dump($string);
+
+
+
+
+                $script = <<< JS
                   <script>
                       if (!localStorage.getItem('TokenBibliotec_$user[id]')) {
                            localStorage.setItem('TokenBibliotec_$user[id]', '$user[usu_token]');
                       }
                    </script>
                   JS;
-                    
-                    
-
-             //   }
 
 
-                
+
+                //   }
+
+
+
                 // Agregar el token al local storage utilizando JavaScript
                 $libroController = new LibroController(Yii::$app->id, Yii::$app);
 
                 $libros = $libroController->runAction('get-libros');
-                
-                
+
+
                 // Renderizar la vista 'index' y ejecutar el script de JavaScript
-                return $this->render('index',[
+                return $this->render('index', [
                     'libros_Array' => $libros
-                ]).$script ;
-                
-                
-               
-
-
+                ]) . $script;
             }
-     
-         
+
+
 
             // Almacenar el tipo de usuario en la variable de sesión
-           // Yii::$app->session->set('tipo_usuario', $user['usu_tipo_usuario']);
-         
+            // Yii::$app->session->set('tipo_usuario', $user['usu_tipo_usuario']);
+
         }
 
         return $this->render('login');
-    
     }
 
     /**
@@ -177,20 +171,18 @@ class SiteController extends Controller
      * @return Response|string
      */
     public function actionLogout()
-    {   if ($this->request->post()) {
+    {
+        if ($this->request->post()) {
 
 
-        $session = Yii::$app->session;
-        if ($session->isActive) {
-            $session->destroy();
-            $session->close();
+            $session = Yii::$app->session;
+            if ($session->isActive) {
+                $session->destroy();
+                $session->close();
+            }
         }
 
 
-
-        }
-        
-       
         return $this->render('index');
     }
 

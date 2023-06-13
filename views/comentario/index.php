@@ -7,7 +7,6 @@ use yii\helpers\Url;
 /** @var yii\web\View $this */
 
 $this->title = 'Comentarios del libro ' . $tituloLibro;
-$idLibro = $comentarios[0]['comet_lib_id'];
 ?>
 
 
@@ -42,6 +41,7 @@ $idLibro = $comentarios[0]['comet_lib_id'];
 
             <?= Html::beginForm(['comentario/delete'], 'post') ?>
             <input type="hidden" name="id" id="idComentarioEliminar"></input>
+            <input type="hidden" name="tituloLibro" value="<?= $tituloLibro ?>"></input>
             <div class="modal-body">
                 <div class="container-fluid">
                     <div class="row justify-content-center">
@@ -70,6 +70,7 @@ $idLibro = $comentarios[0]['comet_lib_id'];
             </div>
             <?= Html::beginForm(['comentario/create'], 'post') ?>
             <input type="hidden" name="idLibro" value='<?= $idLibro ?>'></input>
+            <input type="hidden" name="tituloLibro" value="<?= $tituloLibro ?>"></input>
             <div class="modal-body">
                 <div class="container-fluid">
                     <div class="row justify-content-center">
@@ -98,6 +99,7 @@ $idLibro = $comentarios[0]['comet_lib_id'];
             </div>
             <?= Html::beginForm(['comentario/create'], 'post') ?>
             <input type="hidden" name="idLibro" value='<?= $idLibro ?>'></input>
+            <input type="hidden" name="tituloLibro" value="<?= $tituloLibro ?>"></input>
             <input type="hidden" name="comentarioPadre" id="idComentarioPadre"></input>
             <input type="hidden" name="comentarioReferencia" id="idComentarioReferencia"></input>
             <div class="modal-body">
@@ -134,6 +136,7 @@ $idLibro = $comentarios[0]['comet_lib_id'];
             </div>
             <?= Html::beginForm(['comentario/update'], 'post') ?>
             <input type="hidden" name="id" id="idComentario"></input>
+            <input type="hidden" name="tituloLibro" value="<?= $tituloLibro ?>"></input>
             <div class="modal-body">
                 <div class="container-fluid">
                     <div class="row justify-content-center">

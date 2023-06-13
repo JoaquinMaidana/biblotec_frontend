@@ -64,14 +64,12 @@ class FavoritosController extends Controller{
     }
     public function actionUpdate()
     {
-      
-        if ($this->request->post()) {
-            //var_dump("del if",$fav);exit;
-           // var_dump($this->request->post());exit;
-            $this->deleteFav('PUT');
-        }
+        //idUsuario 0 $_POST['idUsuario'];
+        $idLibro = $_POST['idLibro'];
+        $fav = $_POST['fav']; //S/N
 
-        return $this->actionIndex();
+        //llamada a la API para actualizar
+        return 0;
     }
     protected function findLibro($idlibro)
     {
