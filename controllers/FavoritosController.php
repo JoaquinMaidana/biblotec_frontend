@@ -2,6 +2,7 @@
 namespace app\controllers;
 
 use Yii;
+use yii\helpers\Url;
 use yii\web\Controller;
 use yii\httpclient\Client;
 use yii\helpers\Json;
@@ -67,10 +68,52 @@ class FavoritosController extends Controller{
         //idUsuario 0 $_POST['idUsuario'];
         $idLibro = $_POST['idLibro'];
         $fav = $_POST['fav']; //S/N
-
+        if (Yii::$app->session->isActive) {      
+            $token = Yii::$app->session->get('usu_token');    
+            $usu_id =  Yii::$app->session->get('usu_id');         
+        }
         //llamada a la API para actualizar
-        return 0;
+        $client = new Client();
+        $response = $client->createRequest()
+            ->setMethod('post')
+            ->setUrl('http://152.70.212.112/favoritos/create')
+            ->addHeaders(['content-type' => 'application/json',
+            'Authorization' => 'Bearer ' . $token,
+            ])->setContent(Json::encode([
+                "fav_lib_id" =>$idLibro,
+                "fav_usu_id"=>$usu_id,
+                
+            ]))
+            ->send();
+
+        
+
+      //  $siteController = new SiteController(Yii::$app->id, Yii::$app);
+
+      return $this->redirect(['get-favoritos']);
     }
+
+    public function actionBaja(){
+
+    }
+
+    public function actionGetFavoritos(){
+        $client = new Client();
+        if (Yii::$app->session->isActive) {      
+            $token = Yii::$app->session->get('usu_token');             
+        }
+        $response = $client->createRequest()
+            ->setMethod('get')
+            ->setUrl('http://152.70.212.112/favoritos/obtener-favoritos?token='.$token)
+            ->send();
+
+        $data = json_decode($response->getContent(), true);
+        $favoritos = $data['data'];
+        
+        return $favoritos;
+    }
+
+
     protected function findLibro($idlibro)
     {
       

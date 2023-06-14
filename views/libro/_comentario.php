@@ -28,7 +28,7 @@
                             <div class="col-6">
                                 <div class="row justify-content-end">
                                     <div class="col-auto pe-0">
-                                        <button class="btn btn-primary" onclick="$('#modalResponderComentario').modal('show');$('#comentarioResponder').val('<?= $comentario ?>');$('#idComentarioPadre').val('<?= $id ?>');$('#idComentarioReferencia').val('<?= $referencia ?>')">Responder</button><!-- Cuando el comentario no es del usuario -->
+                                        <button class="btn btn-primary" onclick="$('#modalResponderComentario').modal('show');$('#comentarioResponder').val('<?= $comentario ?>');$('#idComentarioPadre').val('<?= $id ?>');$('#idComentarioReferencia').val('<?=  $referencia !== null ? $referencia : $id ?>')">Responder</button><!-- Cuando el comentario no es del usuario -->
                                     </div>
                                     <div class="col-auto pe-0">
                                         <button class="btn btn-primary" onclick="$('#modalEditarComentario').modal('show');$('#idComentario').val(<?= $id ?>);$('#comentarioEditar').val('<?= $comentario ?>')">Editar</button> <!-- Cuando el comentario es del usuario -->

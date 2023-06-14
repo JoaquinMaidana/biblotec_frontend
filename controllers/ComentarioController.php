@@ -14,8 +14,8 @@ class ComentarioController extends Controller
     {
         //$idLibro = $_POST['idLibro'];
         //$tituloLibro = $_POST['tituloLibro'];
-        $idLibro = 2;
-        $this->idLibro =2;
+        $idLibro = 9;
+        $this->idLibro =9;
         $tituloLibro = "Ejemplo";
         $comentarios = json_decode($this->obtenerComentariosPadres($idLibro));
         $comentarios = $this->obtenerComentariosLibro($comentarios);
@@ -25,12 +25,24 @@ class ComentarioController extends Controller
             'tituloLibro' => $tituloLibro,
             'idLibro' => $idLibro
         ]);
+      
+    }
+
+    public function actionGetComentarios($idLibro){
+        $this->idLibro =$idLibro;
+         $tituloLibro = "Ejemplo";
+        $comentarios = json_decode($this->obtenerComentariosPadres($idLibro));
+        $comentarios = $this->obtenerComentariosLibro($comentarios);
+
+        return $comentarios;
+
     }
 
     public function actionCreate()
     {
         $idLibro = $_POST['idLibro'];
-        $tituloLibro = $_POST['tituloLibro'];
+        $isbn = $_POST['isbn'];
+      
         $comentario = $_POST['comentario'];
 
         if (isset($_POST['comentarioPadre'])) {
@@ -50,26 +62,30 @@ class ComentarioController extends Controller
 
         // $idUsuario = $_POST['idUsuario']; //No estoy seguro de como se consigue todavia
         //Llamada a la API para crear
-        return $this->redirect(['index', "idLibro" => $idLibro, "tituloLibro" => $tituloLibro]);
+        return $this->redirect(['libro/view', "id2" => $isbn]);
     }
 
     public function actionUpdate()
     {
         $id = $_POST['id'];
-        $tituloLibro = $_POST['tituloLibro'];
+        $isbn = $_POST['isbn'];
+       
         $comentario = $_POST['comentario'];
-
+        if ($this->request->post()) {
+            $this->save('PUT');
+        }
         //Llamada a la API para actualizar
-        return $this->redirect(['index', "idLibro" => $id, "tituloLibro" => $tituloLibro]);
+        return $this->redirect(['libro/view', "id2" => $isbn]);
     }
 
     public function actionDelete()
     {
+        $isbn = $_POST['isbn'];
         $id = $_POST['id'];
         $tituloLibro = $_POST['tituloLibro'];
 
         //Llamada a la API para desactivar
-        return $this->redirect(['index', "idLibro" => $id, "tituloLibro" => $tituloLibro]);
+        return $this->redirect(['libro/view', "id2" => $isbn]);
     }
 
     public function obtenerComentariosPadres($idLibro)
@@ -101,8 +117,12 @@ class ComentarioController extends Controller
         $response = $client->createRequest()
             ->setMethod('get')
         //    ->setUrl('http://152.70.212.112:3000/comentarios?comt_vigente=S&comet_padre_id=' . $idComentario)
-            ->setUrl('http://152.70.212.112:3000/comentarios?comt_vigente=S&comet_padre_id=' . $idComentario)
-
+            ->setUrl('http://152.70.212.112/comentarios/vigentes')
+            ->addHeaders(['content-type' => 'application/json'])
+            ->setContent(Json::encode([
+                "lib_id" =>$this->idLibro,
+                "comet_id" => $idComentario,
+            ]))
             ->send();
 
         return $response->getContent();
@@ -132,22 +152,18 @@ class ComentarioController extends Controller
 
         protected function save($httpMethod='post')
     {
-        $url = 'http://localhost/proyectos%20php/bibliotec_backend/web/comentarios';
+        $url = 'http://152.70.212.112/comentarios';
         $client = new Client();
         $token = Yii::$app->request->post('token');
-        
-        $referenciaid = Yii::$app->request->post('comet_referencia_id');
-            $padreid = Yii::$app->request->post('comet_padre_id');
-            $fecha_hora = Yii::$app->request->post('comet_fecha_hora');
+        $currentDateTime = (new \DateTime())->format('Y-m-d H:i:s');
+        $referenciaid = Yii::$app->request->post('comentarioReferencia');
+            $padreid = Yii::$app->request->post('comentarioPadre');
+          
+            if (Yii::$app->session->isActive) {      
+                 
+                $usu_id =  Yii::$app->session->get('usu_id');         
+            }    
             
-            if(isset($fecha_hora)){
-                $fecha_convertida = date("Y-m-d", strtotime($fecha_hora));
-                // Obtener la hora actual
-                $hora_actual = date("H:i:s");
-
-                // Combinar la fecha y la hora
-                $fecha_hora_actual = $fecha_convertida . " " . $hora_actual;
-            }
 
 
         if ($httpMethod === 'PUT') {
@@ -157,12 +173,14 @@ class ComentarioController extends Controller
 
                 ->setMethod('put')
                 ->setUrl($url)
-                ->addHeaders(['content-type' => 'application/json'])
+                ->addHeaders(['content-type' => 'application/json',
+                        'Authorization' => 'Bearer ' . $token,
+                ])
                 ->setContent(Json::encode([
-                    "comet_fecha_hora" => $fecha_hora_actual,
-                    "comet_usu_id" => Yii::$app->request->post('comet_usu_id'),
-                    "comet_lib_id" => Yii::$app->request->post('comet_lib_id'),
-                    "comet_comentario" => Yii::$app->request->post('comet_comentario'),
+                    "comet_fecha_hora" => $currentDateTime,
+                    "comet_usu_id" => $usu_id,
+                    "comet_lib_id" => Yii::$app->request->post('id'),
+                    "comet_comentario" => Yii::$app->request->post('comentario'),
                     "comet_referencia_id" => $referenciaid,
                     "comet_padre_id" => $padreid,
                     
@@ -173,7 +191,7 @@ class ComentarioController extends Controller
                 $response = $client->createRequest()
                 
                 ->setMethod('put')
-                ->setUrl($url.'/create')
+                ->setUrl($url)
                 ->addHeaders(['content-type' => 'application/json',
                         'Authorization' => 'Bearer ' . $token,
                 
@@ -181,10 +199,10 @@ class ComentarioController extends Controller
                 ])
                 
                 ->setContent(Json::encode([
-                    "comet_fecha_hora" => $fecha_hora_actual,
-                    "comet_usu_id" => Yii::$app->request->post('comet_usu_id'),
-                    "comet_lib_id" => Yii::$app->request->post('comet_lib_id'),
-                    "comet_comentario" => Yii::$app->request->post('comet_comentario'),
+                    "comet_fecha_hora" => $currentDateTime,
+                    "comet_usu_id" => $usu_id,
+                    "comet_lib_id" => Yii::$app->request->post('id'),
+                    "comet_comentario" => Yii::$app->request->post('comentario'),
                     
                     
                 ]))
@@ -199,12 +217,15 @@ class ComentarioController extends Controller
 
                 ->setMethod('post')
                 ->setUrl($url.'/create')
-                ->addHeaders(['content-type' => 'application/json'])
+                ->addHeaders(['content-type' => 'application/json',
+                'Authorization' => 'Bearer ' . $token,
+        
+                 ])
                 ->setContent(Json::encode([
-                    "comet_fecha_hora" => $fecha_hora_actual,
-                    "comet_usu_id" => Yii::$app->request->post('comet_usu_id'),
-                    "comet_lib_id" => Yii::$app->request->post('comet_lib_id'),
-                    "comet_comentario" => Yii::$app->request->post('comet_comentario'),
+                    "comet_fecha_hora" => $currentDateTime,
+                    "comet_usu_id" => $usu_id,
+                    "comet_lib_id" => Yii::$app->request->post('idLibro'),
+                    "comet_comentario" => Yii::$app->request->post('comentario'),
                     "comet_referencia_id" => $referenciaid,
                     "comet_padre_id" => $padreid,
                     
@@ -223,10 +244,10 @@ class ComentarioController extends Controller
                 ])
                 
                 ->setContent(Json::encode([
-                    "comet_fecha_hora" => $fecha_hora_actual,
-                    "comet_usu_id" => Yii::$app->request->post('comet_usu_id'),
-                    "comet_lib_id" => Yii::$app->request->post('comet_lib_id'),
-                    "comet_comentario" => Yii::$app->request->post('comet_comentario'),
+                    "comet_fecha_hora" => $currentDateTime,
+                    "comet_usu_id" => $usu_id,
+                    "comet_lib_id" => Yii::$app->request->post('idLibro'),
+                    "comet_comentario" => Yii::$app->request->post('comentario'),
                     
                     
                 ]))
