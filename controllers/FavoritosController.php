@@ -16,22 +16,21 @@ class FavoritosController extends Controller{
         $client = new Client();
         $response2=$client->createRequest()
         ->setMethod('get')
-        ->setUrl('http://152.70.212.112:3000/favoritos')
+        //->headers->set('Content-Type', 'application/json')
+        ->setUrl('http://152.70.212.112/favoritos/obtener-favoritos?token=648f8784860d6')
         ->send();
-        $response = $client->createRequest()
-            ->setMethod('get')
-            ->setUrl('http://152.70.212.112:3000/libros')
-            ->send();
+       
 
-        if ($response->isOk && $response2->isOk) {
+        if ( $response2->isOk) {
             
             // Decodificar el contenido JSON en un array asociativo
-            $fav =  json_decode($response2->getContent(), true);
-            $data = json_decode($response->getContent(), true);
-           
-            $string = json_encode($data);
-            
-            $stringfav= json_encode($fav);
+           // var_dump(json_decode($response2->getContent(), true));
+            $data =  json_decode($response2->getContent(), true);
+           // var_dump($fav);exit;
+            $fav2 =$data['data'];
+          
+
+           // $stringfav= json_encode($fav);
         
               
               // Imprimir el string JSON
@@ -39,8 +38,7 @@ class FavoritosController extends Controller{
         }else {var_dump("No fue ok");exit;}
 
         return $this->render('index',[
-            'libros' => $string,
-            'favoritos' => $stringfav
+            'favoritos' => $fav2
         ]);
       
     }
@@ -150,55 +148,30 @@ class FavoritosController extends Controller{
     
 
 
-    protected function deleteFav($httpMethod='post')
+    public function actionUpdatee()
     {   //var_dump("favoritos controller delete fav",$_POST["idlibro"],$_POST["idusu"],$_POST["idfav"],$_POST["estado"]);exit;
-        $url = 'http://152.70.212.112:3000/favoritos';
+        $url = 'http://152.70.212.112/favoritos';
         $client = new Client();
-    
-        if ($httpMethod === 'PUT') {
-            $url .= '/' . $_POST["idlibro"];
-            if($_POST["estado"]==1){
-                $new_estado = 1;
-            }else{
-                $new_estado = 0;
-            }
+        if (Yii::$app->session->isActive) {      
+            $token = Yii::$app->session->get('usu_token');          
+        }
+        
+            $url .= '/delete?id=' . Yii::$app->request->post('id_fav');
+            
            
           //var_dump($favorito['fav_usu_id']);exit;
             $response = $client->createRequest()
-                ->setMethod('PUT')
+                ->setMethod('DELETE')
                 ->setUrl($url)
-                ->addHeaders(['content-type' => 'application/json'])
-                ->addHeaders(['Authorization' => 'Bearer ' . 'user'])
-                ->setContent(Json::encode([
-                    "id" =>$_POST["idfav"],
-                    "fav_usu_id"=>$_POST["idusu"],
-                    "fav_lib_id"=>$_POST["idlibro"],
-                    "fav_estado"=>$new_estado,
-                    
-                ])) 
+                ->addHeaders(['content-type' => 'application/json',
+                'Authorization' => 'Bearer ' . $token,
+                ])
+                
                 ->send();
-        } else {
-            $response = $client->createRequest()
-                ->setMethod('post')
-                ->setUrl($url)
-                ->addHeaders(['content-type' => 'application/json'])
-                ->addHeaders(['Authorization' => 'Bearer ' . 'user'])
-                ->setContent(Json::encode([
-                    "id" =>Yii::$app->request->post('id'),
-                    "sug_sugerencia"=>Yii::$app->request->post('sug_sugerencia'),
-                    "sug_vigente"=>Yii::$app->request->post('sug_vigente'),
-                    "sug_idusu"=>Yii::$app->request->post('sug_idusu'),
-                    "sug_fecha" =>Yii::$app->request->post('sug_fecha'),
-                ]))
-                ->send();
-        }
-    
-        if ($response->isOk) {
-            
-            return true;
-        } else {
-            return false;
-        }
+       
+            return $this->redirect(['favoritos/index']);
+
+
     }
 
 }

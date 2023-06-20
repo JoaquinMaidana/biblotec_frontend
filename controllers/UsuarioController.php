@@ -10,12 +10,16 @@ use yii\helpers\Json;
 class UsuarioController extends Controller
 {
     public function actionIndex()
-    {
+    {   
+        if (Yii::$app->session->isActive) {      
+            $token = Yii::$app->session->get('usu_token');    
+                
+        }
         $client = new Client();
         $response = $client->createRequest()
             ->setMethod('get')
-            ->setUrl('http://localhost/proyectos%20php/bibliotec_backend/web/usuarios/listado')
-            ->addHeaders(['Authorization' => 'Bearer ' . 'user'])
+            ->setUrl('http://152.70.212.112/usuarios/listado')
+            ->addHeaders(['Authorization' => 'Bearer ' . $token])
             ->send();
 
             $usuarios = json_decode($response->getContent(), true);
@@ -66,9 +70,28 @@ class UsuarioController extends Controller
     public function actionDelete()
     {
         $id = $_POST['id'];
+        $motivo = $_POST['motivo'];
+        if (Yii::$app->session->isActive) {      
+            $token = Yii::$app->session->get('usu_token');
+                 
+        }
+        $client = new Client();
+        $response = $client->createRequest()
+            ->setMethod('put')
+            ->addHeaders(['content-type' => 'application/json',
+            'Authorization' => 'Bearer ' . $token,
+            ])
+            ->setUrl('http://152.70.212.112/usuarios/delete')
+            ->setContent(Json::encode([
 
-        //Llamada a la API para desactivar
+                "id" =>$id,
+                "motivo" => $motivo,
+              
+            ]))
+            ->send();
+
         return $this->redirect(['index']);
+       
     }
 
     public function findUsuario($usu_id)
