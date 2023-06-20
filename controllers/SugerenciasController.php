@@ -60,18 +60,13 @@ class SugerenciasController extends Controller{
             'sugerenciasJson' => $string,
             'sugerencias_Array' => $sugerencias_array
         ]);
-       /* return $this->render('admin',[
-            'dataProvider'=>$sugerencias_array,
-            'sugerenciasJson' => $string,
-            'sugerencias_Array' => $sugerencias_array
-        ]);*/
     }
 
     public function actionCreate()
     {
         //primero  consulto si la peticion vino por post
         if ($this->request->post()) {
-            $sug_sugerencia = $_POST['sug_sugerencia'];
+            $sug_sugerencia = $_POST['sugerencia'];
           //  var_dump(Yii::$app->request->post('sug_sugerencia'), "yii POST", $sug_sugerencia, "Post");exit;
             $this->saveSug();
         }
@@ -257,5 +252,3 @@ class SugerenciasController extends Controller{
     }
 
 }
-
-?>

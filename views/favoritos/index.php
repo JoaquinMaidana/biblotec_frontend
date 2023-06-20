@@ -1,126 +1,145 @@
 <?php
 
-use app\controllers\FavoritosController;
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\httpclient\Client;
 
 /** @var yii\web\View $this */
 
-$this->title = 'Mis libros favoritos';
+$this->title = 'Libros favoritos';
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Favoritos</title>
+<style>
+    .card {
+        height: 100% !important;
+    }
+
+    .card button {
+        width: 100%;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="row align-items-center">
+        <div class="col-8">
+            <h1><?= Html::encode($this->title) ?></h1>
+        </div>
+    </div>
+    <hr>
+    <div class="row mt-3 justify-content-center">
+        <?php foreach ($libros as $libro) {
+        ?>
+            <div class="col-3 mb-3 ms-2 me-2">
+                <div class="card">
+                    <div class="card-body ps-0 pt-0 pe-0">
+                        <img class="card-img-top img" src="<?= $libro['lib_imagen'] ?>" alt="Card image cap">
+                    </div>
+                    <div class="card-footer">
+                        <h5 class="card-title text-truncate"><?= $libro['lib_titulo'] ?></h5>
+                        <hr>
+                        <div class="row">
+                            <div class="col-7 text-start">
+                                <label>Categoría:</label>
+                            </div>
+                            <div class="col text-end text-truncate">
+                                <p class="card-text"><?= $libro['lib_categoria'] ?></p>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-7 text-start">
+                                <label>Sub Categoría:</label>
+                            </div>
+                            <div class="col text-end text-truncate">
+                                <p class="card-text"><?= $libro['lib_sub_categoria'] ?></p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row mt-2">
+                            <div class="col-4 text-start">
+                                <label>Autor/es:</label>
+                            </div>
+                            <div class="col text-end text-truncate">
+                                <p class="card-text"><?= $libro['lib_autores'] ?></p>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-4 text-start">
+                                <label>Idioma:</label>
+                            </div>
+                            <div class="col text-end text-truncate">
+                                <p class="card-text"><?= $libro['lib_idioma'] ?></p>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-auto text-start">
+                                <a class='' id="favorito_<?= $libro['id'] ?>" onclick='quitarFavorito(this.id)'><i id="estrella_<?= $libro['id'] ?>" class="fa-solid fa-star"></i></a>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <?php if ($libro['lib_vigente'] == 'Si') { ?>
+                                <div class="col">
+                                    <button onclick="reservarLibro(<?= $libro['id'] ?>)" class="btn btn-primary">Reservar</button>
+                                </div>
+                            <?php } ?>
+                        </div>
+                        <?= Html::beginForm(['libro/view']) ?>
+                        <input type="hidden" name="id" value="<?= $libro['id'] ?>"></input>
+                        <input type="hidden" name="vuelta" value="site/index"></input>
+                        <div class="row mt-2">
+                            <div class="col">
+                                <button type="submit" class="btn btn-primary">Ver más</button>
+                            </div>
+                        </div>
+                        <?= Html::endForm() ?>
+                        <?= Html::beginForm(['comentario/index']) ?>
+                        <input type="hidden" name="idLibro" value="<?= $libro['id'] ?>"></input>
+                        <input type="hidden" name="tituloLibro" value="<?= $libro['lib_titulo'] ?>"></input>
+                        <div class="row mt-2">
+                            <div class="col">
+                                <button type="submit" class="btn btn-primary">Comentarios</button>
+                            </div>
+                        </div>
+                        <?= Html::endForm() ?>
+                    </div>
+                </div>
+            </div>
+        <?php } ?>
+    </div>
+</div>
 
 <script>
-    $(document).ready(function () {
-        $('#todas').DataTable();
-    });
+    function quitarFavorito(id) {
+        id = id.split("_")[1];
 
+        $.ajax({
+            method: "POST",
+            url: "<?= Url::toRoute(['favoritos/update']); ?>",
+            data: {
+                _csrf: "<?= Yii::$app->request->csrfToken; ?>",
+                //idUsuario: idUsuario
+                idLibro: id,
+                fav: 'N'
+            },
+            success: function(result) {
+                location.reload();
+            }
+        });
+    }
+
+    function reservarLibro(id = null) {
+        if (id != null) {
+            $("#libroId").val(id);
+            $("#modalReserva").modal("show");
+        } else {
+            hoy = Date.now();
+
+            if ((Date.parse($("#desde").val()) < Date.parse($("#hasta").val())) && (Date.parse($("#desde").val()) >= hoy)) {
+                $("#fecha_desde").val($("#desde").val());
+                $("#fecha_hasta").val($("#hasta").val());
+                $("#formReserva").submit();
+            } else {
+                $("#modalReserva").modal("hide");
+                $("#modalAdvertencia").modal("show");
+            }
+        }
+    }
 </script>
-
-</head>
-<body>
-    <h1><?= Html::encode($this->title) ?></h1>
-        
-    <div class="col d-flex justify-content-end">
-        <?= Html::a('Agregar favoritos', ['libro/index'], ['class' => 'btn btn-primary']) ?>
-    </div>
-
-    <?php 
-    /*     let token = localStorage.getItem('TokenBibliotec_50541551');
-    if (token) {
-    document.getElementById('token-field').value = token;
-    console.log(token);
-  } else {
-    // El contenido de token es nulo o no existe
-    // Puedes manejar esta situación según tus necesidades
-    console.log('El token no está disponible.');
-  }
-*/
-
-      
-    ?>
-    <?= Html::beginForm(['favoritos/updatee'], 'post', ['id' => 'formFav']) ?>
-                                    <input type="text" id="id_fav" name="id_fav" value=""></input>
-            <?= Html::endForm() ?>
-    <table id="todas" class="display compact">
-        <thead>
-            <tr>
-                <th>Titulo</th>
-                <th>Portada</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-
-        
-            <?php 
-
-            foreach($favoritos as $favorito){
-               
-                
-                ?>
-                <tr>
-                    <td><?= $favorito['titulo']; ?></td>
-                    <td><button class="btn btn-primary" onclick="$('#modalPortada').modal('show')">Ver portada</button></td>
-                    <td><a class='btn btn-warning' onclick="$('#modalCambiarEstado<?=$favorito['fav_id'] ?>').modal('show');">Quitar de favoritos</a></td> 
-                </tr>
-                    
-                <div id="modalPortada" class="modal" tabindex="-1">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">Portada actual</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-
-                            <div class="modal-body">
-                                <div class="container-fluid">
-                                    <div class="row justify-content-center">
-                                        <div class="col-auto">
-                                            <input type="image" id="imagenPortada" src="<?= $favorito['imagen'] ?>"></input>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-primary" onclick="$('#modalPortada').modal('hide');">Aceptar</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                                    
-                <div id="modalCambiarEstado<?= $favorito['fav_id']?>" class="modal" tabindex="-1">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-
-                            <div class="modal-header">
-                                <h5 class="modal-title">Quitar de favoritos</h5>
-                                <label for="estact">
-                                  <strong>A : <input style="border: none;"  type="text" value="<?= $favorito['titulo']?>" ></strong>  
-                                </label>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-primary"  onclick="$('#modalCambiarEstado<?=$favorito['fav_id']  ?>').modal('hide');">Cancelar</button>
-                                <button type="button" class="btn btn-primary" onclick='$(`#id_fav`).val(`<?= $favorito["fav_id"] ?>`);$(`#formFav`).submit()'> Quitar de favoritos</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                    
-            
-               
-            <?php }?>
-        </tbody>
-    </table>
-
-</body>
-</html>

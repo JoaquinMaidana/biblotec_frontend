@@ -27,7 +27,7 @@ $this->title = 'Mis reservas';
 </style>
 
 <div class="container-fluid">
-    <div class="row mt-3 align-items-center">
+    <div class="row align-items-center">
         <div class="col-3">
             <h1><?= Html::encode($this->title) ?></h1>
         </div>

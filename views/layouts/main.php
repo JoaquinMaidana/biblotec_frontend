@@ -16,7 +16,7 @@ use app\assets\AppAsset;
         $isAdmin = Yii::$app->session->get('usu_tipo_usuario');             
     }
 ?>
- 
+
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>" class="h-100">
@@ -30,6 +30,83 @@ use app\assets\AppAsset;
   src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js" integrity="sha256-lSjKY0/srUM9BE3dPm+c4fBo1dky2v27Gdjm2uoZaL0=" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" />
+
+<style>
+    body {
+        background-color: #cbd0d5;
+    }
+
+    .marco {
+        margin: 1%;
+        background-color: #343a40;
+        border-radius: 10px;
+        padding: 10px;
+    }
+
+    .navbar-expand-lg {
+        background-color: #343a40 !important;
+    }
+
+    .navbar-nav li a {
+        color: #00c7ff;
+    }
+
+    .btn-primary {
+        background-color: #00c7ff;
+        color: #343a40;
+        border: 0px;
+    }
+
+    .btn-primary:hover,
+    .btn-primary:active {
+        background-color: #009dc9 !important;
+        color: #343a40 !important;
+    }
+
+    .btn-outline-primary {
+        color: white;
+        border-color: #00c7ff;
+    }
+
+    .btn-outline-primary:hover {
+        background-color: #00c7ff;
+        border-color: #00c7ff;
+        color: #343a40;
+    }
+
+    i,
+    hr,
+    h5,
+    h1 {
+        color: #00c7ff;
+    }
+
+    td,
+    th,
+    .dataTables_info {
+        color: white !important;
+    }
+
+    .modal-header,
+    .modal-footer {
+        background-color: #343a40;
+    }
+
+
+    .modal-body {
+        background-color: #cbd0d5;
+    }
+
+    .form-control,
+    .form-control:focus {
+        background-color: #cbd0d5;
+        border-color: #343a40;
+    }
+
+    .card {
+        background-color: #cbd0d5;
+    }
+</style>
 
 <head>
     <title><?= Html::encode($this->title) ?></title>
@@ -77,48 +154,42 @@ use app\assets\AppAsset;
                     <?php } ?>
                 </ul>
                 <ul class="navbar-nav mr-auto">
-                       
-                       <?php if (Yii::$app->session->isActive) { ?>
+
+                    <?php if (Yii::$app->session->isActive) { ?>
                         <li class="nav-item active">
-                              <form action="<?= Url::toRoute(['site/logout']); ?>" method="post">
-                              <?= Html::hiddenInput(Yii::$app->request->csrfParam, Yii::$app->request->csrfToken) ?>
-                                  <?= Html::submitButton(
-                                      'Logout (' . Yii::$app->session->get('usu_documento') . ')'."  Tipo:".Yii::$app->session['usu_tipo_usuario'],
-                                      ['class' => 'nav-link btn btn-link logout']
-                                  ); ?>
-                              </form>
-                          </li>
+                            <form action="<?= Url::toRoute(['site/logout']); ?>" method="post">
+                                <?= Html::hiddenInput(Yii::$app->request->csrfParam, Yii::$app->request->csrfToken) ?>
+                                <?= Html::submitButton(
+                                    'Logout (' . Yii::$app->session->get('usu_documento') . ')' . "  Tipo:" . Yii::$app->session['usu_tipo_usuario'],
+                                    ['class' => 'nav-link btn btn-link logout']
+                                ); ?>
+                            </form>
+                        </li>
 
-                      <?php } else { ?>
-                          
-
-                          <li class="nav-item active">
-                              <a class="nav-link" href="<?= Url::toRoute(['site/login']); ?>">Login</a>
-                          </li>
+                    <?php } else { ?>
 
 
-                      <?php } ?>
-                         
-                      </ul>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="<?= Url::toRoute(['site/login']); ?>">Login</a>
+                        </li>
+
+
+                    <?php } ?>
+
+                </ul>
             </div>
-            
+
         </nav>
     </header>
 
     <main id="main" class="flex-shrink-0" role="main">
-        <div class="container">
-            <?= Alert::widget() ?>
-            <?= $content ?>
-        </div>
-    </main>
-    <footer id="footer" class="mt-auto py-3 bg-light">
-        <div class="container">
-            <div class="row text-muted">
-                <div class="col-md-6 text-center text-md-start">&copy; My Company <?= date('Y') ?></div>
-                <div class="col-md-6 text-center text-md-end"><?= Yii::powered() ?></div>
+        <div class="container-fluid">
+            <div class="marco">
+                <?= Alert::widget() ?>
+                <?= $content ?>
             </div>
         </div>
-    </footer>
+    </main>
     <?php $this->endBody() ?>
 </body>
 
