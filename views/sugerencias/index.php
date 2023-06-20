@@ -1,174 +1,153 @@
 <?php
 
-
 use yii\helpers\Html;
-use yii\helpers\Url;
-
 
 /** @var yii\web\View $this */
 
 $this->title = 'Sugerencias';
-$this->params['breadcrumbs'][] = $this->title;
-if (Yii::$app->session->isActive) {      
-    $documento = Yii::$app->session->get('usu_documento');       
-    $id_usuario =  Yii::$app->session->get('usu_id');       
+if (Yii::$app->session->isActive) {
+    $documento = Yii::$app->session->get('usu_documento');
+    $id_usuario =  Yii::$app->session->get('usu_id');
 }
-
-
 ?>
-<?php //var_dump($params);exit;?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sugerencias</title>
-    <style> 
-    table {
-        border: 1px solid #000;
-        width: 100%;
-    }
-    table  th, td {
-     text-align: center;
-     
-     
-     vertical-align: top;
-     border: 1px solid #000;
-     border-spacing: 0;
-     padding: 0.2em;
-     
-    }
 
-</style>
-<script>
-    $(document).ready(function () {
-    $('#todas').DataTable();
-    });
-</script>
-</head>
-<body>
-<div class="sugerencias-index">
+<div class="container-fluid">
+    <div class="row align-items-center">
+        <div class="col-8">
+            <h1><?= Html::encode($this->title) ?></h1>
+        </div>
+        <div class="col d-flex justify-content-end pe-0">
+            <button class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#modalNuevaSugerencia'>Nueva sugerencia</button>
+        </div>
+        <div class="col d-flex justify-content-end ps-0">
+            <?= Html::a('Mis sugerencias', ['view'], ['class' => 'btn btn-primary']) ?>
+        </div>
+    </div>
 
-<h1><?= Html::encode($this->title) ?></h1>
-<p>
-    <?= Html::a('Crear Sugerencias', ['create'], ['class' => 'btn btn-success']) ?>
-    <?= Html::a('Mis Sugerencias', ['view'], ['class' => 'btn btn-primary']) ?>
-</p>
-
-
-<!-- <p>
-    ?php $url = Url::to(['sugerencias/update', 'idsugerencias'=>1 ]);
-   // var_dump($url);exit; [Url::to(['sugerencias/modificar-sugerencia', 'idsugerencia'=>1 ])] ?>
-    ?= Html::a('Editar Sugerencias',$url , ['class' => 'btn btn-success'])  ?>
-</p> -->
-<?= Html::beginForm(['sugerencias/update'], 'post', ['id' => 'formSug2']) ?>
-                                    <input type="hidden" id="id_sug" name="id" value=""></input>
-                                    <input type="hidden" id="sug" name="sug_sugerencia" value=""></input>
-                                    <input type="hidden" id="usu" name="sug_idusu" value=""></input>
-                                    <input type="hidden" id="fech_sug" name="sug_fecha" value=""></input>
-                                    <input type="hidden" id="new_e" name="nuevo_e" value=""></input>
-                                    <input type="hidden" id="token-field" name="token" value="" >
-            <?= Html::endForm() ?>
-<?php $sugerencias = json_decode($sugerenciasJson); ?>
-
-<h2>Todas las sugerenciasss</h2>
-<hr>
-    <table id="todas" class="display compact">
+    <table id="tablaSugerencias" class="display compact">
         <thead>
             <tr>
-                <th>id</th>
-                <th>Texto de sugerencia</th>
+                <th>Sugerencia</th>
                 <th>Estado</th>
-                <th>Usuario que realiza</th>
-                <th>Fecha realizacion</th>
-                <th>Acciones</th>
+                <th>Usuario</th>
+                <th>Fecha</th>
+                <th></th>
             </tr>
         </thead>
-        <tbody>
-        
-            <?php 
-            foreach($sugerencias as $sugerencia){
-                ?>
-                <tr>
-                    <td><?= $sugerencia->sug_id; ?></td>
-                    <td><?= $sugerencia->sug_sugerencia; ?></td>
-                    <td><?= $estado = $sugerencia->sug_vigente=='S' ? 'Activa' : 'Revisada'; ?></td>
-                    <td><?= $sugerencia->sug_usu_id; ?></td>
-                    <td><?= $sugerencia->sug_fecha_hora; ?></td>
-                    <td><a class='btn btn-warning' onclick="$('#modalCambiarEstado<?=$sugerencia->sug_id ?>').modal('show');">Cambiar estado</a></td>
-                    
-                </tr>
-                  
-                                    
-                    <div id="modalCambiarEstado<?= $sugerencia->sug_id?>" class="modal" tabindex="-1">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title">Cambiar de estado</h5>
-                                    <label for="estact">
-                                        Estado actual: <input type="text" name="estact" value="<?= $estado = $sugerencia->sug_vigente=='S' ? 'Activa' : 'Revisada'; ?>" disabled>
-                                    </label>
-                                    <div>Pasar a estado: 
-                                        <select name="nuevoEstado">
-                                            <?php if ($sugerencia->sug_vigente=='S'){
-                                            echo '<option value="N">Revisada</option>'; 
-                                            } else { 
-                                            echo '<option value="S">Activa</option>';
-                                            } ?>
-                                        </select>
-                                        </div>
-                                    
-                                </div>
-                                <div class="modal-body">
-                                    <div class="container-fluid">
-                                        <div class="row justify-content-center">
-                                            <div class="col" id="textoModalDesactivar">
-                                            <p>Confirmar cambio de estado</p>
-                                            <p> <?php  var_dump($sugerencia) ?></p>
-                                            
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <script>
-                                    $(document).ready(function() {
-                                        var formSug2HTML = $('#formSug2').html(); // Obtén el HTML del formulario #formSug2
-                                        $('#formSug2Info').html(formSug2HTML); // Imprime el HTML del formulario en el elemento <p>
-                                    });
-                                </script>
-                
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-outline-primary"  onclick="$('#modalCambiarEstado<?=$sugerencia->sug_id ?>').modal('hide');">Cancelar</button>
-                                    <button type="submit" class="btn btn-primary" 
-                                    onclick='$(`#id_sug`).val(`<?= $sugerencia->sug_id?>`);
-                                    $(`#sug`).val(`<?= $sugerencia->sug_sugerencia?>`);
-                                    $(`#usu`).val(`<?= $sugerencia->sug_usu_id?>`);
-                                    $(`#fech_sug`).val(`<?= $sugerencia->sug_fecha_hora?>`);
-                                    $(`#new_e`).val($(`select[name="nuevoEstado"]`).val());
-                                    $(`#formSug2`).submit()'>
-                                    Confirmar</button>
-                                </div>
+    </table>
+
+    <div id="modalRevisarSugerencia" class="modal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Revisar sugerencia</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <?= Html::beginForm(['sugerencias/update'], 'post') ?>
+                <input type="hidden" name="id" id="idSugerenciaRevisar"></input>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row justify-content-center">
+                            <div class="col">
+                                <p>¿Desea marcar como revisada la sugerencia?</p>
                             </div>
                         </div>
                     </div>
-                    
-            
-               
-            <?php }?>
-        </tbody>
-    </table>
-</body>
-</html>
+                </div>
 
-<script> 
-    let token = localStorage.getItem('TokenBibliotec_<?=$documento ?>');
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-primary" onclick="$('#modalRevisarSugerencia').modal('hide');">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Marcar como revisada</button>
+                </div>
+                <?= Html::endForm() ?>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalNuevaSugerencia" class="modal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Revisar sugerencia</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <?= Html::beginForm(['sugerencias/create'], 'post') ?>
+                <input type="hidden" name="id" id="idSugerenciaRevisar"></input>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row justify-content-center">
+                            <div class="col-3 text-end">
+                                <label>Sugerencia:<span class="text-danger">*<span></label>
+                            </div>
+                            <div class="col">
+                                <textarea class="form-control" name="sugerencia" required></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-primary" onclick="$('#modalNuevaSugerencia').modal('hide');">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Crear</button>
+                </div>
+                <?= Html::endForm() ?>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('#tablaSugerencias').DataTable({
+            data: <?= $sugerenciasJson ?>,
+            responsive: true,
+            bFilter: false,
+            paging: false,
+            ordering: false,
+            columns: [{
+                    data: 'sug_sugerencia'
+                },
+                {
+                    data: function(data) {
+                        if (data.sug_vigente == 'S') {
+                            return "Activa";
+                        } else {
+                            return "Revisada";
+                        }
+                    }
+                },
+                {
+                    data: 'sug_usu_id'
+                },
+                {
+                    data: function(data) {
+                        fechaHora = data.sug_fecha_hora.split(" ");
+                        fecha = fechaHora[0].split("-");
+                        return fecha[2] + "/" + fecha[1] + "/" + fecha[0] + " " + fechaHora[1];
+                    }
+                },
+                {
+                    data: function(data) {
+                        if (data.sug_vigente == 'S') {
+                            return "<a class='me-2' onclick='$(`#idSugerenciaRevisar`).val(`" + data.sug_id + "`);$(`#modalRevisarSugerencia`).modal(`show`)'><i class='fa-solid fa-check'></i></a>"
+                        }
+                    }
+                }
+            ],
+        });
+    });
+
+
+
+    let token = localStorage.getItem('TokenBibliotec_<?= $documento ?>');
     if (token) {
-    document.getElementById('token-field').value = token;
-  } else {
-    // El contenido de token es nulo o no existe
-    // Puedes manejar esta situación según tus necesidades
-    console.log('El token no está disponible.');
-  }
-
+        document.getElementById('token-field').value = token;
+    } else {
+        // El contenido de token es nulo o no existe
+        // Puedes manejar esta situación según tus necesidades
+        console.log('El token no está disponible.');
+    }
 </script>

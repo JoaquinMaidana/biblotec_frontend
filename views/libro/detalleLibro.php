@@ -10,7 +10,7 @@ $this->title = 'Libro: ' . $libro['lib_titulo'];
 ?>
 
 <div class="container-fluid">
-    <div class="row mt-3 align-items-center">
+    <div class="row align-items-center">
         <div class="col">
             <h1 class="titulo"><?= Html::encode($this->title) ?></h1>
         </div>

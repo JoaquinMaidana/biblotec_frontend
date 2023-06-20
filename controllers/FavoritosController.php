@@ -27,8 +27,6 @@ class FavoritosController extends Controller{
             // Decodificar el contenido JSON en un array asociativo
             $fav =  json_decode($response2->getContent(), true);
             $data = json_decode($response->getContent(), true);
-           
-            $string = json_encode($data);
             
             $stringfav= json_encode($fav);
         
@@ -38,7 +36,7 @@ class FavoritosController extends Controller{
         }else {var_dump("No fue ok");exit;}
 
         return $this->render('index',[
-            'libros' => $string,
+            'libros' => $data,
             'favoritos' => $stringfav
         ]);
       

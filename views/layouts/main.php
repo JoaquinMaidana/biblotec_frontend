@@ -7,12 +7,12 @@ use app\widgets\Alert;
 use yii\bootstrap5\Html;
 use yii\helpers\Url;
 use app\assets\AppAsset;
-   
-    if (Yii::$app->session->getCount()==1){
-        Yii::$app->session->close();
-    }
+
+if (Yii::$app->session->getCount() == 1) {
+    Yii::$app->session->close();
+}
 ?>
- 
+
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>" class="h-100">
@@ -24,6 +24,83 @@ use app\assets\AppAsset;
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" />
+
+<style>
+    body {
+        background-color: #cbd0d5;
+    }
+
+    .marco {
+        margin: 1%;
+        background-color: #343a40;
+        border-radius: 10px;
+        padding: 10px;
+    }
+
+    .navbar-expand-lg {
+        background-color: #343a40 !important;
+    }
+
+    .navbar-nav li a {
+        color: #00c7ff;
+    }
+
+    .btn-primary {
+        background-color: #00c7ff;
+        color: #343a40;
+        border: 0px;
+    }
+
+    .btn-primary:hover,
+    .btn-primary:active {
+        background-color: #009dc9 !important;
+        color: #343a40 !important;
+    }
+
+    .btn-outline-primary {
+        color: white;
+        border-color: #00c7ff;
+    }
+
+    .btn-outline-primary:hover {
+        background-color: #00c7ff;
+        border-color: #00c7ff;
+        color: #343a40;
+    }
+
+    i,
+    hr,
+    h5,
+    h1 {
+        color: #00c7ff;
+    }
+
+    td,
+    th,
+    .dataTables_info {
+        color: white !important;
+    }
+
+    .modal-header,
+    .modal-footer {
+        background-color: #343a40;
+    }
+
+
+    .modal-body {
+        background-color: #cbd0d5;
+    }
+
+    .form-control,
+    .form-control:focus {
+        background-color: #cbd0d5;
+        border-color: #343a40;
+    }
+
+    .card {
+        background-color: #cbd0d5;
+    }
+</style>
 
 <head>
     <title><?= Html::encode($this->title) ?></title>
@@ -68,48 +145,42 @@ use app\assets\AppAsset;
                     </li>
                 </ul>
                 <ul class="navbar-nav mr-auto">
-                       
-                       <?php if (Yii::$app->session->isActive) { ?>
+
+                    <?php if (Yii::$app->session->isActive) { ?>
                         <li class="nav-item active">
-                              <form action="<?= Url::toRoute(['site/logout']); ?>" method="post">
-                              <?= Html::hiddenInput(Yii::$app->request->csrfParam, Yii::$app->request->csrfToken) ?>
-                                  <?= Html::submitButton(
-                                      'Logout (' . Yii::$app->session->get('usu_documento') . ')'."  Tipo:".Yii::$app->session['usu_tipo_usuario'],
-                                      ['class' => 'nav-link btn btn-link logout']
-                                  ); ?>
-                              </form>
-                          </li>
+                            <form action="<?= Url::toRoute(['site/logout']); ?>" method="post">
+                                <?= Html::hiddenInput(Yii::$app->request->csrfParam, Yii::$app->request->csrfToken) ?>
+                                <?= Html::submitButton(
+                                    'Logout (' . Yii::$app->session->get('usu_documento') . ')' . "  Tipo:" . Yii::$app->session['usu_tipo_usuario'],
+                                    ['class' => 'nav-link btn btn-link logout']
+                                ); ?>
+                            </form>
+                        </li>
 
-                      <?php } else { ?>
-                          
-
-                          <li class="nav-item active">
-                              <a class="nav-link" href="<?= Url::toRoute(['site/login']); ?>">Login</a>
-                          </li>
+                    <?php } else { ?>
 
 
-                      <?php } ?>
-                         
-                      </ul>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="<?= Url::toRoute(['site/login']); ?>">Login</a>
+                        </li>
+
+
+                    <?php } ?>
+
+                </ul>
             </div>
-            
+
         </nav>
     </header>
 
     <main id="main" class="flex-shrink-0" role="main">
-        <div class="container">
-            <?= Alert::widget() ?>
-            <?= $content ?>
-        </div>
-    </main>
-    <footer id="footer" class="mt-auto py-3 bg-light">
-        <div class="container">
-            <div class="row text-muted">
-                <div class="col-md-6 text-center text-md-start">&copy; My Company <?= date('Y') ?></div>
-                <div class="col-md-6 text-center text-md-end"><?= Yii::powered() ?></div>
+        <div class="container-fluid">
+            <div class="marco">
+                <?= Alert::widget() ?>
+                <?= $content ?>
             </div>
         </div>
-    </footer>
+    </main>
     <?php $this->endBody() ?>
 </body>
 
