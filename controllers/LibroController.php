@@ -271,13 +271,19 @@ class LibroController extends Controller
         } else  if ($this->request->get()) {
             $id = $this->request->get('id2');
             $vuelta = $this->request->get('vuelta');
-            // Resto del código     
+                
         }
-
         $libro = $this->findLibro($id);
+
+        $comentarioController = new ComentarioController(Yii::$app->id, Yii::$app);
+
+        $comentarios = $comentarioController->runAction('get-comentarios', ['idLibro' => $libro['lib_id']]);
+
+        
         return $this->render('detalleLibro', [
             'libro' => $libro,
-            'vuelta' => $vuelta
+            'vuelta' => $vuelta,
+            'comentarios'=> $comentarios
         ]);
     }
 

@@ -14,7 +14,14 @@ $this->title = 'My Yii Application';
      });
     
    }
- 
+
+   
+   if(isset($favoritos ) && !empty($favoritos)){
+     $ids = array_column($favoritos, 'id');
+     
+   }
+   
+  
 ?>
 <style>
     .card {
@@ -138,8 +145,12 @@ $this->title = 'My Yii Application';
                         </div>
                         <div class="row mt-2">
                             <div class="col-auto text-start">
-                                <a class='' id="favorito_<?= $libro['id'] ?>" onclick='agregarFavorito(this.id)'><i id="estrella_<?= $libro['id'] ?>" class="fa-regular fa-star"></i></a>
+                            
+                                <a class='' id="favorito_<?= $libro['id'] ?>" onclick='agregarFavorito(this.id)'><i id="estrella_<?= $libro['id'] ?>"
+                                class="<?= (isset($favoritos) && !empty($favoritos) && in_array($libro['id'], $ids)) ? 'fa-solid fa-star' : 'fa-regular fa-star' ?>"></i></a>
                             </div>
+                            
+                              
                         </div>
                         <div class="row mt-2">
                             <?php if ($libro['vigencia'] == 'Si') { ?>
@@ -149,7 +160,7 @@ $this->title = 'My Yii Application';
                             <?php } ?>
                         </div>
                         <?= Html::beginForm(['libro/view']) ?>
-                        <input type="hidden" name="id" value="<?= $libro['id'] ?>"></input>
+                        <input type="hidden" name="id" value="<?= $libro['isbn'] ?>"></input>
                         <input type="hidden" name="vuelta" value="site/index"></input>
                         <div class="row mt-2">
                             <div class="col">
@@ -172,7 +183,7 @@ $this->title = 'My Yii Application';
         <?php } ?>
     </div>
 </div>
-
+<p id="response"> </p>
 <div id="modalReserva" class="modal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -253,7 +264,7 @@ $this->title = 'My Yii Application';
     novedadesArrayValues.forEach(item => {
         const anchor = document.createElement('a');
         anchor.classList.add('swiper-slide');
-        anchor.href = '<?= Yii::$app->urlManager->createUrl(["libro/view", "vuelta" => "site/index", "id2" => ""]) ?>' + item.id;
+        anchor.href = '<?= Yii::$app->urlManager->createUrl(["libro/view", "vuelta" => "site/index", "id2" => ""]) ?>' + item.isbn;
 
         const containerImg = document.createElement('div');
         containerImg.classList.add('conteiner-img');
@@ -270,7 +281,7 @@ $this->title = 'My Yii Application';
     novedadesArrayValues.forEach(item => {
         const anchor = document.createElement('a');
         anchor.classList.add('swiper-slide');
-        anchor.href = '<?= Yii::$app->urlManager->createUrl(["libro/view", "id2" => ""]) ?>' + item.id;
+        anchor.href = '<?= Yii::$app->urlManager->createUrl(["libro/view", "id2" => ""]) ?>' + item.isbn;
 
         const containerImg = document.createElement('div');
         containerImg.classList.add('conteiner-img');
@@ -306,13 +317,8 @@ $this->title = 'My Yii Application';
             $("#estrella_" + id).removeClass("fa-regular fa-star");
             $("#estrella_" + id).addClass("fa-solid fa-star");
             fav = 'S';
-        } else {
-            $("#estrella_" + id).removeClass("fa-solid fa-star");
-            $("#estrella_" + id).addClass("fa-regular fa-star");
-            fav = 'N';
-        }
 
-        $.ajax({
+            $.ajax({
             method: "POST",
             url: "<?= Url::toRoute(['favoritos/update']); ?>",
             data: {
@@ -321,7 +327,16 @@ $this->title = 'My Yii Application';
                 idLibro: id,
                 fav: fav
             },
-        });
+                
+                
+                });
+        } else {
+            $("#estrella_" + id).removeClass("fa-solid fa-star");
+            $("#estrella_" + id).addClass("fa-regular fa-star");
+            fav = 'N';
+        }
+
+        
     }
 
     function reservarLibro(id = null) {

@@ -14,7 +14,7 @@ $this->title = 'Mis reservas';
 
     .card h5,
     .card p {
-        color: white;
+        color: black;
     }
 
     .card {

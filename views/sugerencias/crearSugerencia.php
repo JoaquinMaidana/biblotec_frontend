@@ -20,6 +20,11 @@ $form = ActiveForm::begin(['action' => ['sugerencias/new'], 'options' => ['encty
         Texto:&nbsp&nbsp&nbsp&nbsp&nbsp<input type="text" name="sug_sugerencia" id="sug_sugerencia" required>
     </label>
     <br>
+    <label for="libro_sug">
+        Libro sugerido:&nbsp<input type="text" name="libro_sug"   value="" >
+    </label>
+    <input type="text" name="token" hidden id="token-field" value="" >
+    <br>
     <label for="sug_idusu">
         Usuario:&nbsp<input type="text" name="sug_idusu" id="sug_idusu" disabled value="<?php echo $id_usuario ?>" >
     </label>

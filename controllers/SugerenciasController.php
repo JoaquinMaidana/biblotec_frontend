@@ -100,6 +100,7 @@ class SugerenciasController extends Controller{
         ]);
     }
 
+
     public function actionUpdate()
     {
         
@@ -136,21 +137,26 @@ class SugerenciasController extends Controller{
     protected function findSugerencias()
     {
       
+       
         $client = new Client();
         $response = $client->createRequest()
             ->setMethod('get')
-            ->setUrl('http://152.70.212.112:3000/sugerencias')
+            ->setUrl('http://152.70.212.112/sugerencias')
             ->send();
-            
+
         if ($response->isOk) {
+            
+            // Decodificar el contenido JSON en un array asociativo 
             $data = json_decode($response->getContent(), true);
-            $string = json_encode($data);
-           
-          //  var_dump($string);exit;
-            return $string;
+            
+            $sugerencias =$data;
+            
+
         } else {
             return $sugerencia="";
         }
+
+        return $sugerencias; 
 
 
     }
@@ -160,7 +166,9 @@ class SugerenciasController extends Controller{
         $url = 'http://152.70.212.112/sugerencias';
         $client = new Client();
         //var_dump($httpMethod='post');exit;
-        $token = Yii::$app->request->post('token');
+        if (Yii::$app->session->isActive) {      
+            $token = Yii::$app->session->get('usu_token');          
+        }
         if ($httpMethod === 'PUT') {
             //var_dump(Yii::$app->request->post('nuevoEstado'),"get",Yii::$app->request->get('sugerencia')['id'] );exit;
             $url .= '/modificar-estado' ;
@@ -183,13 +191,14 @@ class SugerenciasController extends Controller{
             $response = $client->createRequest()
                 ->setMethod('post')
                 ->setUrl($url)
-                ->addHeaders(['content-type' => 'application/json'])
+                ->addHeaders(['content-type' => 'application/json',
+                'Authorization' => 'Bearer ' . $token])
                 ->setContent(Json::encode([
-                    "id" =>"",
+                    
                     "sug_sugerencia"=>Yii::$app->request->post('sug_sugerencia'),
-                    "sug_vigente"=>"S",
-                    "sug_idusu"=>Yii::$app->user->identity->id,
-                    "sug_fecha" => date('Y-m-d')
+                    "sug_nombre_libro"=>Yii::$app->request->post('libro_sug'),
+                    "sug_usu_id"=>Yii::$app->request->post('sug_idusu'),
+                    
                 ]))
                 ->send();
         }

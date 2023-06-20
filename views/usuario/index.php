@@ -31,7 +31,7 @@ $this->title = 'Usuarios';
                             <th>Telefono</th>
                             <th>Documento</th>
                             <th>Habilitado</th>
-                            <th>Estado</th>
+                          
                             <th></th>
                         </tr>
                     </thead>
@@ -227,6 +227,12 @@ $this->title = 'Usuarios';
                                 <div class="col" id="textoModalDesactivar">
                                 </div>
                             </div>
+                            <div class="row justify-content-center">
+                                <div class="col">
+                                    <label>Motivo</label>
+                                    <textarea class="form-control" required name="motivo" ></textarea>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -253,11 +259,17 @@ $this->title = 'Usuarios';
                         data: 'id'
                     },
                     {
-                        data: 'tipo_usuario'
+                        data: function(data) {
+                            if(data.tipo_usuario==0){
+                                return "Estudiante";
+                            }else{
+                                return "Administrador";
+                            }
+                        }
                     },
                     {
                         data: function(data) {
-                            return "<span>" + data.usu_nombre + " " + data.usu_apellido + "</span>";
+                            return "<span>" + data.nombre + " " + data.apellido + "</span>";
                         }
                     },
                     {
@@ -270,14 +282,18 @@ $this->title = 'Usuarios';
                         data: 'documento'
                     },
                     {
-                        data: 'habilitado'
+                        data: function(data) {
+                            if(data.habilitado=='S'){
+                                return "Habilitado";
+                            }else{
+                                return "No habilitado";
+                            }
+                        }
                     },
-                    {
-                        data: 'usu_estado'
-                    },
+                    
                     {
                         data: function(data) {
-                            return "<a class='me-2' onclick='actualizarUsuario(" + data.usu_id + ")'><i class='fa-solid fa-pencil'></i></a><a class='' onclick='desactivarUsuario(" + data.usu_id + ",`" + data.usu_nombre + "`,`" + data.usu_apellido + "`)'><i class='fa-solid fa-x'></i></a>"
+                            return "<a class='me-2' onclick='actualizarUsuario(" + data.id + ")'><i class='fa-solid fa-pencil'></i></a><a class='' onclick='desactivarUsuario(" + data.id + ",`" + data.nombre + "`,`" + data.apellido + "`)'><i class='fa-solid fa-x'></i></a>"
                         }
                     }
                 ],

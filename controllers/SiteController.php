@@ -20,6 +20,8 @@ class SiteController extends Controller
     private array $usuario;
 
     private $token;
+
+    private $token2;
     
     /**
      * {@inheritdoc}
@@ -71,10 +73,23 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        if (Yii::$app->session->isActive) {      
+            $isAdmin = Yii::$app->session->get('usu_tipo_usuario');             
+        }
 
         $libroController = new LibroController(Yii::$app->id, Yii::$app);
 
         $libros = $libroController->runAction('get-libros');
+        if(isset($isAdmin)&& $isAdmin ==='Administrador'){
+            $favoritosController = new FavoritosController(Yii::$app->id, Yii::$app);
+
+            $favoritos = $favoritosController->runAction('get-favoritos');
+
+            return $this->render('index', [
+                'libros_Array' => $libros,
+                'favoritos' => $favoritos
+            ]); 
+        }
         return $this->render('index', [
             'libros_Array' => $libros
         ]); //redirigir a la página de inicio
@@ -121,6 +136,7 @@ class SiteController extends Controller
                     if($respuesta['codigo']=='0'){
         
                         $token = $respuesta['data']['token'];
+                        $this->token2 = $token;
                         $user = json_decode($respuesta['data']['datosUsuario'], true);
         
                     }else{
@@ -146,7 +162,7 @@ class SiteController extends Controller
                     $session->set('usu_clave', $user['clave']);
                     $session->set('usu_telefono', $user['telefono']);                    
                     $session->set('usu_tipo_usuario', 'Estudiante');
-                    
+                    $session->set('usu_token', $this->token2);      
                     $script = <<< JS
                   <script>
                       if (!localStorage.getItem('TokenBibliotec_$user[documento]')) {
@@ -155,12 +171,14 @@ class SiteController extends Controller
                    </script>
                   JS;
                 }else{
+                    $session->set('usu_documento', $user['usu_id']);
                     $session->set('usu_documento', $user['usu_documento']);
                     $session->set('usu_nombre', $user['usu_nombre']);
                     $session->set('usu_apellido', $user['usu_apellido']);
                     $session->set('usu_mail', $user['usu_mail']);
                     $session->set('usu_clave', $user['usu_clave']);
                     $session->set('usu_telefono', $user['usu_telefono']);
+                    $session->set('usu_token', $this->token2);
                     if($user['usu_tipo_usuario']==1){
                         $session->set('usu_tipo_usuario', 'Administrador');
                     }else{
@@ -224,9 +242,13 @@ class SiteController extends Controller
                 $session->close();
             }
         }
+        $libroController = new LibroController(Yii::$app->id, Yii::$app);
 
+        $libros = $libroController->runAction('get-libros');
 
-        return $this->render('index');
+        return $this->render('index', [
+            'libros_Array' => $libros
+        ]);
     }
 
     /**

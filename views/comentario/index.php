@@ -25,6 +25,7 @@ use yii\helpers\Url;
         </div>
     </div>
     <div class="row align-items-center">
+    
         <?php foreach ($comentarios as $comentario) { ?>
             <div class="row mt-3">
                 <hr>
@@ -108,6 +109,7 @@ use yii\helpers\Url;
             <input type="hidden" name="idLibro" value='<?= $idLibro ?>'></input>
             <input type="hidden" name="tituloLibro" value="<?= $tituloLibro ?>"></input>
             <input type="hidden" name="comentarioPadre" id="idComentarioPadre"></input>
+            <input type="hidden" name="isbn" value='9781491912058'></input>
             <input type="hidden" name="comentarioReferencia" id="idComentarioReferencia"></input>
             <input type="hidden" name="token" value="" >
             <div class="modal-body">
@@ -190,8 +192,27 @@ use yii\helpers\Url;
                 $("#btnEditar").prop("disabled", true);
             }
         });
+
+
+        
     });
+
+    
 </script>
+
+<script>
+    function ocultarMostrarComentarios(padre){
+        if($("#" + padre).is(":visible")){
+            $("#btn" + padre).removeClass("fa-arrow-up-long");
+            $("#btn" + padre).addClass("fa-arrow-down-long");
+            $("#" + padre).hide();
+        } else {
+            $("#btn" + padre).addClass("fa-arrow-up-long");
+            $("#btn" + padre).removeClass("fa-arrow-down-long");
+            $("#" + padre).show();
+        }
+    }
+        </script>
 
 <script> 
         let tokenElements = document.querySelectorAll('[name="token"]');
