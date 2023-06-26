@@ -48,7 +48,8 @@ class UsuarioController extends Controller
     {
         $id = $_POST['id'];
 
-        if (isset($_POST['nombre'])) {
+        if ($this->request->post() && isset($_POST['nombre']) && isset($_POST['apellido']) && isset($_POST['correo']) && isset($_POST['telefono'])) {
+            $id = $_POST['id'];
             $nombre = $_POST['nombre'];
             $apellido = $_POST['apellido'];
             $correo = $_POST['correo'];
@@ -57,13 +58,39 @@ class UsuarioController extends Controller
             $habilitado = $_POST['habilitado'];
             $tipo = $_POST['tipo'];
 
+            if (Yii::$app->session->isActive) {      
+                $token = Yii::$app->session->get('usu_token');    
+                    
+            }
+            $client = new Client();
+            $response = $client->createRequest()
+                ->setMethod('put')
+                ->setUrl('http://152.70.212.112/usuarios/update')
+                ->addHeaders(['content-type' => 'application/json',
+                'Authorization' => 'Bearer ' . $token,
+                ])
+                ->setContent(Json::encode([
+                    "nombre" => $nombre,
+                    "apellido" => $apellido,
+                    "correo" => $correo,
+                    "telefono" => $telefono,
+                    "documento" => $documento,
+                    "habilitado" => $habilitado,
+                    "tipo" => $tipo
+                    
+                  
+                ]))
+                ->send();
+
+               
+
             //Llamada a la API para actualizar
             return $this->redirect(['index']);
         } else {
 
             $usuario = $this->findUsuario($id);
 
-            return $usuario;
+            return json_encode($usuario);
         }
     }
 
@@ -99,11 +126,12 @@ class UsuarioController extends Controller
         $client = new Client();
         $response = $client->createRequest()
             ->setMethod('get')
-            ->setUrl('http://localhost:3000/usuarios/' . $usu_id)
+            ->setUrl('http://152.70.212.112/usuarios/find?doc=' . $usu_id)
             ->send();
 
         if ($response->isOk) {
-            $user = json_decode($response->getContent(), true);
+            $data = json_decode($response->getContent(), true);
+            $user = $data['data'];
             return $user;
         } else {
             return $user = "";

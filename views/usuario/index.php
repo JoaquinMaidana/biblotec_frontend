@@ -130,6 +130,7 @@ $this->title = 'Usuarios';
                     <input name="id" id="editarId" type="text" class="form-control" hidden></input>
                     <div class="modal-body">
                         <div class="container-fluid">
+                            <input type="hidden" id="editarId" name="id">
                             <div class="row justify-content-center">
                                 <div class="col-3 text-end">
                                     <label>Tipo:<span class="text-danger">*<span></label>
@@ -137,7 +138,7 @@ $this->title = 'Usuarios';
                                 <div class="col">
                                     <select name="tipo" id="editarTipo" type="text" class="form-control" required>
                                         <option value="1">Administrador</option>
-                                        <option value="2">Cliente</option>
+                                        <option value="0">Estudiante</option>
                                     </select>
                                 </div>
                             </div>
@@ -279,7 +280,7 @@ $this->title = 'Usuarios';
                 }
             },
                 columns: [{
-                        data: 'id'
+                        data: 'documento'
                     },
                     {
                         data: function(data) {
@@ -316,14 +317,14 @@ $this->title = 'Usuarios';
                     
                     {
                         data: function(data) {
-                            return "<a class='me-2' onclick='actualizarUsuario(" + data.id + ")'><i class='fa-solid fa-pencil'></i></a><a class='' onclick='desactivarUsuario(" + data.id + ",`" + data.nombre + "`,`" + data.apellido + "`)'><i class='fa-solid fa-x'></i></a>"
+                            return "<a class='me-2' onclick='actualizarUsuario(" + data.documento + ")'><i class='fa-solid fa-pencil'></i></a><a class='' onclick='desactivarUsuario(" + data.id + ",`" + data.nombre + "`,`" + data.apellido + "`)'><i class='fa-solid fa-x'></i></a>"
                         }
                     }
                 ],
             });
         });
 
-        function desactivarUsuario(id, nombre, apellido) {
+        function desactivarUsuario(documento, nombre, apellido) {
             $("#idUsuarioDesactivar").val(id);
             $("#textoModalDesactivar").empty();
             $("#textoModalDesactivar").append("<p>¿Desea desactivar el usuario " + nombre + " " + apellido + "?</p>");
@@ -339,7 +340,20 @@ $this->title = 'Usuarios';
                     id: id,
                 },
                 success: function(result) {
-                    console.log(result); //Rellenar los campos 
+                    console.log(result); 
+                  
+                    var resultado = JSON.parse(result);
+                    console.log(resultado);
+                    console.log(resultado[0].nombre);
+                    $('#editarTipo').val(resultado[0].tipo_usuario);
+                    $('#editarNombre').val(resultado[0].nombre);
+                    $('#editarApellido').val(resultado[0].apellido);
+                    $('#editarCorreo').val(resultado[0].mail);
+                    $('#editarTelefono').val(resultado[0].telefono);
+                    $('#editarDocumento').val(resultado[0].documento);
+                    $('#editarHabilitado').val(resultado[0].habilitado);
+                    $('#editarId').val(resultado[0].id);
+
                     $("#modalEditarUsuario").modal("show");
                 },
             });

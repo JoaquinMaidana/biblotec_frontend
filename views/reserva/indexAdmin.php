@@ -39,12 +39,12 @@ $this->title = 'Reservas';
     </div>
 
     <?= Html::beginForm(['reserva/update'], 'post', ['id' => 'formReservaUpdate']) ?>
-    <input type="text" name="id_reserva" id="idReserva"></input>
-    <input type="text" name="libro_id" id="libro_id"></input>
-    <input type="text" name="estado" id="estado"></input>
-    <input type="text" name="fecha_desde" id="fecha_desde"></input>
-    <input type="text" name="fecha_hasta" id="fecha_hasta"></input>
-    <input type="text" name="vuelta" id="vuelta"></input>
+    <input type="hidden" name="id_reserva" id="idReserva"></input>
+    <input type="hidden" name="libro_id" id="libro_id"></input>
+    <input type="hidden" name="estado" id="estado"></input>
+    <input type="hidden" name="fecha_desde" id="fecha_desde"></input>
+    <input type="hidden" name="fecha_hasta" id="fecha_hasta"></input>
+    <input type="hidden" name="vuelta" id="vuelta"></input>
     <?= Html::endForm() ?>
 
    
