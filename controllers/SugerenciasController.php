@@ -91,7 +91,7 @@ class SugerenciasController extends Controller{
         $sugerencias = $this->findSugerencias();
 
         return $this->render('misSugerencias', [
-            'sugerencias' => $sugerencias,
+            'sugerencias' => json_encode($sugerencias),
         ]);
     }
 

@@ -5,16 +5,34 @@ use yii\helpers\Url;
 
 /** @var yii\web\View $this */
 
-    $this->title = 'Libro: ' . $libro['lib_titulo'];
-    if (Yii::$app->session->isActive) {      
-        $documento = Yii::$app->session->get('usu_documento');             
-    }
- //   if(isset($comentarios) && !empty($comentarios) ){
- //       $idLibro = $comentarios[0]['comet_lib_id'];
- //   }
-  $idLibro = $libro['lib_id'];
-    
+$this->title = 'Libro: ' . $libro['lib_titulo'];
+if (Yii::$app->session->isActive) {
+    $documento = Yii::$app->session->get('usu_documento');
+}
+//   if(isset($comentarios) && !empty($comentarios) ){
+//       $idLibro = $comentarios[0]['comet_lib_id'];
+//   }
+$idLibro = $libro['lib_id'];
+
+if ($libro['lib_disponible'] == 'S') {
+    $disponible = 'Si';
+} else {
+    $disponible = 'No';
+}
+
+if ($libro['lib_novedades'] == 'S') {
+    $novedad = 'Si';
+} else {
+    $novedad = 'No';
+}
 ?>
+
+<style>
+    label,
+    p {
+        color: white;
+    }
+</style>
 
 <div class="container-fluid">
     <div class="row align-items-center">
@@ -25,16 +43,16 @@ use yii\helpers\Url;
     </div>
 
     <div class="row mt-3">
-        <div class="col-4">
+        <div class="col-6">
             <div class="container-fluid">
                 <div class="row justify-content-center">
                     <div class="col-auto">
-                        <input type="image" id="imagenPortada" src="<?= $libro['lib_imagen'] ?>"></input>
+                        <img src="<?= $libro['lib_imagen'] ?>"></img>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-8">
+        <div class="col-6">
             <div class="container-fluid">
 
                 <div class="row justify-content-center">
@@ -42,7 +60,7 @@ use yii\helpers\Url;
                         <label>Código:</label>
                     </div>
                     <div class="col">
-                        <input disabled name="isbn" type="text" class="form-control" value="<?= $libro['lib_isbn'] ?>"></input>
+                        <p><?= $libro['lib_isbn'] ?></p>
                     </div>
                 </div>
 
@@ -51,7 +69,7 @@ use yii\helpers\Url;
                         <label>Título:</label>
                     </div>
                     <div class="col">
-                        <input disabled name="titulo" type="text" class="form-control" value="<?= $libro['lib_titulo'] ?>"></input>
+                        <p><?= $libro['lib_titulo'] ?></p>
                     </div>
                 </div>
 
@@ -60,7 +78,7 @@ use yii\helpers\Url;
                         <label>Autor/es:</label>
                     </div>
                     <div class="col">
-                        <input disabled name="autor" type="text" class="form-control" value="<?= $libro['lib_autores'] ?>"></input>
+                        <p><?= $libro['lib_autores'] ?></p>
                     </div>
                 </div>
 
@@ -69,7 +87,7 @@ use yii\helpers\Url;
                         <label>Edición:</label>
                     </div>
                     <div class="col">
-                        <input disabled name="edicion" type="text" class="form-control" value="<?= $libro['lib_edicion'] ?>"></input>
+                        <p><?= $libro['lib_edicion'] ?></p>
                     </div>
                 </div>
 
@@ -78,7 +96,7 @@ use yii\helpers\Url;
                         <label>Fecha de lanzamiento:</label>
                     </div>
                     <div class="col">
-                        <input disabled name="fecha" type="date" class="form-control" value="<?= $libro['lib_fecha_lanzamiento'] ?>"></input>
+                        <p><?= $libro['lib_fecha_lanzamiento'] ?></p>
                     </div>
                 </div>
 
@@ -87,7 +105,7 @@ use yii\helpers\Url;
                         <label>Idioma:</label>
                     </div>
                     <div class="col">
-                        <input disabled name="idioma" type="text" class="form-control" value="<?= $libro['lib_idioma'] ?>"></input>
+                        <p><?= $libro['lib_idioma'] ?></p>
                     </div>
                 </div>
 
@@ -96,21 +114,21 @@ use yii\helpers\Url;
                         <label>Descripción:</label>
                     </div>
                     <div class="col">
-                        <textarea disabled name="descripcion" class="form-control"><?= $libro['lib_descripcion'] ?></textarea>
+                        <p><?= $libro['lib_descripcion'] ?></p>
                     </div>
                 </div>
 
-               
+
 
                 <div class="row mt-3 justify-content-center">
                     <div class="col-3 text-end">
                         <label>Puntuación:</label>
                     </div>
                     <div class="col">
-                        <input disabled name="puntuacion" type="text" class="form-control" value="<?= $libro['lib_puntuacion'] ?>"></input>
+                        <p><?= $libro['lib_puntuacion'] ?></p>
                     </div>
                 </div>
-<!-- 
+                <!-- 
     <div class="row mt-3 justify-content-center">
                     <div class="col-3 text-end">
                         <label>Subcategoría:</label>
@@ -121,14 +139,14 @@ use yii\helpers\Url;
                 </div>
 
  -->
-                
+
 
                 <div class="row mt-3 justify-content-center">
                     <div class="col-3 text-end">
                         <label>Disponible:</label>
                     </div>
                     <div class="col">
-                        <input disabled name="disponible" class="form-control" value="<?= $libro['lib_disponible'] ?>"></input>
+                        <p><?= $disponible ?></p>
                     </div>
                 </div>
 
@@ -137,7 +155,7 @@ use yii\helpers\Url;
                         <label>Novedad:</label>
                     </div>
                     <div class="col">
-                        <input disabled name="novedad" class="form-control" value="<?= $libro['lib_novedades'] ?>"></input>
+                        <p><?= $novedad ?></p>
                     </div>
                 </div>
 
@@ -146,7 +164,7 @@ use yii\helpers\Url;
                         <label>Stock:</label>
                     </div>
                     <div class="col">
-                        <input disabled name="stock" type="number" class="form-control" value="<?= $libro['lib_stock'] ?>"></input>
+                        <p><?= $libro['lib_stock'] ?></p>
                     </div>
                 </div>
 
@@ -155,7 +173,7 @@ use yii\helpers\Url;
                         <a href="<?= Url::toRoute([$vuelta]); ?>" class="btn btn-primary">Volver</a>
                     </div>
                     <div class="col-auto">
-                        <a href="<?= Url::toRoute(['reserva/create','isbn' => $libro['lib_isbn']]); ?>" class="btn btn-secondary">Reservar</a>
+                        <a href="<?= Url::toRoute(['reserva/create', 'isbn' => $libro['lib_isbn']]); ?>" class="btn btn-secondary">Reservar</a>
                     </div>
                 </div>
             </div>
@@ -175,32 +193,32 @@ use yii\helpers\Url;
         </div>
     </div>
 
-    <?php if (isset($comentarios) && !empty($comentarios)) { ?>  
-    <div class="row align-items-center">
-    
-        <?php foreach ($comentarios as $comentario) { ?>
-            <div class="row mt-3">
-                
-                <div class="col-12 mb-2">
-                    <?= $this->render('_comentario', array('comentario' => $comentario['comet_comentario'], 'usuario' => $comentario['comet_usu'], 'fecha' => $comentario['comet_fecha_hora'], 'hijos' => $comentario['comentariosHijos'], 'id' => $comentario['comet_id'], 'referencia' => $comentario['comet_referencia_id'], 'padre' => $comentario['comet_padre_id'])); ?>
-                </div>
-                
-                <hr>
-            </div>
-        <?php } ?>
-    </div>
-    <?php }else{ ?>  
-        <div class="row mt-3 align-items-center">
-           
-            <h4>No hay comentarios</h4>
-            
-        
-    </div>
-        
+    <?php if (isset($comentarios) && !empty($comentarios)) { ?>
+        <div class="row align-items-center">
 
-    <?php } ?>     
+            <?php foreach ($comentarios as $comentario) { ?>
+                <div class="row mt-3">
+
+                    <div class="col-12 mb-2">
+                        <?= $this->render('_comentario', array('comentario' => $comentario['comet_comentario'], 'usuario' => $comentario['comet_usu'], 'fecha' => $comentario['comet_fecha_hora'], 'hijos' => $comentario['comentariosHijos'], 'id' => $comentario['comet_id'], 'referencia' => $comentario['comet_referencia_id'], 'padre' => $comentario['comet_padre_id'])); ?>
+                    </div>
+
+                    <hr>
+                </div>
+            <?php } ?>
+        </div>
+    <?php } else { ?>
+        <div class="row mt-3 align-items-center">
+
+            <h4>No hay comentarios</h4>
+
+
+        </div>
+
+
+    <?php } ?>
 </div>
- 
+
 <div id="modalEliminarComentario" class="modal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -211,9 +229,9 @@ use yii\helpers\Url;
 
             <?= Html::beginForm(['comentario/delete'], 'post') ?>
             <input type="hidden" name="id" id="idComentarioEliminar"></input>
-            <input type="hidden" name="token" value="" >
+            <input type="hidden" name="token" value="">
             <input type="hidden" name="isbn" value='<?= $libro['lib_isbn'] ?>'></input>
-           
+
             <div class="modal-body">
                 <div class="container-fluid">
                     <div class="row justify-content-center">
@@ -243,8 +261,8 @@ use yii\helpers\Url;
             <?= Html::beginForm(['comentario/create'], 'post') ?>
             <input type="hidden" name="idLibro" value='<?= $idLibro ?>'></input>
             <input type="hidden" name="isbn" value='<?= $libro['lib_isbn'] ?>'></input>
-            <input type="hidden" name="token" value="" >
-          
+            <input type="hidden" name="token" value="">
+
             <div class="modal-body">
                 <div class="container-fluid">
                     <div class="row justify-content-center">
@@ -273,10 +291,10 @@ use yii\helpers\Url;
             </div>
             <?= Html::beginForm(['comentario/create'], 'post') ?>
             <input type="hidden" name="idLibro" value='<?= $idLibro ?>'></input>
-         
+
             <input type="hidden" name="comentarioPadre" id="idComentarioPadre"></input>
             <input type="hidden" name="comentarioReferencia" id="idComentarioReferencia"></input>
-            <input type="hidden" name="token" value="" >
+            <input type="hidden" name="token" value="">
             <input type="hidden" name="isbn" value='<?= $libro['lib_isbn'] ?>'></input>
             <div class="modal-body">
                 <div class="container-fluid">
@@ -312,9 +330,9 @@ use yii\helpers\Url;
             </div>
             <?= Html::beginForm(['comentario/update'], 'post') ?>
             <input type="hidden" name="id" id="idComentario"></input>
-            <input type="hidden" name="token" value="" >
+            <input type="hidden" name="token" value="">
             <input type="hidden" name="isbn" value='<?= $libro['lib_isbn'] ?>'></input>
-        
+
             <div class="modal-body">
                 <div class="container-fluid">
                     <div class="row justify-content-center">
@@ -361,15 +379,13 @@ use yii\helpers\Url;
         });
 
 
-        
-    });
 
-    
+    });
 </script>
 
 <script>
-    function ocultarMostrarComentarios(padre){
-        if($("#" + padre).is(":visible")){
+    function ocultarMostrarComentarios(padre) {
+        if ($("#" + padre).is(":visible")) {
             $("#btn" + padre).removeClass("fa-arrow-up-long");
             $("#btn" + padre).addClass("fa-arrow-down-long");
             $("#" + padre).hide();
@@ -379,21 +395,19 @@ use yii\helpers\Url;
             $("#" + padre).show();
         }
     }
-        </script>
+</script>
 
-<script> 
-        let tokenElements = document.querySelectorAll('[name="token"]');
+<script>
+    let tokenElements = document.querySelectorAll('[name="token"]');
 
-        if (tokenElements.length > 0) {
-        let token = localStorage.getItem('TokenBibliotec_<?=$documento ?>');
+    if (tokenElements.length > 0) {
+        let token = localStorage.getItem('TokenBibliotec_<?= $documento ?>');
         if (token) {
             tokenElements.forEach(function(element) {
-            element.value = token;
+                element.value = token;
             });
         } else {
             console.log('El token no está disponible.');
         }
-        }
-
+    }
 </script>
-

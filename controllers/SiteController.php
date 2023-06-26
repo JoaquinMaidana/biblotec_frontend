@@ -78,8 +78,11 @@ class SiteController extends Controller
         }
 
         $libroController = new LibroController(Yii::$app->id, Yii::$app);
+        $categoriaController = new CategoriaController(Yii::$app->id, Yii::$app);
 
         $libros = $libroController->runAction('get-libros');
+        $categorias = $categoriaController->runAction('get-categorias');
+
         if (isset($isAdmin) && $isAdmin === 'Administrador') {
             $favoritosController = new FavoritosController(Yii::$app->id, Yii::$app);
 
@@ -87,11 +90,13 @@ class SiteController extends Controller
 
             return $this->render('index', [
                 'libros_Array' => $libros,
-                'favoritos' => $favoritos
+                'favoritos' => $favoritos,
+                'categorias' => $categorias
             ]);
         }
         return $this->render('index', [
-            'libros_Array' => $libros
+            'libros_Array' => $libros,
+            'categorias' => $categorias
         ]); //redirigir a la página de inicio
 
     }
@@ -206,9 +211,7 @@ class SiteController extends Controller
 
 
             // Renderizar la vista 'index' y ejecutar el script de JavaScript
-            return $this->render('index', [
-                'libros_Array' => $libros
-            ]) . $script;
+            $this->redirect('Index');
         }
 
 

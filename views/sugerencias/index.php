@@ -12,14 +12,17 @@ if (Yii::$app->session->isActive) {
 ?>
 
 <div class="container-fluid">
-    <div class="row align-items-center">
-        <div class="col-8">
+    <div class="row align-items-center justify-content-end">
+        <div class="col-auto">
             <h1><?= Html::encode($this->title) ?></h1>
         </div>
-        <div class="col d-flex justify-content-end pe-0">
+        <div class="col">
+            <i class="fa-solid fa-circle-info text-warning info" data-bs-toggle="tooltip" data-bs-placement="top" title="Sugiere libros que te gustaria que sean agregados a la biblioteca"></i>
+        </div>
+        <div class="col-auto justify-content-end">
             <button class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#modalNuevaSugerencia'>Nueva sugerencia</button>
         </div>
-        <div class="col d-flex justify-content-end ps-0">
+        <div class="col-auto justify-content-end">
             <?= Html::a('Mis sugerencias', ['view'], ['class' => 'btn btn-primary']) ?>
         </div>
     </div>

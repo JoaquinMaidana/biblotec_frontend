@@ -96,37 +96,10 @@ class ReservaController extends Controller
                 ->send();
 
             if ($response->isOk) {
-
-                // Decodificar el contenido JSON en un array asociativo 
-                //   $data2 = json_decode($response->getContent(), true);
-                //    $data2 =$data1['data'];
-                //    $data3 = $data2['libro'];
-
-                return $this->redirect(['site/index']);
-            }
-        } else {
-            $client = new Client();
-            $response = $client->createRequest()
-                ->setMethod('get')
-                //    ->setUrl('http://localhost/proyectos%20php/bibliotec_backend/web/libros/obtener-libros')
-                ->setUrl('http://152.70.212.112/libros/obtener-libro?isbn=' . $isbn)
-                ->send();
-
-            if ($response->isOk) {
-
-                // Decodificar el contenido JSON en un array asociativo 
-                $data2 = json_decode($response->getContent(), true);
-                //    $data2 =$data1['data'];
-                $data3 = $data2['libro'];
-
-                return $this->redirect('site/index', [
-                    'libro' => $data3
-                ]);
+                return 1;
             }
         }
-
-        //Llamada a la API para crear
-        return $this->redirect('site/index');
+        return 0;
     }
 
     public function actionCancelarReserva()

@@ -1,4 +1,3 @@
-
 <?php
 
 
@@ -16,7 +15,7 @@ $this->title = 'Reservas';
         <div class="col-1">
             <h1><?= Html::encode($this->title) ?></h1>
         </div>
-       
+
     </div>
 
     <div class="row">
@@ -24,7 +23,7 @@ $this->title = 'Reservas';
             <table id="tablaLibros" class="row-border items table table-condensed hover nowrap">
                 <thead>
                     <tr>
-                        <th>ID</th>                  
+                        <th>ID</th>
                         <th>Isbn</th>
                         <th>ID Usuario</th>
                         <th>Estado</th>
@@ -42,11 +41,6 @@ $this->title = 'Reservas';
     <input type="hidden" name="id" id="idLibroView"></input>
     <input type="hidden" name="vuelta" id="vuelta"></input>
     <?= Html::endForm() ?>
-
-   
-
-    
-
 </div>
 
 <script>
@@ -67,40 +61,40 @@ $this->title = 'Reservas';
                     data: 'resv_usu_id'
                 },
                 {
-                data: 'resv_estado',
-                render: function(data, type, row) {
-                    var options = {
-                        'P': 'Pendiente',
-                        'X': 'Cancelada',
-                        'C': 'Confirmada',
-                        'L': 'Libro levantado', 
-                        'D': 'Completada',       
-                        'N': 'Libro no devuelto'
-                    };
+                    data: 'resv_estado',
+                    render: function(data, type, row) {
+                        var options = {
+                            'P': 'Pendiente',
+                            'X': 'Cancelada',
+                            'C': 'Confirmada',
+                            'L': 'Libro levantado',
+                            'D': 'Completada',
+                            'N': 'Libro no devuelto'
+                        };
 
-                    var select = '<select>';
-                    for (var key in options) {
-                        var isSelected = (key === data) ? 'selected' : '';
-                        select += '<option value="' + key + '" ' + isSelected + '>' + options[key] + '</option>';
+                        var select = '<select class="form-control">';
+                        for (var key in options) {
+                            var isSelected = (key === data) ? 'selected' : '';
+                            select += '<option value="' + key + '" ' + isSelected + '>' + options[key] + '</option>';
+                        }
+                        select += '</select>';
+
+                        return select;
                     }
-                    select += '</select>';
-
-                    return select;
-                }
                 },
                 {
                     data: 'resv_fecha_hora'
                 },
                 {
-                data: 'resv_fecha_desde',
+                    data: 'resv_fecha_desde',
                     render: function(data, type, row) {
-                        return '<input type="date"  value="' + data + '">';
+                        return '<input type="date" class="form-control" value="' + data + '">';
                     }
                 },
                 {
                     data: 'resv_fecha_hasta',
                     render: function(data, type, row) {
-                        return '<input type="date"  value="' + data + '">';
+                        return '<input type="date" class="form-control" value="' + data + '">';
                     }
                 },
                 {
@@ -109,8 +103,9 @@ $this->title = 'Reservas';
                     }
                 }
             ],
+        });
     });
-    });
+
     function desactivarLibro(id, titulo) {
 
         $("#idLibroDesactivar").val(id);
