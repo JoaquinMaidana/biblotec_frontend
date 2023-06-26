@@ -5,7 +5,7 @@ use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 
 /** @var yii\web\View $this */
-
+$this->title = 'Login';
 
 ?>
 

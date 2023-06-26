@@ -6,6 +6,7 @@ use Yii;
                             
     
     $usu_id = Yii::$app->session->get('usu_id');
+    $isAdmin = Yii::$app->session->get('usu_tipo_usuario');
     }
 ?>
 
@@ -25,7 +26,31 @@ use Yii;
     ?>
     <script>
     $(document).ready(function () {
-    $('#missugerencias').DataTable();
+    $('#missugerencias').DataTable({
+        language: {
+                "sEmptyTable": "No hay datos disponibles en la tabla",
+                "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                "sInfoPostFix": "",
+                "sInfoThousands": ",",
+                "sLengthMenu": "Mostrar _MENU_ registros",
+                "sLoadingRecords": "Cargando...",
+                "sProcessing": "Procesando...",
+                "sSearch": "Buscar:",
+                "sZeroRecords": "No se encontraron resultados",
+                "oPaginate": {
+                    "sFirst": "Primero",
+                    "sLast": "Último",
+                    "sNext": "Siguiente",
+                    "sPrevious": "Anterior"
+                },
+                "oAria": {
+                    "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                    "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                }
+            }
+    });
     });
 </script>
 </head>
@@ -46,10 +71,10 @@ use Yii;
             <tbody>
                 <?php
                
-                if ($sugerencias != ""){
+                if ($sugerencias != ""   ){
                 
                     foreach($sugerencias as $sugerencia){
-                        
+                         if(isset($isAdmin) && $usu_id==$sugerencia['sug_usu_id']){
                         //var_dump($usu_id);exit;
                          //if($sugerencia->sug_usu_id == Yii::$app->user->identity->id){
                 ?>
@@ -105,6 +130,7 @@ use Yii;
                                 </div>
                             <?= Html::endForm() ?>
                 <?php
+                            }
                         }
                     }
                 //}

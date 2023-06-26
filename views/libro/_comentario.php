@@ -1,4 +1,11 @@
-<?php if ($padre !== null) {
+<?php 
+if (Yii::$app->session->isActive) {      
+        $isAdmin = Yii::$app->session->get('usu_tipo_usuario');   
+        $usu_id = Yii::$app->session->get('usu_id');          
+    }
+    
+
+ if ($padre !== null) {
     
     ?>
     <div class="container-fluid" id="<? $padre ?>">
@@ -25,19 +32,23 @@
                                     <a class="" onclick="ocultarMostrarComentarios('<?= $id ?>')"><i id="btn<?= $id ?>" class="fa-solid fa-arrow-up-long"></i></a>
                                 </div>
                             </div>
+                            <?php if (isset($isAdmin)) { ?> 
                             <div class="col-6">
                                 <div class="row justify-content-end">
                                     <div class="col-auto pe-0">
                                         <button class="btn btn-primary" onclick="$('#modalResponderComentario').modal('show');$('#comentarioResponder').val('<?= $comentario ?>');$('#idComentarioPadre').val('<?= $id ?>');$('#idComentarioReferencia').val('<?=  $referencia !== null ? $referencia : $id ?>')">Responder</button><!-- Cuando el comentario no es del usuario -->
                                     </div>
-                                    <div class="col-auto pe-0">
-                                        <button class="btn btn-primary" onclick="$('#modalEditarComentario').modal('show');$('#idComentario').val(<?= $id ?>);$('#comentarioEditar').val('<?= $comentario ?>')">Editar</button> <!-- Cuando el comentario es del usuario -->
-                                    </div>
-                                    <div class="col-auto pe-0">
-                                        <button class="btn btn-primary" onclick="$('#modalEliminarComentario').modal('show');$('#idComentarioEliminar').val(<?= $id ?>)">Eliminar</button> <!-- Cuando el comentario es del usuario -->
-                                    </div>
+                                    <?php if ($usu_id == $usuario) { ?> 
+                                        <div class="col-auto pe-0">
+                                            <button class="btn btn-primary" onclick="$('#modalEditarComentario').modal('show');$('#idComentario').val(<?= $id ?>);$('#comentarioEditar').val('<?= $comentario ?>')">Editar</button> <!-- Cuando el comentario es del usuario -->
+                                        </div>
+                                        <div class="col-auto pe-0">
+                                            <button class="btn btn-primary" onclick="$('#modalEliminarComentario').modal('show');$('#idComentarioEliminar').val(<?= $id ?>)">Eliminar</button> <!-- Cuando el comentario es del usuario -->
+                                        </div>
+                                    <?php } ?>
                                 </div>
                             </div>
+                            <?php }?> 
                         </div>
                     </div>
                 </div>

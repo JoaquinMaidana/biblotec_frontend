@@ -10,8 +10,12 @@ use yii\helpers\Url;
     $idLibro = $comentarios[0]['comet_lib_id'];
 
     if (Yii::$app->session->isActive) {      
-        $documento = Yii::$app->session->get('usu_documento');             
+        $documento = Yii::$app->session->get('usu_documento');    
+        $isAdmin = Yii::$app->session->get('usu_tipo_usuario');                
     }
+        
+              
+    
 ?>
 
 
@@ -20,9 +24,11 @@ use yii\helpers\Url;
         <div class="col text-truncate">
             <h1><?= Html::encode($this->title) ?></h1>
         </div>
-        <div class="col-auto d-flex justify-content-end">
-            <button class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#modalNuevoComentario'>Nuevo comentario</button>
-        </div>
+        <?php if (isset($isAdmin) && ( $isAdmin ==='Estudiante' || $isAdmin==='Administrador')) { ?> 
+            <div class="col-auto d-flex justify-content-end">
+                <button class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#modalNuevoComentario'>Nuevo comentario</button>
+            </div>
+        <?php } ?> 
     </div>
     <div class="row align-items-center">
     

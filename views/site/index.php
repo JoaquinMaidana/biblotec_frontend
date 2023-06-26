@@ -6,7 +6,7 @@ use yii\helpers\Url;
 /** @var yii\web\View $this */
 
 //var_dump($libros_Array);exit;
-$this->title = 'My Yii Application';
+$this->title = 'Inicio';
    if(isset($libros_Array)){
       
       $novedadesArray = array_filter($libros_Array, function($item) {

@@ -12,12 +12,15 @@ class FavoritosController extends Controller{
     
     public function actionIndex()
     { 
-       
+        if (Yii::$app->session->isActive) {
+
+            $token =  Yii::$app->session->get('usu_token');
+        }
         $client = new Client();
         $response2=$client->createRequest()
         ->setMethod('get')
         //->headers->set('Content-Type', 'application/json')
-        ->setUrl('http://152.70.212.112/favoritos/obtener-favoritos?token=648f8784860d6')
+        ->setUrl('http://152.70.212.112/favoritos/obtener-favoritos?token='.$token)
         ->send();
        
 
@@ -38,7 +41,7 @@ class FavoritosController extends Controller{
         }else {var_dump("No fue ok");exit;}
 
         return $this->render('index',[
-            'favoritos' => $fav2
+            'libros' => $fav2
         ]);
       
     }

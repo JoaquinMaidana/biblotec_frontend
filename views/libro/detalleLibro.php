@@ -7,7 +7,8 @@ use yii\helpers\Url;
 
     $this->title = 'Libro: ' . $libro['lib_titulo'];
     if (Yii::$app->session->isActive) {      
-        $documento = Yii::$app->session->get('usu_documento');             
+        $documento = Yii::$app->session->get('usu_documento'); 
+        $isAdmin = Yii::$app->session->get('usu_tipo_usuario');               
     }
  //   if(isset($comentarios) && !empty($comentarios) ){
  //       $idLibro = $comentarios[0]['comet_lib_id'];
@@ -170,9 +171,11 @@ use yii\helpers\Url;
         <div class="col text-truncate">
             <h2>Comentarios</h2>
         </div>
-        <div class="col-auto d-flex justify-content-end">
-            <button class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#modalNuevoComentario'>Nuevo comentario</button>
-        </div>
+        <?php if (isset($isAdmin)) { ?> 
+            <div class="col-auto d-flex justify-content-end">
+                <button class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#modalNuevoComentario'>Nuevo comentario</button>
+            </div>
+        <?php } ?> 
     </div>
 
     <?php if (isset($comentarios) && !empty($comentarios)) { ?>  

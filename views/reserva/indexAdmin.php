@@ -25,7 +25,7 @@ $this->title = 'Reservas';
                 <thead>
                     <tr>
                         <th>ID</th>                  
-                        <th>Isbn</th>
+                        <th>ID libro</th>
                         <th>ID Usuario</th>
                         <th>Estado</th>
                         <th>Creacion</th>
@@ -38,9 +38,13 @@ $this->title = 'Reservas';
         </div>
     </div>
 
-    <?= Html::beginForm(['libro/view'], 'post', ['id' => 'formLibroView']) ?>
-    <input type="hidden" name="id" id="idLibroView"></input>
-    <input type="hidden" name="vuelta" id="vuelta"></input>
+    <?= Html::beginForm(['reserva/update'], 'post', ['id' => 'formReservaUpdate']) ?>
+    <input type="text" name="id_reserva" id="idReserva"></input>
+    <input type="text" name="libro_id" id="libro_id"></input>
+    <input type="text" name="estado" id="estado"></input>
+    <input type="text" name="fecha_desde" id="fecha_desde"></input>
+    <input type="text" name="fecha_hasta" id="fecha_hasta"></input>
+    <input type="text" name="vuelta" id="vuelta"></input>
     <?= Html::endForm() ?>
 
    
@@ -51,17 +55,47 @@ $this->title = 'Reservas';
 
 <script>
     $(document).ready(function() {
-        $('#tablaLibros').DataTable({
+
+
+
+
+
+
+        
+    var table =    $('#tablaLibros').DataTable({
             data: <?= $reservas ?>,
             responsive: true,
             bFilter: false,
             paging: false,
             ordering: false,
+            language: {
+                "sEmptyTable": "No hay datos disponibles en la tabla",
+                "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                "sInfoPostFix": "",
+                "sInfoThousands": ",",
+                "sLengthMenu": "Mostrar _MENU_ registros",
+                "sLoadingRecords": "Cargando...",
+                "sProcessing": "Procesando...",
+                "sSearch": "Buscar:",
+                "sZeroRecords": "No se encontraron resultados",
+                "oPaginate": {
+                    "sFirst": "Primero",
+                    "sLast": "Último",
+                    "sNext": "Siguiente",
+                    "sPrevious": "Anterior"
+                },
+                "oAria": {
+                    "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                    "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                }
+            },
             columns: [{
                     data: 'resv_id'
                 },
                 {
-                    data: 'isbn_libro'
+                    data: 'resv_lib_id'
                 },
                 {
                     data: 'resv_usu_id'
@@ -81,7 +115,7 @@ $this->title = 'Reservas';
                     var select = '<select>';
                     for (var key in options) {
                         var isSelected = (key === data) ? 'selected' : '';
-                        select += '<option value="' + key + '" ' + isSelected + '>' + options[key] + '</option>';
+                        select += '<option name="est" value="' + key + '" ' + isSelected + '>' + options[key] + '</option>';
                     }
                     select += '</select>';
 
@@ -104,13 +138,40 @@ $this->title = 'Reservas';
                     }
                 },
                 {
-                    data: function(data) {
-                        return "</i></a><a class='me-2' onclick='$(`#idLibroUpdate`).val(`" + data.id + "`);$(`#formLibroUpdate`).submit()'><i class='fa-solid fa-pencil'></i></a>"
+                    data: function(data, row ) {
+                       
+                       
+                        
+                        return "</i></a><a class='me-2' ><i class='fa-solid fa-pencil'></i></a>"
                     }
                 }
             ],
     });
+
+    table.on('change', 'input, select', function() {
+        var fila = table.row($(this).closest('tr'));
+        var columna = table.column($(this).closest('td')).index();
+        
+        // Actualizar el valor de la celda en la tabla
+        table.cell(fila, columna).data($(this).val());
+
+        // Volver a dibujar la tabla para reflejar los cambios
+        table.draw();
     });
+
+
+    $('#tablaLibros').on('click', 'a.me-2', function() {
+        var rowData = table.row($(this).closest('tr')).data();
+        var rowIndex = table.row($(this).closest('tr')).index();
+        console.log('Data:', rowData);
+       
+       update(rowData);
+        
+        console.log('Row index:', rowIndex);
+        
+    });
+
+});
     function desactivarLibro(id, titulo) {
 
         $("#idLibroDesactivar").val(id);
@@ -118,4 +179,19 @@ $this->title = 'Reservas';
         $("#textoModalDesactivar").append("<p>¿Desea desactivar el libro " + titulo + "?</p>");
         $("#modalDesactivarLibro").modal("show");
     }
+
+    function update(rowData){
+        console.log(rowData)
+        console.log(rowData.resv_id)
+        $('#idReserva').val(rowData.resv_id);
+        $('#libro_id').val(rowData.resv_lib_id);
+        $('#estado').val(rowData.resv_estado);
+        $('#fecha_hasta').val(rowData.resv_fecha_hasta);
+        $('#fecha_desde').val(rowData.resv_fecha_desde);
+        $('#formReservaUpdate').submit();
+
+    }
+    
+
+    
 </script>

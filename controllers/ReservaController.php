@@ -104,37 +104,110 @@ class ReservaController extends Controller
 
                 return $this->redirect(['site/index']);
             }
-        } else {
-            $client = new Client();
-            $response = $client->createRequest()
-                ->setMethod('get')
-                //    ->setUrl('http://localhost/proyectos%20php/bibliotec_backend/web/libros/obtener-libros')
-                ->setUrl('http://152.70.212.112/libros/obtener-libro?isbn=' . $isbn)
-                ->send();
-
-            if ($response->isOk) {
-
-                // Decodificar el contenido JSON en un array asociativo 
-                $data2 = json_decode($response->getContent(), true);
-                //    $data2 =$data1['data'];
-                $data3 = $data2['libro'];
-
-                return $this->redirect('site/index', [
-                    'libro' => $data3
-                ]);
-            }
-        }
+        } 
+        
 
         //Llamada a la API para crear
         return $this->redirect('site/index');
     }
 
+
+    public function actionUpdate()
+    {
+        //$usuario_id = $_POST['usuario_id']; todavia no se como se consigue
+        if ($this->request->post()) {
+            $libro_id = $_POST['libro_id'];
+            $estado = $_POST['estado'];
+            $fecha_desde = $_POST['fecha_desde'];
+            $fecha_hasta = $_POST['fecha_hasta'];
+            $idReserva= $_POST['id_reserva'];
+            
+            $fecha_desde_convertida = date("Y-m-d", strtotime($fecha_desde));
+            $fecha_hasta_convertida = date("Y-m-d", strtotime($fecha_hasta));
+            $currentDateTime = (new \DateTime())->format('Y-m-d H:i:s');
+
+            if (Yii::$app->session->isActive) {
+                $token = Yii::$app->session->get('usu_token');
+                $usu_id =  Yii::$app->session->get('usu_id');
+            }
+            $client = new Client();
+            $response = $client->createRequest()
+                ->setMethod('put')
+                ->addHeaders([
+                    'content-type' => 'application/json',
+                    'Authorization' => 'Bearer ' . $token,
+                ])
+                ->setUrl('http://152.70.212.112/reservas/update?id='.$idReserva)
+                ->setContent(Json::encode([
+
+                    "resv_fecha_hora" => $currentDateTime,
+                    "resv_fecha_desde" => $fecha_desde_convertida,
+                    "resv_fecha_hasta" => $fecha_hasta_convertida,
+                    "resv_usu_id" => $usu_id,
+                    "resv_estado" => $estado,
+                    "resv_lib_id" => $libro_id
+
+                ]))
+                ->send();
+
+            if ($response->isOk) {
+
+                // Decodificar el contenido JSON en un array asociativo 
+                //   $data2 = json_decode($response->getContent(), true);
+                //    $data2 =$data1['data'];
+                //    $data3 = $data2['libro'];
+
+                return $this->redirect(['index-admin']);
+            }
+        } 
+        
+
+        //Llamada a la API para crear
+        return $this->redirect(['index-admin']);
+    }
+
     public function actionCancelarReserva()
     {
         //$usuario_id = $_POST['usuario_id']; todavia no se como se consigue
-        $reserva_id = $_POST['id'];
+        if ($this->request->post()) {
+        //    $libro_id = $_POST['libro_id'];
+          
+            $idReserva= $_POST['id_reserva'];
+          
+            $currentDateTime = (new \DateTime())->format('Y-m-d H:i:s');
 
-        //Llamada a la API para cancelar
+            if (Yii::$app->session->isActive) {
+                $token = Yii::$app->session->get('usu_token');
+                $usu_id =  Yii::$app->session->get('usu_id');
+            }
+            $client = new Client();
+            $response = $client->createRequest()
+                ->setMethod('put')
+                ->addHeaders([
+                    'content-type' => 'application/json',
+                    'Authorization' => 'Bearer ' . $token,
+                ])
+                ->setUrl('http://152.70.212.112/reservas/update?id='.$idReserva)
+                ->setContent(Json::encode([
+
+                    "resv_fecha_hora" => $currentDateTime,
+                    "resv_usu_id" => $usu_id,
+                    "resv_estado" => 'X',
+                    
+
+                ]))
+                ->send();
+
+            if ($response->isOk) {
+
+                // Decodificar el contenido JSON en un array asociativo 
+                //   $data2 = json_decode($response->getContent(), true);
+                //    $data2 =$data1['data'];
+                //    $data3 = $data2['libro'];
+
+                return $this->redirect(['index']);
+            }
+        } 
         return $this->redirect(['index']);
     }
 }
