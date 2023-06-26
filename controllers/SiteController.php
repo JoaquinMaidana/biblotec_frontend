@@ -141,6 +141,8 @@ class SiteController extends Controller
                     } else {
                         global $mensaje;
                         $mensaje = $respuesta['mensaje'];
+                        
+                        return $this->render('login');
                     }
                 }
             }

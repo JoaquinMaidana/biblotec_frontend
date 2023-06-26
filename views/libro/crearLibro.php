@@ -12,6 +12,7 @@
 <style>
   .titulo {
     font-family: inherit;
+    
   }
 </style>
 

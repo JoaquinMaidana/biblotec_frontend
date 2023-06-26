@@ -231,7 +231,7 @@ class LibroController extends Controller
         ]);
     }
 
-    public function actionUpdate($idlibros)
+    public function actionUpdate($idlibros="defecto")
     {
         $libro = $this->findLibro($idlibros);
 
@@ -254,12 +254,6 @@ class LibroController extends Controller
         ]);
     }
 
-    public function actionDelete($idlibros)
-    {
-        $libro = $this->findLibro($idlibros);
-        $this->delete($libro['id']);
-        return $this->redirect(['index']);
-    }
 
 
     public function actionView($id2 = "nada")
@@ -303,47 +297,64 @@ class LibroController extends Controller
         } else {
             return $libro = "";
         }
+
+        
     }
 
 
-    protected function delete($idlibros = "")
+    public function actionDelete()
     {
+        if (Yii::$app->session->isActive) {
+            $token = Yii::$app->session->get('usu_token');
+            
+        }
         $client = new Client();
         $response = $client->createRequest()
             ->setMethod('delete')
-            ->setUrl('http://152.70.212.112:3000/libros/' . $idlibros)
+            ->addHeaders([
+                'Authorization' => 'Bearer ' . $token
+            ])
+            ->setUrl('http://152.70.212.112/libros/delete?id=' . Yii::$app->request->post('id'))
             ->send();
-        return $response->isOk;
+       
+
+        return $this->redirect(['index']);
     }
 
     protected function save($httpMethod='post')
 {
-    $url = 'http://152.70.212.112/libros';
+    $url = 'http://152.70.212.112/libros/';
     $client = new Client();
     $mensaje="";
+    if (Yii::$app->session->isActive) {
+        $token = Yii::$app->session->get('usu_token');
+        
+    }
     if ($httpMethod === 'PUT') {
-        $url .= '/' . Yii::$app->request->post('id');
+        $url .= 'modificar-libro?isbn=' . Yii::$app->request->post('lib_isbn');
         $response = $client->createRequest()
-            ->setMethod('PUT')
+            ->setMethod('put')
             ->setUrl($url)
-            ->addHeaders(['content-type' => 'application/json'])
+            ->addHeaders([
+                'content-type' => 'application/json',
+                'Authorization' => 'Bearer ' . $token,
+            ])
             ->setContent(Json::encode([
-                "id" =>Yii::$app->request->post('id'),
-                "lib_isbn"=>Yii::$app->request->post('idbn'),
-                "lib_titulo"=>Yii::$app->request->post('titulo'),
-                "lib_descripcion"=>Yii::$app->request->post('descripcion'),
-                "lib_imagen" =>Yii::$app->request->post('imagen'),
-                "lib_categoria"=>Yii::$app->request->post('categoria'),
-                "lib_sub_categoria"=>Yii::$app->request->post('sub_categoria'),        
-                "lib_stock"=>Yii::$app->request->post('stock'),
-                "lib_autores"=>Yii::$app->request->post('autores'),
-                "lib_edicion"=>Yii::$app->request->post('edicion'),
-                "lib_fecha_lanzamiento"=>Yii::$app->request->post('fecha_lanzamiento'),
-                "lib_novedades"=>Yii::$app->request->post('novedades'),
-                "lib_idioma" =>Yii::$app->request->post('idioma'),
-                "lib_disponible"=>Yii::$app->request->post('disponible'),
-                "lib_vigente"=>Yii::$app->request->post('vigente'),
-                "lib_puntuacion"=>Yii::$app->request->post('puntuacion'),
+                "isbn"=>Yii::$app->request->post('lib_isbn'),
+                "titulo"=>Yii::$app->request->post('titulo'),
+                "descripcion"=>Yii::$app->request->post('descripcion'),
+                "imagen" =>Yii::$app->request->post('imagen'),
+                "categoria"=>Yii::$app->request->post('categoria'),
+                "sub_categoria"=>Yii::$app->request->post('sub_categoria'),        
+                "stock"=>Yii::$app->request->post('stock'),
+                "autores"=>Yii::$app->request->post('autores'),
+                "edicion"=>Yii::$app->request->post('edicion'),
+                "fecha_lanzamiento"=>Yii::$app->request->post('fecha_lanzamiento'),
+                "novedades"=>Yii::$app->request->post('novedades'),
+                "idioma" =>Yii::$app->request->post('idioma'),
+                "disponible"=>Yii::$app->request->post('disponible'),
+                "vigente"=>Yii::$app->request->post('vigente'),
+                "puntuacion"=>Yii::$app->request->post('puntuacion'),
             ]))
             ->send();
     } else {
@@ -371,7 +382,13 @@ class LibroController extends Controller
 
     if ($response->isOk) {
         $data = json_decode($response->getContent(), true);
-        $msj = $data['mensaje'];
+        if(isset($data['mensaje'])){
+            $msj = $data['mensaje'];
+        }
+        else{
+            $msj ="";
+        }
+        
         return $msj;
     } else {
          

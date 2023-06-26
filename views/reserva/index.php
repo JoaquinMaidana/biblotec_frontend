@@ -5,6 +5,7 @@ use yii\helpers\Html;
 /** @var yii\web\View $this */
 
 $this->title = 'Mis reservas';
+$nombreEstado=null;
 ?>
 
 <style>
@@ -34,16 +35,22 @@ $this->title = 'Mis reservas';
     </div>
 
     <div class="row mt-3">
-        <?php foreach ($reservasLibros as $reservaLibro) { ?>
+        <?php foreach ($reservasLibros as $reservaLibro) {
+            
+            ?>
             <div class="col-4">
                 <?php switch ($reservaLibro['reserva']->resv_estado) {
-                    case "C": ?>
+                    case "C": 
+                    $nombreEstado = 'Confirmada';
+                    ?>
                         <div class="card bg-success">
                         <?php break;
-                    case "X": ?>
+                    case "X":
+                        $nombreEstado = 'Cancelada'; ?>
                             <div class="card bg-danger">
                             <?php break;
-                        case "P": ?>
+                        case "P": 
+                            $nombreEstado = 'Pendiente';?>
                                 <div class="card bg-warning">
                             <?php break;
                     } ?>
@@ -52,7 +59,7 @@ $this->title = 'Mis reservas';
                                 <h5 class="card-title"><?= $reservaLibro['libro']['lib_titulo'] ?></h5>
                                 <p class="card-text">Reservado desde: <?= $reservaLibro['reserva']->resv_fecha_desde ?></p>
                                 <p class="card-text">Reservado hasta: <?= $reservaLibro['reserva']->resv_fecha_hasta ?></p>
-                                <p class="card-text">Estado: <?= $reservaLibro['reserva']->resv_estado ?></p>
+                                <p class="card-text">Estado: <?= $nombreEstado ?></p>
                                 <?php if ($reservaLibro['reserva']->resv_estado == "P") { ?>
                                     <button class="btn btn-primary" onclick="cancelarReserva('<?= $reservaLibro['libro']['lib_titulo'] ?>', '<?= $reservaLibro['reserva']->resv_id ?>')">Cancelar reserva</button>
                                 <?php } ?>
@@ -72,7 +79,7 @@ $this->title = 'Mis reservas';
                         </div>
 
                         <?= Html::beginForm(['reserva/cancelar-reserva'], 'post') ?>
-                        <input type="hidden" name="id" id="idReserva"></input>
+                        <input type="hidden" name="id_reserva" id="idReserva"></input>
                         <div class="modal-body">
                             <div class="container-fluid">
                                 <div class="row justify-content-center">
@@ -95,6 +102,8 @@ $this->title = 'Mis reservas';
                 function cancelarReserva(tituloLibro, idReserva) {
                     $("#textoModalCancelarReserva").empty();
                     $("#textoModalCancelarReserva").append("¿Desea cancelar la reserva del libro " + tituloLibro + "?");
+                    $('#idReserva').val(idReserva);
+                   
                     $("#modalCancelarReserva").modal("show");
                 }
             </script>

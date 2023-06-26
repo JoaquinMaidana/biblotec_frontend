@@ -125,8 +125,21 @@ use app\assets\AppAsset;
 
             <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
+                   
+                   
+                    
+                    <?php if (isset($isAdmin)&& $isAdmin ==='Administrador') { ?>
                     <li class="nav-item active">
                         <a class="nav-link" href="<?= Url::toRoute(['libro/index']); ?>">Libros</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="<?= Url::toRoute(['favoritos/index']); ?>">Mis Favoritos</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="<?= Url::toRoute(['sugerencias/index']); ?>">Sugerencias</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="<?= Url::toRoute(['sugerencias/view']); ?>">Mis Sugerencias</a>
                     </li>
                     <li class="nav-item active">
                         <a class="nav-link" href="<?= Url::toRoute(['usuario/index']); ?>">Usuarios</a>
@@ -138,19 +151,25 @@ use app\assets\AppAsset;
                         <a class="nav-link" href="<?= Url::toRoute(['reserva/index-admin']); ?>">Reservas</a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" href="<?= Url::toRoute(['sugerencias/index']); ?>">Sugerencias</a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="<?= Url::toRoute(['favoritos/index']); ?>">Favoritos</a>
-                    </li>
-                    
-                    <?php if (isset($isAdmin)&& $isAdmin ==='Administrador') { ?>
-                    <li class="nav-item active">
                         <a class="nav-link" href="<?= Url::toRoute(['categoria/index']); ?>">Categorias</a>
                     </li>
                     <li class="nav-item active">
                         <a class="nav-link" href="<?= Url::toRoute(['subcategoria/index']); ?>">Sub categorias</a>
                     </li>
+                    <?php } else if(isset($isAdmin)&& $isAdmin ==='Estudiante'){?>
+                        <li class="nav-item active">
+                        <a class="nav-link" href="<?= Url::toRoute(['reserva/index']); ?>">Mis Reservas</a>
+                        </li>
+
+                        <li class="nav-item active">
+                        <a class="nav-link" href="<?= Url::toRoute(['sugerencias/view']); ?>">Mis Sugerencias</a>
+                        </li>
+
+                        <li class="nav-item active">
+                        <a class="nav-link" href="<?= Url::toRoute(['favoritos/index']); ?>">Libros Favoritos</a>
+                    </li>
+
+
                     <?php } ?>
                 </ul>
                 <ul class="navbar-nav mr-auto">

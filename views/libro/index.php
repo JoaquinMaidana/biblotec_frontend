@@ -86,6 +86,29 @@ $this->title = 'Libros';
             bFilter: false,
             paging: false,
             ordering: false,
+            language: {
+                "sEmptyTable": "No hay datos disponibles en la tabla",
+                "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                "sInfoPostFix": "",
+                "sInfoThousands": ",",
+                "sLengthMenu": "Mostrar _MENU_ registros",
+                "sLoadingRecords": "Cargando...",
+                "sProcessing": "Procesando...",
+                "sSearch": "Buscar:",
+                "sZeroRecords": "No se encontraron resultados",
+                "oPaginate": {
+                    "sFirst": "Primero",
+                    "sLast": "Último",
+                    "sNext": "Siguiente",
+                    "sPrevious": "Anterior"
+                },
+                "oAria": {
+                    "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                    "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                }
+            },
             columns: [{
                     data: 'isbn'
                 },
@@ -106,7 +129,8 @@ $this->title = 'Libros';
                 },
                 {
                     data: function(data) {
-                        return "<a class='me-2' onclick='$(`#idLibroView`).val(`" + data.isbn + "`);$(`#formLibroView`).submit()'><i class='fa-solid fa-plus'></i></a><a class='me-2' onclick='$(`#idLibroUpdate`).val(`" + data.id + "`);$(`#formLibroUpdate`).submit()'><i class='fa-solid fa-pencil'></i></a><a class='' onclick='desactivarLibro(" + data.id + ",`" + data.lib_titulo + "`)'><i class='fa-solid fa-x'></i></a>"
+                        return `<a class='me-2' onclick='$("#idLibroView").val("${data.isbn}");$("#formLibroView").submit()'><i class='fa-solid fa-plus'></i></a><a class='me-2' onclick='window.location.href="<?= Yii::$app->urlManager->createUrl(['libro/update', 'idlibros' => '']) ?>" + ${data.isbn}'><i class='fa-solid fa-pencil'></i></a><a class='' onclick='desactivarLibro(${data.id},"${data.titulo}")'><i class='fa-solid fa-x'></i></a>`;
+
                     }
                 }
             ],

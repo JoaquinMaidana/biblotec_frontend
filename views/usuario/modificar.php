@@ -4,7 +4,7 @@ use yii\helpers\Url;
 use yii\bootstrap5\Html;
 use yii\widgets\ActiveForm; 
 /** @var yii\web\View $this */
-  $this->title = 'Registro';
+  $this->title = 'Modificar Usuario';
 ?>
 
 <style>
@@ -15,7 +15,7 @@ use yii\widgets\ActiveForm;
 
 <div class="container-fluid">
 
-  <?php ActiveForm::begin(['action' => ['site/registro'], 'options' => ['enctype' => 'multipart/form-data']]); ?>
+  <?php ActiveForm::begin(['action' => ['usuario/update'], 'options' => ['enctype' => 'multipart/form-data']]); ?>
 
   <div class="row justify-content-center">
     <div class="col-3 text-end">
