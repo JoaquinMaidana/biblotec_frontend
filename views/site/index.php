@@ -15,13 +15,12 @@ $this->title = 'Inicio';
     
    }
 
-   
-   if(isset($favoritos ) && !empty($favoritos)){
-     $ids = array_column($favoritos, 'id');
-     
-   }
-   
-  
+
+if (isset($favoritos) && !empty($favoritos)) {
+    $ids = array_column($favoritos, 'id');
+}
+
+
 ?>
 <style>
     .card {
@@ -92,30 +91,53 @@ $this->title = 'Inicio';
     }
 </style>
 <div class="container-fluid">
-    <div class="row mt-3">
-        <div class="swiper mySwiper">
-            <div class="swiper-wrapper">
+    <div class="marcoNovedades">
+        <div class="row mt-3 justify-content-center">
+            <div class="col-auto">
+                <h1 class="tituloNovedades">Novedades</h1>
+            </div>
+        </div>
+
+        <div class="row mt-3 ms-3 me-3 justify-content-center">
+            <div class="swiper mySwiper">
+                <div class="swiper-wrapper">
+                </div>
             </div>
         </div>
     </div>
     <hr>
+
     <div class="row mt-3 justify-content-center">
-        <?php foreach ($libros_Array as $libro) { 
-            ?>
+        <div class="col-6 ps-0">
+            <input id="filtroTitulo" type="text" class="form-control" placeholder="Buscar libro" oninput="filtrarLibros()"></input>
+        </div>
+        <div class="col-3 pe-0 ps-4 ms-2">
+            <select id="filtroCategoria" class="form-control" onchange="filtrarLibros()">
+                <option value="">Filtrar por categoría</option>
+                <?php foreach ($categorias as $categoria) { ?>
+                    <option value="<?= $categoria['nombre'] ?>"><?= $categoria['nombre'] ?></option>
+                <?php  } ?>
+            </select>
+        </div>
+    </div>
+
+    <div class="row mt-3 justify-content-center">
+        <?php foreach ($libros_Array as $libro) {
+        ?>
             <div class="col-3 mb-3 ms-2 me-2">
                 <div class="card">
                     <div class="card-body ps-0 pt-0 pe-0">
                         <img class="card-img-top img" src="<?= $libro['imagen'] ?>" alt="Card image cap">
                     </div>
                     <div class="card-footer">
-                        <h5 class="card-title text-truncate"><?= $libro['titulo'] ?></h5>
+                        <h5 id="<?= $libro['id'] ?>" class="card-title text-truncate"><?= $libro['titulo'] ?></h5>
                         <hr>
                         <div class="row">
                             <div class="col-7 text-start">
                                 <label>Categoría:</label>
                             </div>
                             <div class="col text-end text-truncate">
-                                <p class="card-text"><?= $libro['categorias'][0]['categoria'] ?></p>
+                                <p id="categoria_<?= $libro['id'] ?>" class="card-text"><?= $libro['categorias'][0]['categoria'] ?></p>
                             </div>
                         </div>
                         <div class="row mt-2">
@@ -145,17 +167,15 @@ $this->title = 'Inicio';
                         </div>
                         <div class="row mt-2">
                             <div class="col-auto text-start">
-                            
-                                <a class='' id="favorito_<?= $libro['id'] ?>" onclick='agregarFavorito(this.id)'><i id="estrella_<?= $libro['id'] ?>"
-                                class="<?= (isset($favoritos) && !empty($favoritos) && in_array($libro['id'], $ids)) ? 'fa-solid fa-star' : 'fa-regular fa-star' ?>"></i></a>
+                                <a class='' id="favorito_<?= $libro['id'] ?>" onclick='agregarFavorito(this.id)'><i id="estrella_<?= $libro['id'] ?>" class="<?= (isset($favoritos) && !empty($favoritos) && in_array($libro['id'], $ids)) ? 'fa-solid fa-star' : 'fa-regular fa-star' ?>"></i></a>
                             </div>
-                            
-                              
+
+
                         </div>
                         <div class="row mt-2">
                             <?php if ($libro['vigencia'] == 'Si') { ?>
                                 <div class="col">
-                                    <button onclick="reservarLibro(<?= $libro['id'] ?>)" class="btn btn-primary">Reservar</button>
+                                    <button onclick="$('#modalReserva').modal('show');$('#libroId').val(<?= $libro['id'] ?>)" class="btn btn-primary">Reservar</button>
                                 </div>
                             <?php } ?>
                         </div>
@@ -165,15 +185,6 @@ $this->title = 'Inicio';
                         <div class="row mt-2">
                             <div class="col">
                                 <button type="submit" class="btn btn-primary">Ver más</button>
-                            </div>
-                        </div>
-                        <?= Html::endForm() ?>
-                        <?= Html::beginForm(['comentario/index']) ?>
-                        <input type="hidden" name="idLibro" value="<?= $libro['id'] ?>"></input>
-                        <input type="hidden" name="tituloLibro" value="<?= $libro['titulo'] ?>"></input>
-                        <div class="row mt-2">
-                            <div class="col">
-                                <button type="submit" class="btn btn-primary">Comentarios</button>
                             </div>
                         </div>
                         <?= Html::endForm() ?>
@@ -192,11 +203,8 @@ $this->title = 'Inicio';
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
-            <?= Html::beginForm(['reserva/create'], 'post', ['id' => 'formReserva']) ?>
-            <input type="hidden" id="libroId" name="libro_id"></input>
-            <input type="hidden" id="fecha_desde" name="fecha_desde"></input>
-            <input type="hidden" id="fecha_hasta" name="fecha_hasta"></input>
             <div class="modal-body">
+                <input type="hidden" id="libroId"></input>
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-3">
@@ -217,7 +225,7 @@ $this->title = 'Inicio';
                     </div>
                 </div>
             </div>
-            <?= Html::endForm() ?>
+
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-primary" onclick="$('#modalReserva').modal('hide');">Cancelar</button>
                 <button onclick="reservarLibro()" class="btn btn-primary">Reservar</button>
@@ -240,8 +248,7 @@ $this->title = 'Inicio';
                 <div class="container-fluid">
                     <div class="row justify-content-center">
                         <div class="col">
-                            <p>Rango de fechas invalido
-                            <p>
+                            <p>Rango de fechas invalido</p>
                         </div>
                     </div>
                 </div>
@@ -249,6 +256,31 @@ $this->title = 'Inicio';
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" onclick="$('#modalAdvertencia').modal('hide');$('#modalReserva').modal('show');">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modalResultado" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Reservar libro</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row justify-content-center">
+                        <div class="col">
+                            <p id="resultado"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="$('#modalResultado').modal('hide');">Aceptar</button>
             </div>
         </div>
     </div>
@@ -286,9 +318,9 @@ $this->title = 'Inicio';
         const containerImg = document.createElement('div');
         containerImg.classList.add('conteiner-img');
 
-  const image = document.createElement('img');
-  image.src = item.imagen;
-  image.alt = '';
+        const image = document.createElement('img');
+        image.src = item.imagen;
+        image.alt = '';
 
         containerImg.appendChild(image);
         anchor.appendChild(containerImg);
@@ -319,41 +351,71 @@ $this->title = 'Inicio';
             fav = 'S';
 
             $.ajax({
-            method: "POST",
-            url: "<?= Url::toRoute(['favoritos/update']); ?>",
-            data: {
-                _csrf: "<?= Yii::$app->request->csrfToken; ?>",
-                //idUsuario: idUsuario
-                idLibro: id,
-                fav: fav
-            },
-                
-                
-                });
+                method: "POST",
+                url: "<?= Url::toRoute(['favoritos/update']); ?>",
+                data: {
+                    _csrf: "<?= Yii::$app->request->csrfToken; ?>",
+                    idLibro: id,
+                    fav: fav
+                },
+            });
         } else {
             $("#estrella_" + id).removeClass("fa-solid fa-star");
             $("#estrella_" + id).addClass("fa-regular fa-star");
             fav = 'N';
         }
-
-        
     }
 
-    function reservarLibro(id = null) {
-        if (id != null) {
-            $("#libroId").val(id);
-            $("#modalReserva").modal("show");
-        } else {
-            hoy = Date.now();
+    function reservarLibro() {
+        hoy = Date.now();
 
-            if ((Date.parse($("#desde").val()) < Date.parse($("#hasta").val())) && (Date.parse($("#desde").val()) >= hoy)) {
-                $("#fecha_desde").val($("#desde").val());
-                $("#fecha_hasta").val($("#hasta").val());
-                $("#formReserva").submit();
-            } else {
-                $("#modalReserva").modal("hide");
-                $("#modalAdvertencia").modal("show");
-            }
+        if ((Date.parse($("#desde").val()) < Date.parse($("#hasta").val())) && (Date.parse($("#desde").val()) >= hoy)) {
+
+            $.ajax({
+                method: "POST",
+                url: "<?= Url::toRoute(['reserva/create']); ?>",
+                data: {
+                    _csrf: "<?= Yii::$app->request->csrfToken; ?>",
+                    libro_id: $("#libroId").val(),
+                    fecha_desde: $("#desde").val(),
+                    fecha_hasta: $("#hasta").val()
+                },
+                success: function(result) {
+                    $("#modalReserva").modal("hide");
+                    if (result == 1) {
+                        $("#resultado").text("Libro reservado con exito.");
+                    } else {
+                        $("#resultado").text("Hubo un error, por favor intenta de nuevo.");
+                    }
+                    $("#modalResultado").modal("show");
+                }
+            });
+
+        } else {
+            $("#modalReserva").modal("hide");
+            $("#modalAdvertencia").modal("show");
         }
+    }
+
+    function filtrarLibros() {
+
+        titulo = $("#filtroTitulo").val();
+        categoria = $("#filtroCategoria").val();
+
+        $(".card-title").each(function() {
+
+            idLibro = $(this).attr("id");
+
+            categoriaLibro = $("#categoria_" + idLibro).text();
+
+            tituloLibro = $(this).text().toLowerCase();
+            tituloLibro = tituloLibro.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+            if ((tituloLibro.includes(titulo) || titulo == null) && (categoriaLibro == categoria || categoria == "")) {
+                $(this).closest(".col-3").show();
+            } else {
+                $(this).closest(".col-3").hide();
+            }
+        });
     }
 </script>

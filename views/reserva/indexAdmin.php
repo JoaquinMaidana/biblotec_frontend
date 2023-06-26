@@ -1,4 +1,3 @@
-
 <?php
 
 
@@ -16,7 +15,7 @@ $this->title = 'Reservas';
         <div class="col-1">
             <h1><?= Html::encode($this->title) ?></h1>
         </div>
-       
+
     </div>
 
     <div class="row">
@@ -46,11 +45,6 @@ $this->title = 'Reservas';
     <input type="hidden" name="fecha_hasta" id="fecha_hasta"></input>
     <input type="hidden" name="vuelta" id="vuelta"></input>
     <?= Html::endForm() ?>
-
-   
-
-    
-
 </div>
 
 <script>
@@ -101,16 +95,16 @@ $this->title = 'Reservas';
                     data: 'resv_usu_id'
                 },
                 {
-                data: 'resv_estado',
-                render: function(data, type, row) {
-                    var options = {
-                        'P': 'Pendiente',
-                        'X': 'Cancelada',
-                        'C': 'Confirmada',
-                        'L': 'Libro levantado', 
-                        'D': 'Completada',       
-                        'N': 'Libro no devuelto'
-                    };
+                    data: 'resv_estado',
+                    render: function(data, type, row) {
+                        var options = {
+                            'P': 'Pendiente',
+                            'X': 'Cancelada',
+                            'C': 'Confirmada',
+                            'L': 'Libro levantado',
+                            'D': 'Completada',
+                            'N': 'Libro no devuelto'
+                        };
 
                     var select = '<select>';
                     for (var key in options) {
@@ -119,22 +113,22 @@ $this->title = 'Reservas';
                     }
                     select += '</select>';
 
-                    return select;
-                }
+                        return select;
+                    }
                 },
                 {
                     data: 'resv_fecha_hora'
                 },
                 {
-                data: 'resv_fecha_desde',
+                    data: 'resv_fecha_desde',
                     render: function(data, type, row) {
-                        return '<input type="date"  value="' + data + '">';
+                        return '<input type="date" class="form-control" value="' + data + '">';
                     }
                 },
                 {
                     data: 'resv_fecha_hasta',
                     render: function(data, type, row) {
-                        return '<input type="date"  value="' + data + '">';
+                        return '<input type="date" class="form-control" value="' + data + '">';
                     }
                 },
                 {

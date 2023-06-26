@@ -267,6 +267,7 @@ class LibroController extends Controller
             $vuelta = $this->request->get('vuelta');
                 
         }
+        //var_dump($vuelta);exit;
         $libro = $this->findLibro($id);
 
         $comentarioController = new ComentarioController(Yii::$app->id, Yii::$app);

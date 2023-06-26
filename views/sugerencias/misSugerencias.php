@@ -1,5 +1,4 @@
-<?php 
-namespace app\controllers;
+<?php
 
 use Yii;
     if(\Yii::$app->session->isActive){
@@ -10,24 +9,63 @@ use Yii;
     }
 ?>
 
+<div class="container-fluid">
+    <div class="row align-items-center">
+        <div class="col-auto">
+            <h1><?= Html::encode($this->title) ?></h1>
+        </div>
+        <div class="col-auto">
+            <i class="fa-solid fa-circle-info text-warning info" data-bs-toggle="tooltip" data-bs-placement="top" title="Sugiere libros que te gustaria que sean agregados a la biblioteca"></i>
+        </div>
+    </div>
 
-<!DOCTYPE html>
-<html lang="es-UY">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mis sugerencias</title>
-    <?php 
-        use yii\helpers\Html;
-        use yii\helpers\Url;
-       // $sugerencias = json_decode($sugerencias); 
-       // var_dump($sugerencias);exit;
-    ?>
-    <script>
-    $(document).ready(function () {
-    $('#missugerencias').DataTable({
-        language: {
+    <table id="tablaSugerencias" class="display compact">
+        <thead>
+            <tr>
+                <th>Sugerencia</th>
+                <th>Estado</th>
+                <th>Usuario</th>
+                <th>Fecha</th>
+                <th></th>
+            </tr>
+        </thead>
+    </table>
+
+    <div id="modalRevisarSugerencia" class="modal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Revisar sugerencia</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <?= Html::beginForm(['sugerencias/update'], 'post') ?>
+                <input type="hidden" name="id" id="idSugerenciaRevisar"></input>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row justify-content-center">
+                            <div class="col">
+                                <p>¿Desea marcar como revisada la sugerencia?</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-primary" onclick="$('#modalRevisarSugerencia').modal('hide');">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Marcar como revisada</button>
+                </div>
+                <?= Html::endForm() ?>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('#tablaSugerencias').DataTable({
+            language: {
                 "sEmptyTable": "No hay datos disponibles en la tabla",
                 "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
                 "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
@@ -50,94 +88,52 @@ use Yii;
                     "sSortDescending": ": Activar para ordenar la columna de manera descendente"
                 }
             }
-    });
-    });
-</script>
-</head>
-<body>
-    <h1>Mis sugerencias</h1>
-    <button type="button" class="btn btn-dark"> <a class="nav-link" href="<?= Url::toRoute(['sugerencias/index']); ?>">Volver</a></button>
-    <table id="missugerencias" class="display compact">
-            <thead>
-                <tr>
-                    <th>id</th>
-                    <th>Texto de sugerencia</th>
-                    <th>Vigente</th>
-                    <th>Usuario que realiza</th>
-                    <th>Fecha realizacion</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-               
-                if ($sugerencias != ""   ){
-                
-                    foreach($sugerencias as $sugerencia){
-                         if(isset($isAdmin) && $usu_id==$sugerencia['sug_usu_id']){
-                        //var_dump($usu_id);exit;
-                         //if($sugerencia->sug_usu_id == Yii::$app->user->identity->id){
-                ?>
-                            <tr>
-                                <td><?= $sugerencia['sug_id']; ?></td>
-                                <td><?= $sugerencia['sug_sugerencia']; ?></td>
-                                <td><?= $estado = $sugerencia['sug_vigente']=='S' ? 'Activa' : 'Revisada'; ?></td>
-                                <td><?= $sugerencia['sug_usu_id']; ?></td>
-                                <td><?= $sugerencia['sug_fecha_hora']; ?></td>
-                                <td><a class='btn btn-warning' onclick="$('#modalCambiarEstado<?=$sugerencia['sug_id'] ?>').modal('show');">Cambiar estado</a></td>
-                                
-                            </tr>
-                            <?= Html::beginForm(['sugerencias/update'], 'post') ?>
-                                            
-                                <div id="modalCambiarEstado<?= $sugerencia['sug_id']?>" class="modal" tabindex="-1">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title">Cambiar de estado</h5>
-                                                <label for="estact">
-                                                        Estado actual: <input type="text" name="estact" value="<?= $estado = $sugerencia['sug_vigente']=='S' ? 'Activa' : 'Revisada'; ?>" disabled>
-                                                </label>
-                                                <label for="nuevoEstado">Pasar a estado: 
-                                                    <select name="nuevoEstado">
-                                                        <?php if ($sugerencia['sug_vigente']=='S'){
-                                                            echo '<option value="N">Revisada</option>'; 
-                                                        } else { 
-                                                            echo '<option value="S">Activa</option>';
-                                                        } ?>
-                                                    </select>
-                                                </label>
-                                                <input type="hidden" name="id" value="<?= $sugerencia['sug_id'];?>"></input>
-                                                <input type="hidden" name="sug_sugerencia" value="<?= $sugerencia['sug_sugerencia'];?>"></input>
-                                                <input type="hidden" name="sug_idusu" value="<?= $sugerencia['sug_usu_id'];?>"></input>
-                                                <input type="hidden" name="sug_fecha" value="<?= $sugerencia['sug_fecha_hora'];?>"></input>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="container-fluid">
-                                                    <div class="row justify-content-center">
-                                                        <div class="col" id="textoModalDesactivar">
-                                                        <p>Confirmar cambio de estado</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                            
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-outline-primary"  onclick="$('#modalCambiarEstado<?=$sugerencia['sug_id'] ?>').modal('hide');">Cancelar</button>
-                                                <button type="submit" class="btn btn-primary">Confirmar</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            <?= Html::endForm() ?>
-                <?php
-                            }
+            data: <?= $sugerencias ?>,
+            responsive: true,
+            bFilter: false,
+            paging: false,
+            ordering: false,
+            columns: [{
+                    data: 'sug_sugerencia'
+                },
+                {
+                    data: function(data) {
+                        if (data.sug_vigente == 'S') {
+                            return "Activa";
+                        } else {
+                            return "Revisada";
                         }
                     }
-                //}
-                ?>
+                },
+                {
+                    data: 'sug_usu_id'
+                },
+                {
+                    data: function(data) {
+                        fechaHora = data.sug_fecha_hora.split(" ");
+                        fecha = fechaHora[0].split("-");
+                        return fecha[2] + "/" + fecha[1] + "/" + fecha[0] + " " + fechaHora[1];
+                    }
+                },
+                {
+                    data: function(data) {
+                        if (data.sug_vigente == 'S') {
+                            return "<a class='me-2' onclick='$(`#idSugerenciaRevisar`).val(`" + data.sug_id + "`);$(`#modalRevisarSugerencia`).modal(`show`)'><i class='fa-solid fa-check'></i></a>"
+                        }
+                    }
+                }
+            ],
+        });
+    });
 
-            </tbody>
-    </table>
-    
-</body>
-</html>
+
+
+    let token = localStorage.getItem('TokenBibliotec_<?= $documento ?>');
+    if (token) {
+        document.getElementById('token-field').value = token;
+    } else {
+        // El contenido de token es nulo o no existe
+        // Puedes manejar esta situación según tus necesidades
+        console.log('El token no está disponible.');
+    }
+</script>
