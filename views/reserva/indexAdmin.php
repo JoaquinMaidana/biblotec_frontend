@@ -106,7 +106,7 @@ $this->title = 'Reservas';
                             'N': 'Libro no devuelto'
                         };
 
-                    var select = '<select>';
+                    var select = '<select class="form-control">';
                     for (var key in options) {
                         var isSelected = (key === data) ? 'selected' : '';
                         select += '<option name="est" value="' + key + '" ' + isSelected + '>' + options[key] + '</option>';

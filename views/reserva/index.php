@@ -9,8 +9,8 @@ $nombreEstado=null;
 ?>
 
 <style>
-    img {
-        height: 30rem;
+    .card-img-top {
+        height: 50rem;
     }
 
     .card h5,
@@ -38,7 +38,7 @@ $nombreEstado=null;
         <?php foreach ($reservasLibros as $reservaLibro) {
             
             ?>
-            <div class="col-4">
+            <div class="col-4 mb-3">
                 <?php switch ($reservaLibro['reserva']->resv_estado) {
                     case "C": 
                     $nombreEstado = 'Confirmada';
