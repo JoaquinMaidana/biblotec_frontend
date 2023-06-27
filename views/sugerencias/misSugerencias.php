@@ -1,12 +1,17 @@
 <?php
 
-use Yii;
-    if(\Yii::$app->session->isActive){
+//use Yii;
+use yii\helpers\Html;
+
+//namespace yii;
+    if(Yii::$app->session->isActive){
                             
     
     $usu_id = Yii::$app->session->get('usu_id');
     $isAdmin = Yii::$app->session->get('usu_tipo_usuario');
+    $documento = Yii::$app->session->get('usu_documento');
     }
+    
 ?>
 
 <div class="container-fluid">
@@ -30,7 +35,12 @@ use Yii;
             </tr>
         </thead>
     </table>
-
+    <?php 
+        if (!$sugerencias){
+            var_dump($sugerencias);exit;
+            echo "<p><strong>NO HAY SUGERENCIAS</strong></p>";
+        }
+    ?>
     <div id="modalRevisarSugerencia" class="modal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -64,6 +74,7 @@ use Yii;
 
 <script>
     $(document).ready(function() {
+        
         $('#tablaSugerencias').DataTable({
             language: {
                 "sEmptyTable": "No hay datos disponibles en la tabla",
@@ -87,7 +98,7 @@ use Yii;
                     "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
                     "sSortDescending": ": Activar para ordenar la columna de manera descendente"
                 }
-            }
+            },
             data: <?= $sugerencias ?>,
             responsive: true,
             bFilter: false,
@@ -98,6 +109,7 @@ use Yii;
                 },
                 {
                     data: function(data) {
+                        console.log(data.sug_id + "PROBANDO");
                         if (data.sug_vigente == 'S') {
                             return "Activa";
                         } else {
