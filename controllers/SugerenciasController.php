@@ -89,7 +89,7 @@ class SugerenciasController extends Controller{
     public function actionView()
     {
         $sugerencias = $this->findSugerencias();
-
+        
         return $this->render('misSugerencias', [
             'sugerencias' => json_encode($sugerencias),
         ]);
