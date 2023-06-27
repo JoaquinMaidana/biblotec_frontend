@@ -135,7 +135,7 @@ use yii\helpers\Url;
                         <label>Disponible:</label>
                     </div>
                     <div class="col">
-                        <p><?= $disponible ?></p>
+                        <p><?= $libro['lib_disponible'] ?></p>
                     </div>
                 </div>
 
@@ -144,7 +144,7 @@ use yii\helpers\Url;
                         <label>Novedad:</label>
                     </div>
                     <div class="col">
-                        <p><?= $novedad ?></p>
+                        <p><?= $libro['lib_novedades'] ?></p>
                     </div>
                 </div>
 
