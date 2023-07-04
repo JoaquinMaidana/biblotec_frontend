@@ -63,6 +63,15 @@ $nombreEstado=null;
                                 <?php if ($reservaLibro['reserva']->resv_estado == "P") { ?>
                                     <button class="btn btn-primary" onclick="cancelarReserva('<?= $reservaLibro['libro']['lib_titulo'] ?>', '<?= $reservaLibro['reserva']->resv_id ?>')">Cancelar reserva</button>
                                 <?php } ?>
+                                <?= Html::beginForm(['libro/view']) ?>
+                                <input type="hidden" name="id" value="<?= $reservaLibro['libro']['lib_isbn'] ?>"></input>
+                                <input type="hidden" name="vuelta" value="site/index"></input>
+                                <div class="row mt-2">
+                                    <div class="col">
+                                        <button type="submit" class="btn btn-primary">Ver más</button>
+                                    </div>
+                                </div>
+                                <?= Html::endForm() ?>
                             </div>
                                 </div>
                             </div>

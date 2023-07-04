@@ -25,7 +25,7 @@ $this->title = 'Reservas';
                     <tr>
                         <th>ID</th>                  
                         <th>ID libro</th>
-                        <th>ID Usuario</th>
+                        <th>Documento</th>
                         <th>Estado</th>
                         <th>Creacion</th>
                         <th>Desde</th>
@@ -59,10 +59,12 @@ $this->title = 'Reservas';
     var table =    $('#tablaLibros').DataTable({
             data: <?= $reservas ?>,
             responsive: true,
+            searching: true,
             bFilter: false,
             paging: false,
             ordering: false,
             language: {
+                "sFilter": "Filtrar",
                 "sEmptyTable": "No hay datos disponibles en la tabla",
                 "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
                 "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
@@ -92,7 +94,7 @@ $this->title = 'Reservas';
                     data: 'resv_lib_id'
                 },
                 {
-                    data: 'resv_usu_id'
+                    data: 'usu_documento'
                 },
                 {
                     data: 'resv_estado',
@@ -164,6 +166,8 @@ $this->title = 'Reservas';
         console.log('Row index:', rowIndex);
         
     });
+
+    
 
 });
     function desactivarLibro(id, titulo) {

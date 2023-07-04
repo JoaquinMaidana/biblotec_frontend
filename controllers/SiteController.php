@@ -147,7 +147,9 @@ class SiteController extends Controller
                         global $mensaje;
                         $mensaje = $respuesta['mensaje'];
                         
-                        return $this->render('login');
+                        return $this->render('login', [
+                            'mensaje' => $mensaje,
+                        ]);
                     }
                 }
             }

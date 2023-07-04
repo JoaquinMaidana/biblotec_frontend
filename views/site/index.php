@@ -382,11 +382,28 @@ if (isset($favoritos) && !empty($favoritos)) {
                 },
                 success: function(result) {
                     $("#modalReserva").modal("hide");
-                    if (result == 1) {
+                    console.log(result);
+                    if (result == 1 ) {
                         $("#resultado").text("Libro reservado con exito.");
-                    } else {
-                        $("#resultado").text("Hubo un error, por favor intenta de nuevo.");
                     }
+                    else if (result ==2){
+                        $("#resultado").text("Error en los datos enviados ");
+                    }
+                    else if (result ==3){
+                        $("#resultado").text("No se ha adjuntado el token para poder resolver esta petición ");
+                    }
+                    else {
+                        if(result){
+                            let errors = JSON.parse(result);
+
+                            // Generar el contenido HTML de los errores con saltos de línea
+                            let html = errors.join("<br>");
+                            $("#resultado").html(html);
+                        }else{
+                            $("#resultado").text("Hubo un error");
+                        }
+                       
+                    } 
                     $("#modalResultado").modal("show");
                 }
             });

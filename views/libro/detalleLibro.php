@@ -7,7 +7,8 @@ use yii\helpers\Url;
 
     $this->title = 'Libro: ' . $libro['lib_titulo'];
     if (Yii::$app->session->isActive) {      
-        $documento = Yii::$app->session->get('usu_documento');             
+        $documento = Yii::$app->session->get('usu_documento'); 
+        $isAdmin = Yii::$app->session->get('usu_tipo_usuario');            
     }
  //   if(isset($comentarios) && !empty($comentarios) ){
  //       $idLibro = $comentarios[0]['comet_lib_id'];
@@ -117,17 +118,7 @@ use yii\helpers\Url;
                         <p><?= $libro['lib_puntuacion'] ?></p>
                     </div>
                 </div>
-                <!-- 
-    <div class="row mt-3 justify-content-center">
-                    <div class="col-3 text-end">
-                        <label>Subcategoría:</label>
-                    </div>
-                    <div class="col">
-                        <input disabled name="subcategoria" type="text" class="form-control" value=" //$libro['lib_sub_categoria'] "></input>
-                    </div>
-                </div>
 
- -->
 
 
                 <div class="row mt-3 justify-content-center">
@@ -162,7 +153,7 @@ use yii\helpers\Url;
                         <a href="<?= Url::toRoute([$vuelta]); ?>" class="btn btn-primary">Volver</a>
                     </div>
                     <div class="col-auto">
-                        <a href="<?= Url::toRoute(['reserva/create', 'isbn' => $libro['lib_isbn']]); ?>" class="btn btn-secondary">Reservar</a>
+                         <button onclick="$('#modalReserva').modal('show');$('#libroId').val(<?= $libro['lib_id'] ?>)" class="btn btn-primary">Reservar</button>
                     </div>
                 </div>
             </div>
@@ -191,7 +182,7 @@ use yii\helpers\Url;
                 <div class="row mt-3">
 
                     <div class="col-12 mb-2">
-                        <?= $this->render('_comentario', array('comentario' => $comentario['comet_comentario'], 'usuario' => $comentario['comet_usu'], 'fecha' => $comentario['comet_fecha_hora'], 'hijos' => $comentario['comentariosHijos'], 'id' => $comentario['comet_id'], 'referencia' => $comentario['comet_referencia_id'], 'padre' => $comentario['comet_padre_id'])); ?>
+                        <?= $this->render('_comentario', array('documento' => $comentario['usu_nombre'],'comentario' => $comentario['comet_comentario'], 'usuario' => $comentario['comet_usu'], 'fecha' => $comentario['comet_fecha_hora'], 'hijos' => $comentario['comentariosHijos'], 'id' => $comentario['comet_id'], 'referencia' => $comentario['comet_referencia_id'], 'padre' => $comentario['comet_padre_id'])); ?>
                     </div>
 
                     <hr>
@@ -208,6 +199,97 @@ use yii\helpers\Url;
 
 
     <?php } ?>
+</div>
+
+<div id="modalReserva" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Reservar libro</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <input type="hidden" id="libroId"></input>
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-3">
+                            <label>Desde:</label>
+                        </div>
+                        <div class="col">
+                            <input type="date" id="desde" class="form-control"></input>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-3">
+                            <label>Hasta:</label>
+                        </div>
+                        <div class="col">
+                            <input type="date" id="hasta" class="form-control"></input>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" onclick="$('#modalReserva').modal('hide');">Cancelar</button>
+                <button onclick="reservarLibro()" class="btn btn-primary">Reservar</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div id="modalAdvertencia" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Advertencia</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row justify-content-center">
+                        <div class="col">
+                            <p>Rango de fechas invalido</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="$('#modalAdvertencia').modal('hide');$('#modalReserva').modal('show');">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modalResultado" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Reservar libro</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row justify-content-center">
+                        <div class="col">
+                            <p id="resultado"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="$('#modalResultado').modal('hide');">Aceptar</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div id="modalEliminarComentario" class="modal" tabindex="-1">
@@ -321,6 +403,7 @@ use yii\helpers\Url;
             </div>
             <?= Html::beginForm(['comentario/update'], 'post') ?>
             <input type="hidden" name="id" id="idComentario"></input>
+            <input type="hidden" name="idLibro" value='<?= $idLibro ?>'></input>
             <input type="hidden" name="token" value="">
             <input type="hidden" name="isbn" value='<?= $libro['lib_isbn'] ?>'></input>
 
@@ -402,3 +485,55 @@ use yii\helpers\Url;
         }
     }
 </script>
+
+<script>
+    function reservarLibro() {
+        hoy = Date.now();
+
+        if ((Date.parse($("#desde").val()) < Date.parse($("#hasta").val())) && (Date.parse($("#desde").val()) >= hoy)) {
+
+            $.ajax({
+                method: "POST",
+                url: "<?= Url::toRoute(['reserva/create']); ?>",
+                data: {
+                    _csrf: "<?= Yii::$app->request->csrfToken; ?>",
+                    libro_id: $("#libroId").val(),
+                    fecha_desde: $("#desde").val(),
+                    fecha_hasta: $("#hasta").val()
+                },
+                success: function(result) {
+                    $("#modalReserva").modal("hide");
+                    console.log(result);
+                    if (result == 1 ) {
+                        $("#resultado").text("Libro reservado con exito.");
+                    }
+                    else if (result ==2){
+                        $("#resultado").text("Error en los datos enviados ");
+                    }
+                    else if (result ==3){
+                        $("#resultado").text("No se ha adjuntado el token para poder resolver esta petición ");
+                    }
+                    else {
+                        if(result){
+                            let errors = JSON.parse(result);
+
+                            // Generar el contenido HTML de los errores con saltos de línea
+                            let html = errors.join("<br>");
+                            $("#resultado").html(html);
+                        }else{
+                            $("#resultado").text("Hubo un error");
+                        }
+                       
+                    } 
+                    $("#modalResultado").modal("show");
+                }
+            });
+
+        } else {
+            $("#modalReserva").modal("hide");
+            $("#modalAdvertencia").modal("show");
+        }
+    }
+
+</script>
+

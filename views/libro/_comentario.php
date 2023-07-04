@@ -6,23 +6,26 @@ if (Yii::$app->session->isActive) {
     
 
  if ($padre !== null) {
-    
+    $fecha2 = date("d-m-Y H:i:s", strtotime($fecha));
     ?>
     <div class="container-fluid" id="<? $padre ?>">
     
-    <?php } else { ?>
+    <?php } else {
+        $fecha2 = date("d-m-Y H:i:s", strtotime($fecha));
+        
+        ?>
         <div class="container-fluid">
         <?php } ?>
         <div class="row">
             <div class="col pe-0">
                 <div class="card">
                     <div class="card-header">
-                        <?= $fecha ?>
+                        <?= $fecha2 ?>
                     </div>
                     <div class="card-body">
                         <blockquote class="blockquote mb-0">
                             <p><?= $comentario ?></p>
-                            <footer class="blockquote-footer"><?php echo "ID Usuario:".$usuario ?></footer>
+                            <footer class="blockquote-footer"><?php echo "Nombre:".$documento ?></footer>
                         </blockquote>
                     </div>
                     <div class="card-footer">
@@ -55,7 +58,7 @@ if (Yii::$app->session->isActive) {
 
                 <?php foreach ($hijos as $hijo) { ?>
                     <div class="mt-2">
-                        <?= $this->render('_comentario', array('comentario' => $hijo['comet_comentario'], 'usuario' => $hijo['comet_usu'], 'fecha' => $hijo['comet_fecha_hora'], 'hijos' => $hijo['comentariosHijos'], 'id' => $hijo['comet_id'], 'referencia' => $hijo['comet_referencia_id'],  'padre' => $hijo['comet_padre_id'])); ?>
+                        <?= $this->render('_comentario', array('documento' => $hijo['usu_nombre'],'comentario' => $hijo['comet_comentario'], 'usuario' => $hijo['comet_usu'], 'fecha' => $hijo['comet_fecha_hora'], 'hijos' => $hijo['comentariosHijos'], 'id' => $hijo['comet_id'], 'referencia' => $hijo['comet_referencia_id'],  'padre' => $hijo['comet_padre_id'])); ?>
                     </div>
                 <?php } ?>
             </div>
