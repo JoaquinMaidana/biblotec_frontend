@@ -45,14 +45,27 @@ $nombreEstado=null;
                     ?>
                         <div class="card bg-success">
                         <?php break;
+                    case "L": 
+                        $nombreEstado = 'Libro levantado';
+                        ?>
+                            <div class="card bg-success">
+                            <?php break;
                     case "X":
-                        $nombreEstado = 'Cancelada'; ?>
+                    $nombreEstado = 'Cancelada'; ?>
+                        <div class="card   ">
+                        <?php break;
+                    case "P": 
+                        $nombreEstado = 'Pendiente';?>
+                            <div class="card bg-warning">
+                        <?php break;
+                    case "D": 
+                        $nombreEstado = 'Completada';?>
+                            <div class="card bg-success">
+                        <?php break;
+                    case "N": 
+                        $nombreEstado = 'Libro no devuelto';?>
                             <div class="card bg-danger">
-                            <?php break;
-                        case "P": 
-                            $nombreEstado = 'Pendiente';?>
-                                <div class="card bg-warning">
-                            <?php break;
+                        <?php break;
                     } ?>
                             <img class="card-img-top" src="<?= $reservaLibro['libro']['lib_imagen'] ?>" alt="<?= $reservaLibro['libro']['lib_titulo'] ?>">
                             <div class="card-body">
@@ -62,6 +75,8 @@ $nombreEstado=null;
                                 <p class="card-text">Estado: <?= $nombreEstado ?></p>
                                 <?php if ($reservaLibro['reserva']->resv_estado == "P") { ?>
                                     <button class="btn btn-primary" onclick="cancelarReserva('<?= $reservaLibro['libro']['lib_titulo'] ?>', '<?= $reservaLibro['reserva']->resv_id ?>')">Cancelar reserva</button>
+                                
+                                    <button class="btn btn-primary mt-2" onclick="levantarLibro('<?= $reservaLibro['libro']['lib_titulo'] ?>', '<?= $reservaLibro['reserva']->resv_id ?>')">Levantar Libro</button>
                                 <?php } ?>
                                 <?= Html::beginForm(['libro/view']) ?>
                                 <input type="hidden" name="id" value="<?= $reservaLibro['libro']['lib_isbn'] ?>"></input>
@@ -107,6 +122,35 @@ $nombreEstado=null;
                 </div>
             </div>
 
+            <div id="modalLevantarLibro" class="modal" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Levantar Libro</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <?= Html::beginForm(['reserva/levantar-libro'], 'post') ?>
+                        <input type="hidden" name="id_reserva" id="idReserva2"></input>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <div class="row justify-content-center">
+                                    <div class="col" id="textoModalLevantarLibro">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-primary" onclick="$('#modalLevantarLibro').modal('hide');">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Levantar Libro</button>
+                        </div>
+                        <?= Html::endForm() ?>
+                    </div>
+                </div>
+            </div>
+
+
             <script>
                 function cancelarReserva(tituloLibro, idReserva) {
                     $("#textoModalCancelarReserva").empty();
@@ -114,5 +158,13 @@ $nombreEstado=null;
                     $('#idReserva').val(idReserva);
                    
                     $("#modalCancelarReserva").modal("show");
+                }
+
+                function levantarLibro(tituloLibro, idReserva) {
+                    $("#textoModalLevantarLibro").empty();
+                    $("#textoModalLevantarLibro").append("¿Desea levantar el libro  " + tituloLibro + "?");
+                    $('#idReserva2').val(idReserva);
+                   
+                    $("#modalLevantarLibro").modal("show");
                 }
             </script>

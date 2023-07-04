@@ -390,7 +390,7 @@ if (isset($favoritos) && !empty($favoritos)) {
                         $("#resultado").text("Error en los datos enviados ");
                     }
                     else if (result ==3){
-                        $("#resultado").text("No se ha adjuntado el token para poder resolver esta petición ");
+                        $("#resultado").text("Para reservar debe iniciar sesión o registrarse. ");
                     }
                     else {
                         if(result){

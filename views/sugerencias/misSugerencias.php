@@ -1,6 +1,6 @@
 <?php
 
-use Yii;
+use yii\helpers\Html; 
     if(\Yii::$app->session->isActive){
                             
     
@@ -128,12 +128,5 @@ use Yii;
 
 
 
-    let token = localStorage.getItem('TokenBibliotec_<?= $documento ?>');
-    if (token) {
-        document.getElementById('token-field').value = token;
-    } else {
-        // El contenido de token es nulo o no existe
-        // Puedes manejar esta situación según tus necesidades
-        console.log('El token no está disponible.');
-    }
+   
 </script>
