@@ -220,4 +220,49 @@ class ReservaController extends Controller
         } 
         return $this->redirect(['index']);
     }
+
+    public function actionLevantarLibro()
+    {
+        //$usuario_id = $_POST['usuario_id']; todavia no se como se consigue
+        if ($this->request->post()) {
+        //    $libro_id = $_POST['libro_id'];
+          
+            $idReserva= $_POST['id_reserva'];
+          
+        //    $currentDateTime = (new \DateTime())->format('Y-m-d H:i:s');
+
+            if (Yii::$app->session->isActive) {
+                $token = Yii::$app->session->get('usu_token');
+                $usu_id =  Yii::$app->session->get('usu_id');
+            }
+            $client = new Client();
+            $response = $client->createRequest()
+                ->setMethod('put')
+                ->addHeaders([
+                    'content-type' => 'application/json',
+                    'Authorization' => 'Bearer ' . $token,
+                ])
+                ->setUrl('http://152.70.212.112/reservas/update?id='.$idReserva)
+                ->setContent(Json::encode([
+
+                   
+                    "resv_usu_id" => $usu_id,
+                    "resv_estado" => 'L',
+                    
+
+                ]))
+                ->send();
+
+            if ($response->isOk) {
+
+                // Decodificar el contenido JSON en un array asociativo 
+                //   $data2 = json_decode($response->getContent(), true);
+                //    $data2 =$data1['data'];
+                //    $data3 = $data2['libro'];
+
+                return $this->redirect(['index']);
+            }
+        } 
+        return $this->redirect(['index']);
+    }
 }
