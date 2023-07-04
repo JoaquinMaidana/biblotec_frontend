@@ -141,6 +141,8 @@ class ComentarioController extends Controller
             $index['comet_comentario'] = $comentarioPadre->comet_comentario;
             $index['comet_referencia_id'] = $comentarioPadre->comet_referencia_id;
             $index['comet_padre_id'] = $comentarioPadre->comet_padre_id;
+            $index['usu_nombre'] = $comentarioPadre->usu_nombre;
+            $index['usu_documento'] = $comentarioPadre->usu_documento;
 
             $comentariosHijos = json_decode($this->obtenerComentariosHijos($comentarioPadre->comet_id));
             $index['comentariosHijos'] = $this->obtenerComentariosLibro($comentariosHijos);
@@ -160,7 +162,7 @@ class ComentarioController extends Controller
             $padreid = Yii::$app->request->post('comentarioPadre');
           
             if (Yii::$app->session->isActive) {      
-                 
+                 $token = Yii::$app->session->get('usu_token'); 
                 $usu_id =  Yii::$app->session->get('usu_id');         
             }    
             
@@ -179,7 +181,7 @@ class ComentarioController extends Controller
                 ->setContent(Json::encode([
                     "comet_fecha_hora" => $currentDateTime,
                     "comet_usu_id" => $usu_id,
-                    "comet_lib_id" => Yii::$app->request->post('id'),
+                    "comet_lib_id" => Yii::$app->request->post('idLibro'),
                     "comet_comentario" => Yii::$app->request->post('comentario'),
                     "comet_referencia_id" => $referenciaid,
                     "comet_padre_id" => $padreid,
@@ -201,7 +203,7 @@ class ComentarioController extends Controller
                 ->setContent(Json::encode([
                     "comet_fecha_hora" => $currentDateTime,
                     "comet_usu_id" => $usu_id,
-                    "comet_lib_id" => Yii::$app->request->post('id'),
+                    "comet_lib_id" => Yii::$app->request->post('idLibro'),
                     "comet_comentario" => Yii::$app->request->post('comentario'),
                     
                     

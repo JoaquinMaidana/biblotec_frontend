@@ -81,7 +81,7 @@ class ReservaController extends Controller
                 ->setMethod('post')
                 ->addHeaders([
                     'content-type' => 'application/json',
-                    'Authorization' => 'Bearer ' . $token,
+                    'Authorization' => 'Bearer ' . $token
                 ])
                 ->setUrl('http://152.70.212.112/reservas')
                 ->setContent(Json::encode([
@@ -94,15 +94,25 @@ class ReservaController extends Controller
 
                 ]))
                 ->send();
-
+            $data= json_decode($response->getContent());
             if ($response->isOk) {
 
-                // Decodificar el contenido JSON en un array asociativo 
-                //   $data2 = json_decode($response->getContent(), true);
-                //    $data2 =$data1['data'];
-                //    $data3 = $data2['libro'];
+               return 1;
+            }
+            //errores de validacion de datos
+            else if ($response->getStatusCode()==422){
+                $messages = []; // Array para almacenar los mensajes
 
-                return $this->redirect(['site/index']);
+                foreach ($data as $item) {
+                    $messages[] = $item->message;
+                }
+                $retorno = json_encode($messages);
+                return $retorno;
+            }
+            //errores de autorizacion
+            else if ($response->getStatusCode()==403){
+
+                return 3;
             }
         } 
         

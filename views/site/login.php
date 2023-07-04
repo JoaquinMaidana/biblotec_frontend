@@ -21,6 +21,12 @@ $this->title = 'Login';
 </style>
 
 <div class="container-fluid">
+<?php if (isset($mensaje) && !empty($mensaje)): ?>
+  <div class="alert alert-primary alert-dismissible fade show mb-3" role="alert">
+    <strong>Mensaje</strong> Descripcion: <?php echo $mensaje; ?> 
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+<?php endif; ?>
 
     <div class="row justify-content-center">
         <div class="col-10 justify-content-center">

@@ -143,7 +143,7 @@
             <label>Stock:<span class="text-danger">*<span></label>
           </div>
           <div class="col">
-            <?=Html::textInput('stock', null, ['class' => 'form-control']) ?>
+            <?=Html::textInput('stock', isset($libro) && !empty($libro) ? $libro['lib_stock'] : null, ['class' => 'form-control']) ?>
           </div>
         </div>
 
