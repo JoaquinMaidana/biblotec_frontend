@@ -11,6 +11,11 @@ use yii\widgets\ActiveForm;
   .titulo {
     font-family: inherit;
   }
+
+  label,
+  p {
+    color: white;
+  }
 </style>
 
 <?php $form = ActiveForm::begin(['action' => ['libro/update'], 'options' => ['enctype' => 'multipart/form-data']]); ?>
