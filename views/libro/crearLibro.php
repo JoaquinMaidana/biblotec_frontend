@@ -78,7 +78,7 @@ if (isset($categorias)) {
       <!--<fieldset class="input-group">
         <button class="stop">Stop</button>
       </fieldset>-->
-      <!--<fieldset class="reader-config-group">-->
+      <fieldset class="reader-config-group">
         <hr>
         <div class="row">
           <div class="col-3 text-end">
@@ -175,7 +175,7 @@ if (isset($categorias)) {
           <span>Torch:</span>
           <input type="checkbox" name="settings_torch" />
         </label>
-      <!--</fieldset>-->
+      </fieldset>
     </div>
     <div id="interactive" class="viewport"></div>
   </div>
