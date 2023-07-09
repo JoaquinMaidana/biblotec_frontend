@@ -164,6 +164,35 @@ if (Yii::$app->session->isActive) {
         </div>
     </div>
 
+    <div id="modalActivarSubcategoria" class="modal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Activar subcategoria</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <?= Html::beginForm(['subcategoria/activate'], 'post') ?>
+                <input type="hidden" name="id" id="idSubcategoriaActivar"></input>
+                <input type="hidden" name="token" value="" >
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row justify-content-center">
+                            <div class="col" id="textoModalActivar">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-primary" onclick="$('#modalActivarSubcategoria').modal('hide');">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Activar</button>
+                </div>
+                <?= Html::endForm() ?>
+            </div>
+        </div>
+    </div>
+
     <script>
         $(document).ready(function() {
 
@@ -216,7 +245,13 @@ if (Yii::$app->session->isActive) {
                     },
                     {
                         data: function(data) {
-                            return "<a class='me-2' onclick='editarSubcategoria(" + data.id + ",`" + data.nombre + "`," + data.id + ")'><i class='fa-solid fa-pencil'></i></a><a class='' onclick='desactivarSubcategoria(" + data.id + ",`" + data.nombre + "`)'><i class='fa-solid fa-x'></i></a>";
+                            if(data.vigente == "S"){
+                                return "<a class='me-2' onclick='editarSubcategoria(" + data.id + ",`" + data.nombre + "`," + data.id + ")'><i class='fa-solid fa-pencil'></i></a><a class='' onclick='desactivarSubcategoria(" + data.id + ",`" + data.nombre + "`)'><i class='fa-solid fa-x'></i></a>";
+                            }else{
+
+                                return "<a class='me-2' onclick='editarSubcategoria(" + data.id + ",`" + data.nombre + "`," + data.id + ")'><i class='fa-solid fa-pencil'></i></a><a class='' onclick='activarSubcategoria(" + data.id + ",`" + data.nombre + "`)'><i class='fa-solid fa-check'></i></a>";
+                            }
+                            
                         }
                     },
                 ],
@@ -237,6 +272,14 @@ if (Yii::$app->session->isActive) {
             $("#textoModalDesactivar").empty();
             $("#textoModalDesactivar").append("<p>¿Desea desactivar la subcategoria " + nombre + "?</p>");
             $("#modalDesactivarSubcategoria").modal("show");
+        }
+
+        function activarSubcategoria(id, nombre) {
+
+            $("#idSubcategoriaActivar").val(id);
+            $("#textoModalActivar").empty();
+            $("#textoModalActivar").append("<p>¿Desea activar la subcategoria " + nombre + "?</p>");
+            $("#modalActivarSubcategoria").modal("show");
         }
     </script>
 

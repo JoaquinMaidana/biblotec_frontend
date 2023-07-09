@@ -30,6 +30,8 @@ $this->title = 'Usuarios';
                             <th>Correo</th>
                             <th>Telefono</th>
                             <th>Documento</th>
+                            
+                            <th>Activo</th>
                             <th>Habilitado</th>
                           
                             <th></th>
@@ -127,10 +129,10 @@ $this->title = 'Usuarios';
                     </div>
 
                     <?= Html::beginForm(['usuario/update'], 'post') ?>
-                    <input name="id" id="editarId" type="text" class="form-control" hidden></input>
+                 
                     <div class="modal-body">
                         <div class="container-fluid">
-                            <input type="hidden" id="editarId" name="id">
+                            <input type="text" id="editarId" name="id">
                             <div class="row justify-content-center">
                                 <div class="col-3 text-end">
                                     <label>Tipo:<span class="text-danger">*<span></label>
@@ -246,6 +248,41 @@ $this->title = 'Usuarios';
             </div>
         </div>
 
+        <div id="modalActivarUsuario" class="modal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Activar usuario</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <?= Html::beginForm(['usuario/activate'], 'post') ?>
+                    <input type="hidden" name="id" id="idUsuarioActivar"></input>
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <div class="row justify-content-center">
+                                <div class="col" id="textoModalActivar">
+                                </div>
+                            </div>
+                            <div class="row justify-content-center">
+                                <div class="col">
+                                    <label>Motivo</label>
+                                    <textarea class="form-control" required name="motivo" ></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-primary" onclick="$('#modalActivarUsuario').modal('hide');">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Activar</button>
+                    </div>
+                    <?= Html::endForm() ?>
+                </div>
+            </div>
+        </div>
+
+
     </div>
 
     <script>
@@ -307,6 +344,15 @@ $this->title = 'Usuarios';
                     },
                     {
                         data: function(data) {
+                            if(data.activo=='S'){
+                                return "Si";
+                            }else{
+                                return "No";
+                            }
+                        }
+                    },
+                    {
+                        data: function(data) {
                             if(data.habilitado=='S'){
                                 return "Habilitado";
                             }else{
@@ -317,18 +363,33 @@ $this->title = 'Usuarios';
                     
                     {
                         data: function(data) {
-                            return "<a class='me-2' onclick='actualizarUsuario(" + data.documento + ")'><i class='fa-solid fa-pencil'></i></a><a class='' onclick='desactivarUsuario(" + data.id + ",`" + data.nombre + "`,`" + data.apellido + "`)'><i class='fa-solid fa-x'></i></a>"
+
+                            if(data.activo=='S'){
+                                return "<a class='me-2' onclick='actualizarUsuario(" + data.documento + ")'><i class='fa-solid fa-pencil'></i></a><a class='' onclick='desactivarUsuario(" + data.id + ",`" + data.nombre + "`,`" + data.apellido + "`)'><i class='fa-solid fa-x'></i></a>"
+                            }else{
+                                return "<a class='me-2' onclick='actualizarUsuario(" + data.documento + ")'><i class='fa-solid fa-pencil'></i></a><a class='' onclick='activarUsuario(" + data.id + ",`" + data.nombre + "`,`" + data.apellido + "`)'><i class='fa-solid fa-check'></i></a>"
+                            }
+                            
                         }
                     }
                 ],
             });
         });
 
-        function desactivarUsuario(documento, nombre, apellido) {
+        function desactivarUsuario(id, nombre, apellido) {
             $("#idUsuarioDesactivar").val(id);
             $("#textoModalDesactivar").empty();
             $("#textoModalDesactivar").append("<p>¿Desea desactivar el usuario " + nombre + " " + apellido + "?</p>");
             $("#modalDesactivarUsuario").modal("show");
+            console.log("llega a desactivar");
+        }
+
+        function activarUsuario(id, nombre, apellido) {
+            $("#idUsuarioActivar").val(id);
+            $("#textoModalActivar").empty();
+            $("#textoModalActivar").append("<p>¿Desea activar el usuario " + nombre + " " + apellido + "?</p>");
+            $("#modalActivarUsuario").modal("show");
+            console.log("llega a activar");
         }
 
         function actualizarUsuario(id) {
@@ -343,7 +404,7 @@ $this->title = 'Usuarios';
                     console.log(result); 
                   
                     var resultado = JSON.parse(result);
-                    console.log(resultado);
+                    console.log("resultado es"+result);
                     console.log(resultado[0].nombre);
                     $('#editarTipo').val(resultado[0].tipo_usuario);
                     $('#editarNombre').val(resultado[0].nombre);
@@ -353,7 +414,7 @@ $this->title = 'Usuarios';
                     $('#editarDocumento').val(resultado[0].documento);
                     $('#editarHabilitado').val(resultado[0].habilitado);
                     $('#editarId').val(resultado[0].id);
-
+                    
                     $("#modalEditarUsuario").modal("show");
                 },
             });

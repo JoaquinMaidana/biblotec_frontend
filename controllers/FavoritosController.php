@@ -19,8 +19,8 @@ class FavoritosController extends Controller{
         $client = new Client();
         $response2=$client->createRequest()
         ->setMethod('get')
-        //->headers->set('Content-Type', 'application/json')
-        ->setUrl('http://152.70.212.112/favoritos/obtener-favoritos?token='.$token)
+        ->addHeaders(['Authorization' => 'Bearer ' . $token])
+        ->setUrl('http://152.70.212.112/favoritos/obtener-favoritos')
         ->send();
        
 
@@ -105,7 +105,8 @@ class FavoritosController extends Controller{
         }
         $response = $client->createRequest()
             ->setMethod('get')
-            ->setUrl('http://152.70.212.112/favoritos/obtener-favoritos?token='.$token)
+            ->addHeaders(['Authorization' => 'Bearer ' . $token])
+            ->setUrl('http://152.70.212.112/favoritos/obtener-favoritos')
             ->send();
 
         $data = json_decode($response->getContent(), true);

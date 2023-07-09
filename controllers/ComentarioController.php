@@ -78,15 +78,7 @@ class ComentarioController extends Controller
         return $this->redirect(['libro/view', "id2" => $isbn]);
     }
 
-    public function actionDelete()
-    {
-        $isbn = $_POST['isbn'];
-        $id = $_POST['id'];
-        $tituloLibro = $_POST['tituloLibro'];
-
-        //Llamada a la API para desactivar
-        return $this->redirect(['libro/view', "id2" => $isbn]);
-    }
+    
 
     public function obtenerComentariosPadres($idLibro)
     {
@@ -151,12 +143,78 @@ class ComentarioController extends Controller
         }
         return $comentarios;
     }
+public function actionDelete(){
+   
+    $url = 'http://152.70.212.112/comentarios';
+    $url .= '/update?id=' . Yii::$app->request->post('id');
+        $client = new Client();
+        if (Yii::$app->session->isActive) {
+            $token = Yii::$app->session->get('usu_token');
+        }
+        $currentDateTime = (new \DateTime())->format('Y-m-d H:i:s');
+        $referenciaid = Yii::$app->request->post('comentarioReferencia');
+            $padreid = Yii::$app->request->post('comentarioPadre');
+          
+            if (Yii::$app->session->isActive) {      
+                 $token = Yii::$app->session->get('usu_token'); 
+                $usu_id =  Yii::$app->session->get('usu_id');         
+            }    
+    if(isset($referenciaid)&& $referenciaid != '' && isset($padreid)&& $padreid != ''){
+        $response = $client->createRequest()
+
+        ->setMethod('put')
+        ->setUrl($url)
+        ->addHeaders(['content-type' => 'application/json',
+                'Authorization' => 'Bearer ' . $token,
+        ])
+        ->setContent(Json::encode([
+            "comet_fecha_hora" => $currentDateTime,
+            "comet_usu_id" => $usu_id,
+            "comet_lib_id" => Yii::$app->request->post('idLibro'),
+            "comet_comentario" => Yii::$app->request->post('comentario'),
+            "comet_referencia_id" => $referenciaid,
+            "comet_padre_id" => $padreid,
+            "comet_vigente"=> "N"
+            
+        ]))
+        ->send();
+    }else{
+        
+        $response = $client->createRequest()
+        
+        ->setMethod('put')
+        ->setUrl($url)
+        ->addHeaders(['content-type' => 'application/json',
+                'Authorization' => 'Bearer ' . $token,
+        
+        
+        ])
+        
+        ->setContent(Json::encode([
+            "comet_fecha_hora" => $currentDateTime,
+            "comet_usu_id" => $usu_id,
+            "comet_lib_id" => Yii::$app->request->post('idLibro'),
+            "comet_comentario" => Yii::$app->request->post('comentario'),
+            
+            
+        ]))
+        ->send();
+
+    }
+
+
+}
+
+
+
 
         protected function save($httpMethod='post')
     {
         $url = 'http://152.70.212.112/comentarios';
         $client = new Client();
-        $token = Yii::$app->request->post('token');
+        if (Yii::$app->session->isActive) {
+            $token = Yii::$app->session->get('usu_token');
+        }
         $currentDateTime = (new \DateTime())->format('Y-m-d H:i:s');
         $referenciaid = Yii::$app->request->post('comentarioReferencia');
             $padreid = Yii::$app->request->post('comentarioPadre');

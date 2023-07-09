@@ -34,7 +34,7 @@
                                         <button class="btn btn-primary" onclick="$('#modalEditarComentario').modal('show');$('#idComentario').val(<?= $id ?>);$('#comentarioEditar').val('<?= $comentario ?>')">Editar</button> <!-- Cuando el comentario es del usuario -->
                                     </div>
                                     <div class="col-auto pe-0">
-                                        <button class="btn btn-primary" onclick="$('#modalEliminarComentario').modal('show');$('#idComentarioEliminar').val(<?= $id ?>)">Eliminar</button> <!-- Cuando el comentario es del usuario -->
+                                        <button class="btn btn-primary" onclick="$('#modalEliminarComentario').modal('show');$('#idComentarioEliminar').val(<?= $id ?>);$('#idComentarioPadre2').val('<?= $id ?>');$('#idComentarioReferencia2').val('<?= $referencia ?>');$('#idComentarioPadre2').val('<?= $id ?>');$('#coment').val('<?= $comentario ?>')">Eliminar</button> <!-- Cuando el comentario es del usuario -->
                                     </div>
                                 </div>
                             </div>
