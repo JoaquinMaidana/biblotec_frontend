@@ -61,11 +61,11 @@ if (isset($categorias)) {
     </div>
   </div>
 
-  <div class="row mt-3">
+  <div class="row mt-3 justify-content-end">
     <div class="col-3 text-end">
       <label>Ingresar ISBN manualmente:</label>
     </div>
-    <div class="col">
+    <div class="col-2">
       <input id="txt-code" type="text" class="form-control">
     </div>
     <div class="col-auto">
@@ -160,14 +160,14 @@ if (isset($categorias)) {
     </div>
   </div>
 
-  <div class="row">
-    <div class="col-12">
+  <div class="row justify-content-center">
+    <div class="col-6">
       <?php $form = ActiveForm::begin(['action' => ['libro/create'], 'options' => ['enctype' => 'multipart/form-data']]); ?>
       <div class="row justify-content-center">
         <div class="col-3 text-end">
           <label>ISBN:<span class="text-danger">*<span></label>
         </div>
-        <div class="col">
+        <div class="col-9">
           <?= Html::textInput('lib_isbn', isset($libro) && !empty($libro) ? $libro['lib_isbn'] : null, ['class' => 'form-control']) ?>
         </div>
       </div>
@@ -176,7 +176,7 @@ if (isset($categorias)) {
         <div class="col-3 text-end">
           <label>Título:<span class="text-danger">*<span></label>
         </div>
-        <div class="col">
+        <div class="col-9">
           <?= Html::textInput('lib_titulo', isset($libro) && !empty($libro) ? $libro['lib_titulo'] : null, ['class' => 'form-control', 'maxlength' => true]) ?>
         </div>
       </div>
@@ -185,7 +185,7 @@ if (isset($categorias)) {
         <div class="col-3 text-end">
           <label>Autor/es:<span class="text-danger">*<span></label>
         </div>
-        <div class="col">
+        <div class="col-9">
           <?= Html::textInput('lib_autores', isset($libro) && !empty($libro) ? $libro['lib_autores'] : null, ['class' => 'form-control', 'maxlength' => true]) ?>
 
         </div>
@@ -195,7 +195,7 @@ if (isset($categorias)) {
         <div class="col-3 text-end">
           <label>Edición:<span class="text-danger">*<span></label>
         </div>
-        <div class="col">
+        <div class="col-9">
           <?= Html::textInput('lib_edicion', isset($libro) && !empty($libro) ? $libro['lib_edicion'] : null, ['class' => 'form-control', 'maxlength' => true]) ?>
         </div>
       </div>
@@ -204,7 +204,7 @@ if (isset($categorias)) {
         <div class="col-3 text-end">
           <label>Fecha de lanzamiento:<span class="text-danger">*<span></label>
         </div>
-        <div class="col">
+        <div class="col-9">
           <?= Html::textInput('lib_fecha_lanzamiento', isset($libro) && !empty($libro) ? $libro['lib_fecha_lanzamiento'] : null, ['class' => 'form-control']) ?>
         </div>
       </div>
@@ -213,7 +213,7 @@ if (isset($categorias)) {
         <div class="col-3 text-end">
           <label>Idioma:<span class="text-danger">*<span></label>
         </div>
-        <div class="col">
+        <div class="col-9">
           <?= Html::textInput('lib_idioma', isset($libro) && !empty($libro) ? $libro['lib_idioma'] : null, ['class' => 'form-control', 'maxlength' => true]) ?>
         </div>
       </div>
@@ -222,7 +222,7 @@ if (isset($categorias)) {
         <div class="col-3 text-end">
           <label>Descripción:<span class="text-danger">*<span></label>
         </div>
-        <div class="col">
+        <div class="col-9">
           <?= Html::textarea('lib_descripcion', isset($libro) && !empty($libro) ? $libro['lib_descripcion'] : null, ['rows' => 6, 'class' => 'form-control']) ?>
         </div>
       </div>
@@ -231,7 +231,7 @@ if (isset($categorias)) {
         <div class="col-3 text-end">
           <label>Portada:<span class="text-danger">*<span></label>
         </div>
-        <div class="col">
+        <div class="col-9">
           <?= Html::textInput('lib_imagen', isset($libro) && !empty($libro) ? $libro['lib_imagen'] : null, ['class' => 'form-control']) ?>
         </div>
 
@@ -243,7 +243,7 @@ if (isset($categorias)) {
         <div class="col-3 text-end">
           <label>Categoría:<span class="text-danger">*<span></label>
         </div>
-        <div class="col">
+        <div class="col-9">
           <?= Html::dropDownList(
             'lib_categoria',
             isset($libro) && !empty($libro) ? $libro['lib_categoria'] : null,
@@ -258,7 +258,7 @@ if (isset($categorias)) {
         <div class="col-3 text-end">
           <label>Sub Categoría:<span class="text-danger">*<span></label>
         </div>
-        <div class="col">
+        <div class="col-9">
           <?= Html::dropDownList('lib_sub_categoria', isset($libro) && !empty($libro) ? $libro['lib_sub_categoria'] : null, [], ['prompt' => 'Seleccione una subcategoría', 'class' => 'form-control', 'required' => true, 'id' => 'subcategoria']) ?>
         </div>
       </div>
@@ -268,7 +268,7 @@ if (isset($categorias)) {
         <div class="col-3 text-end">
           <label>Disponible:<span class="text-danger">*<span></label>
         </div>
-        <div class="col">
+        <div class="col-9">
           <?= Html::dropDownList('lib_disponible', '1', [0 => 'No', 1 => 'Sí'], ['class' => 'form-control']) ?>
         </div>
       </div>
@@ -277,7 +277,7 @@ if (isset($categorias)) {
         <div class="col-3 text-end">
           <label>Novedad:<span class="text-danger">*<span></label>
         </div>
-        <div class="col">
+        <div class="col-9">
           <?= Html::dropDownList('lib_novedades', '1', [0 => 'No', 1 => 'Sí'], ['class' => 'form-control']) ?>
         </div>
       </div>
@@ -286,7 +286,7 @@ if (isset($categorias)) {
         <div class="col-3 text-end">
           <label>Vigente:<span class="text-danger">*<span></label>
         </div>
-        <div class="col">
+        <div class="col-9">
           <?= Html::dropDownList('lib_vigente', '1', [0 => 'No', 1 => 'Sí'], ['class' => 'form-control']) ?>
         </div>
       </div>
@@ -296,13 +296,13 @@ if (isset($categorias)) {
         <div class="col-3 text-end">
           <label>Stock:<span class="text-danger">*<span></label>
         </div>
-        <div class="col">
+        <div class="col-9">
           <?= Html::textInput('lib_stock', null, ['class' => 'form-control']) ?>
         </div>
       </div>
 
       <div class="row mt-3 justify-content-end">
-        <div class="col-1">
+        <div class="col-auto">
           <a href="<?= Url::toRoute(['libro/index']); ?>" class="btn btn-outline-primary">Cancelar</a>
         </div>
         <div class="col-auto">

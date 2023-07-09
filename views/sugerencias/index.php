@@ -9,6 +9,7 @@ if (Yii::$app->session->isActive) {
     $documento = Yii::$app->session->get('usu_documento');
     $id_usuario =  Yii::$app->session->get('usu_id');
 }
+
 ?>
 
 <div class="container-fluid">

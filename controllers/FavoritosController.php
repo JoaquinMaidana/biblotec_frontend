@@ -122,7 +122,10 @@ class FavoritosController extends Controller
         }
         $response = $client->createRequest()
             ->setMethod('get')
-            ->setUrl('http://152.70.212.112/favoritos/obtener-favoritos?token='.$token)
+            ->setUrl('http://152.70.212.112/favoritos/obtener-favoritos')
+            ->addHeaders([
+                'Authorization' => 'Bearer ' . $token,
+            ])
             ->send();
 
         $data = json_decode($response->getContent(), true);
