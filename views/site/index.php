@@ -442,8 +442,13 @@ var highlightedDates = ['2023-07-10', '2023-07-11', '2023-07-12'];
             $("#estrella_" + id).removeClass("fa-regular fa-star");
             $("#estrella_" + id).addClass("fa-solid fa-star");
             fav = 'S';
+        } else {
+            $("#estrella_" + id).removeClass("fa-solid fa-star");
+            $("#estrella_" + id).addClass("fa-regular fa-star");
+            fav = 'N';
+        }
 
-            $.ajax({
+        $.ajax({
                 method: "POST",
                 url: "<?= Url::toRoute(['favoritos/update']); ?>",
                 data: {
@@ -452,11 +457,6 @@ var highlightedDates = ['2023-07-10', '2023-07-11', '2023-07-12'];
                     fav: fav
                 },
             });
-        } else {
-            $("#estrella_" + id).removeClass("fa-solid fa-star");
-            $("#estrella_" + id).addClass("fa-regular fa-star");
-            fav = 'N';
-        }
     }
     function abrirReserva(id){
         $.ajax({

@@ -8,7 +8,11 @@ use yii\helpers\Url;
 
 $this->title = 'Reservas';
 ?>
-
+<style>
+    #tablaLibros_filter {
+        display: none;
+    }
+</style>
 
 <div class="container-fluid">
     <div class="row mt-3 align-items-center">
@@ -23,13 +27,23 @@ $this->title = 'Reservas';
             <table id="tablaLibros" class="row-border items table table-condensed hover nowrap">
                 <thead>
                     <tr>
-                        <th>ID</th>                  
+                        <th>ID</th>
                         <th>ID libro</th>
                         <th>Documento</th>
                         <th>Estado</th>
                         <th>Creacion</th>
                         <th>Desde</th>
                         <th>Hasta</th>
+                        <th></th>
+                    </tr>
+                    <tr id="filtros">
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
                         <th></th>
                     </tr>
                 </thead>
@@ -55,8 +69,8 @@ $this->title = 'Reservas';
 
 
 
-        
-    var table =    $('#tablaLibros').DataTable({
+
+        var table = $('#tablaLibros').DataTable({
             data: <?= $reservas ?>,
             responsive: true,
             searching: true,
@@ -108,12 +122,12 @@ $this->title = 'Reservas';
                             'N': 'Libro no devuelto'
                         };
 
-                    var select = '<select class="form-control">';
-                    for (var key in options) {
-                        var isSelected = (key === data) ? 'selected' : '';
-                        select += '<option name="est" value="' + key + '" ' + isSelected + '>' + options[key] + '</option>';
-                    }
-                    select += '</select>';
+                        var select = '<select class="form-control">';
+                        for (var key in options) {
+                            var isSelected = (key === data) ? 'selected' : '';
+                            select += '<option name="est" value="' + key + '" ' + isSelected + '>' + options[key] + '</option>';
+                        }
+                        select += '</select>';
 
                         return select;
                     }
@@ -134,42 +148,68 @@ $this->title = 'Reservas';
                     }
                 },
                 {
-                    data: function(data, row ) {
-                       
-                       
-                        
+                    data: function(data, row) {
+
+
+
                         return "</i></a><a class='me-2' ><i class='fa-solid fa-pencil'></i></a>"
                     }
                 }
             ],
+            initComplete: function() {
+                columnas = [0, 1, 2, 3, 4, 5, 6];
+                this.api().columns(columnas).every(function() {
+                    var columna = this;
+                    switch (columna.index()) {
+                        case 0:
+                        case 1:
+                        case 2:
+                            $('<input type="text" class="form-control"/>').appendTo($("#filtros").find("th").eq(columna.index())).on('keyup change', function() {
+                                if (columna.search() !== this.value) {
+                                    columna.search(this.value).draw();
+                                }
+                            });
+                            break;
+                        case 4:
+                            $('<input type="date" class="form-control"/>').appendTo($("#filtros").find("th").eq(columna.index())).on('change', function() {
+                                console.log(columna.search());
+                                if (columna.search() !== this.value) {
+                                    columna.search(this.value).draw();
+                                }
+                            });
+                            break;
+                    }
+                });
+            }
+        });
+
+        table.on('change', 'input, select', function() {
+            var fila = table.row($(this).closest('tr'));
+            var columna = table.column($(this).closest('td')).index();
+
+            // Actualizar el valor de la celda en la tabla
+            table.cell(fila, columna).data($(this).val());
+
+            // Volver a dibujar la tabla para reflejar los cambios
+            table.draw();
+        });
+
+
+        $('#tablaLibros').on('click', 'a.me-2', function() {
+            var rowData = table.row($(this).closest('tr')).data();
+            var rowIndex = table.row($(this).closest('tr')).index();
+            console.log('Data:', rowData);
+
+            update(rowData);
+
+            console.log('Row index:', rowIndex);
+
+        });
+
+
+
     });
 
-    table.on('change', 'input, select', function() {
-        var fila = table.row($(this).closest('tr'));
-        var columna = table.column($(this).closest('td')).index();
-        
-        // Actualizar el valor de la celda en la tabla
-        table.cell(fila, columna).data($(this).val());
-
-        // Volver a dibujar la tabla para reflejar los cambios
-        table.draw();
-    });
-
-
-    $('#tablaLibros').on('click', 'a.me-2', function() {
-        var rowData = table.row($(this).closest('tr')).data();
-        var rowIndex = table.row($(this).closest('tr')).index();
-        console.log('Data:', rowData);
-       
-       update(rowData);
-        
-        console.log('Row index:', rowIndex);
-        
-    });
-
-    
-
-});
     function desactivarLibro(id, titulo) {
 
         $("#idLibroDesactivar").val(id);
@@ -178,7 +218,7 @@ $this->title = 'Reservas';
         $("#modalDesactivarLibro").modal("show");
     }
 
-    function update(rowData){
+    function update(rowData) {
         console.log(rowData)
         console.log(rowData.resv_id)
         $('#idReserva').val(rowData.resv_id);
@@ -189,7 +229,4 @@ $this->title = 'Reservas';
         $('#formReservaUpdate').submit();
 
     }
-    
-
-    
 </script>
