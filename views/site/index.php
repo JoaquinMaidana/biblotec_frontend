@@ -349,8 +349,13 @@ if (isset($favoritos) && !empty($favoritos)) {
             $("#estrella_" + id).removeClass("fa-regular fa-star");
             $("#estrella_" + id).addClass("fa-solid fa-star");
             fav = 'S';
+        } else {
+            $("#estrella_" + id).removeClass("fa-solid fa-star");
+            $("#estrella_" + id).addClass("fa-regular fa-star");
+            fav = 'N';
+        }
 
-            $.ajax({
+        $.ajax({
                 method: "POST",
                 url: "<?= Url::toRoute(['favoritos/update']); ?>",
                 data: {
@@ -359,11 +364,6 @@ if (isset($favoritos) && !empty($favoritos)) {
                     fav: fav
                 },
             });
-        } else {
-            $("#estrella_" + id).removeClass("fa-solid fa-star");
-            $("#estrella_" + id).addClass("fa-regular fa-star");
-            fav = 'N';
-        }
     }
 
     function reservarLibro() {

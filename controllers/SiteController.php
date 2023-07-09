@@ -248,9 +248,7 @@ class SiteController extends Controller
 
         $libros = $libroController->runAction('get-libros');
 
-        return $this->render('index', [
-            'libros_Array' => $libros
-        ]);
+        return $this->redirect('index');
     }
 
     /**

@@ -138,56 +138,54 @@ if (Yii::$app->session->isActive) {
 
     <header id="header">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark ">
-            <a class="navbar-brand ms-4" href="<?= Url::toRoute(['site/index']); ?>"><img src="../imagenes/logo.png" width="40" height="40" alt=""></a>
+            <a class="navbar-brand ms-4" href="<?= Url::toRoute(['site/index']); ?>"><img src="../imagenes/logo.png" width="40" height="40" alt=""> &nbsp;Bibliotec</a>
+            <i class="fa-solid fa-circle-info text-warning info" data-bs-toggle="tooltip" data-bs-placement="top" title="Bibliotec te da acceso completo a la biblioteca de libros de UTEC para que puedas reservar desde cualquier lugar"></i>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent #navEnd" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
             <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                   
-                   
-                    
-                    <?php if (isset($isAdmin)&& $isAdmin ==='Administrador') { ?>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="<?= Url::toRoute(['libro/index']); ?>">Libros</a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="<?= Url::toRoute(['favoritos/index']); ?>">Mis Favoritos</a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="<?= Url::toRoute(['sugerencias/index']); ?>">Sugerencias</a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="<?= Url::toRoute(['sugerencias/view']); ?>">Mis Sugerencias</a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="<?= Url::toRoute(['usuario/index']); ?>">Usuarios</a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="<?= Url::toRoute(['reserva/index']); ?>">Mis Reservas</a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="<?= Url::toRoute(['reserva/index-admin']); ?>">Reservas</a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="<?= Url::toRoute(['categoria/index']); ?>">Categorias</a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="<?= Url::toRoute(['subcategoria/index']); ?>">Sub categorias</a>
-                    </li>
-                    <?php } else if(isset($isAdmin)&& $isAdmin ==='Estudiante'){?>
+                <ul class="navbar-nav mr-auto ms-5">
+                    <?php if (isset($isAdmin) && $isAdmin === 'Administrador') { ?>
                         <li class="nav-item active">
-                        <a class="nav-link" href="<?= Url::toRoute(['reserva/index']); ?>">Mis Reservas</a>
+                            <a class="nav-link" href="<?= Url::toRoute(['libro/index']); ?>">Libros</a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="<?= Url::toRoute(['favoritos/index']); ?>">Mis Favoritos</a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="<?= Url::toRoute(['sugerencias/index']); ?>">Sugerencias</a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="<?= Url::toRoute(['sugerencias/view']); ?>">Mis Sugerencias</a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="<?= Url::toRoute(['usuario/index']); ?>">Usuarios</a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="<?= Url::toRoute(['reserva/index']); ?>">Mis Reservas</a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="<?= Url::toRoute(['reserva/index-admin']); ?>">Reservas</a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="<?= Url::toRoute(['categoria/index']); ?>">Categorias</a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="<?= Url::toRoute(['subcategoria/index']); ?>">Sub categorias</a>
+                        </li>
+                    <?php } else if (isset($isAdmin) && $isAdmin === 'Estudiante') { ?>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="<?= Url::toRoute(['reserva/index']); ?>">Mis Reservas</a>
                         </li>
 
                         <li class="nav-item active">
-                        <a class="nav-link" href="<?= Url::toRoute(['sugerencias/view']); ?>">Mis Sugerencias</a>
+                            <a class="nav-link" href="<?= Url::toRoute(['sugerencias/view']); ?>">Mis Sugerencias</a>
                         </li>
 
                         <li class="nav-item active">
-                        <a class="nav-link" href="<?= Url::toRoute(['favoritos/index']); ?>">Libros Favoritos</a>
-                    </li>
+                            <a class="nav-link" href="<?= Url::toRoute(['favoritos/index']); ?>">Libros Favoritos</a>
+                        </li>
 
 
                     <?php } ?>
