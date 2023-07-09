@@ -70,6 +70,7 @@ class UsuarioController extends Controller
                 'Authorization' => 'Bearer ' . $token,
                 ])
                 ->setContent(Json::encode([
+                    "id" => $id,
                     "nombre" => $nombre,
                     "apellido" => $apellido,
                     "correo" => $correo,
@@ -115,6 +116,28 @@ class UsuarioController extends Controller
                 "motivo" => $motivo,
               
             ]))
+            ->send();
+
+        return $this->redirect(['index']);
+       
+    }
+
+    public function actionActivate()
+    {
+        $id = $_POST['id'];
+        $motivo = $_POST['motivo'];
+        if (Yii::$app->session->isActive) {      
+            $token = Yii::$app->session->get('usu_token');
+                 
+        }
+        $client = new Client();
+        $response = $client->createRequest()
+            ->setMethod('put')
+            ->addHeaders(['content-type' => 'application/json',
+            'Authorization' => 'Bearer ' . $token,
+            ])
+            ->setUrl('http://152.70.212.112/usuarios/activar?id='.$id)
+            
             ->send();
 
         return $this->redirect(['index']);

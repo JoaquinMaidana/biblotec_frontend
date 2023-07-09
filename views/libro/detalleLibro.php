@@ -302,9 +302,12 @@ use yii\helpers\Url;
 
             <?= Html::beginForm(['comentario/delete'], 'post') ?>
             <input type="hidden" name="id" id="idComentarioEliminar"></input>
-            <input type="hidden" name="token" value="">
-            <input type="hidden" name="isbn" value='<?= $libro['lib_isbn'] ?>'></input>
-
+            <input type="hidden" name="idLibro" value='<?= $idLibro ?>'></input>
+            <input type="hidden" name="comentarioPadre" id="idComentarioPadre2"></input>
+            <input type="hidden" name="comentario" value="" id="coment" >
+            <input type="hidden" name="comentarioReferencia" id="idComentarioReferencia2"></input>
+            <input type="hidden" name="token" value="" >
+            
             <div class="modal-body">
                 <div class="container-fluid">
                     <div class="row justify-content-center">

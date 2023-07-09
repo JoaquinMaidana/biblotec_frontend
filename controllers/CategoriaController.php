@@ -117,7 +117,9 @@ class CategoriaController extends Controller
     public function actionDelete()
     {
         if ($this->request->post()) {
-            $token = Yii::$app->request->post('token');
+            if (Yii::$app->session->isActive) {
+                $token = Yii::$app->session->get('usu_token');
+            }
             $id = $_POST["id"];
             $client = new Client();
             $response = $client->createRequest()
@@ -130,10 +132,30 @@ class CategoriaController extends Controller
         return $this->redirect(['index']);
     }
 
+    public function actionActivate()
+    {
+        if ($this->request->post()) {
+            if (Yii::$app->session->isActive) {
+                $token = Yii::$app->session->get('usu_token');
+            }
+            $id = $_POST["id"];
+            $client = new Client();
+            $response = $client->createRequest()
+            ->setMethod('put')
+            ->setUrl('http://152.70.212.112/categorias/activar?id='.$id)
+            ->addHeaders(['content-type' => 'application/json',
+                    'Authorization' => 'Bearer ' . $token,
+            ])->send();
+        }
+        return $this->redirect(['index']);
+    }
+
 
     protected function save($httpMethod='post')
     {
-        $token = Yii::$app->request->post('token');
+        if (Yii::$app->session->isActive) {
+            $token = Yii::$app->session->get('usu_token');
+        }
         $url = 'http://152.70.212.112/categorias';
         $client = new Client();
 

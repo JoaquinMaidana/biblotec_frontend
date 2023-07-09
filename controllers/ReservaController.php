@@ -2,6 +2,8 @@
 
 namespace app\controllers;
 
+use DateInterval;
+use DateTimeZone;
 use Yii;
 use Faker\Provider\DateTime;
 use yii\helpers\Json;
@@ -60,6 +62,64 @@ class ReservaController extends Controller
         return $this->render('indexAdmin', [
             'reservas' => $reservas
         ]);
+    }
+
+    // se obtienen las fechas bloqueadas cuando hay mismo numero de reservas que el stock, y que el estado sea pend, levantado, y no devuelto
+    public function actionFechasBloqueadas($id){
+        $client = new Client();
+        $response = $client->createRequest()
+            ->setMethod('get')
+            ->setUrl('http://152.70.212.112/reservas/obtener-de-libro?id='.$id)
+            ->send();
+
+        $data = json_decode($response->getContent());
+        $stock = $data->lib_stock;
+        $reservas = $data->reserva;
+
+        $estadosFiltrados = ["P", "N", "L"]; 
+
+        $reservasFiltradas = array_filter($reservas, function($reserva) use ($estadosFiltrados) {
+            return in_array($reserva->resv_estado, $estadosFiltrados);
+        });
+
+        $cantidad_reserva = count($reservasFiltradas);
+
+        if($stock == $cantidad_reserva){
+            
+            foreach ($reservasFiltradas as $reserva) {
+                $fechaDesde = strtotime($reserva->resv_fecha_desde);
+                $fechaHasta = strtotime($reserva->resv_fecha_hasta);
+            
+                // Agregar las fechas al array $blockedDates
+                $fechaActual = $fechaDesde;
+                while ($fechaActual <= $fechaHasta) {
+                    $blockedDates[] = date('Y-m-d', $fechaActual);
+                    $fechaActual = strtotime('+1 day', $fechaActual);
+                }
+            }
+
+            $data2 = json_encode($blockedDates);
+            return $data2;
+
+        }
+        else{
+            
+            
+        //    $currentDate = date('Y-m-d'); // Obtener la fecha actual en formato 'YYYY-MM-DD'
+            
+            // Filtrar el array `blockedDates` a partir de la fecha actual
+        //    $filteredDates = array_filter($blockedDates, function ($date) use ($currentDate) {
+        //        return $date >= $currentDate;
+        //    });
+            $blockedDates = [];
+            $data2 = json_encode($blockedDates);
+            return $data2;
+        }
+        
+       
+        
+
+
     }
 
     public function actionCreate($isbn = "")

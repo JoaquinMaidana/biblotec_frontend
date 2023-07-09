@@ -117,11 +117,31 @@ class SubcategoriaController extends Controller
     public function actionDelete()
     {
         $id = $_POST["id"];
-        $token = Yii::$app->request->post('token');
+        if (Yii::$app->session->isActive) {
+            $token = Yii::$app->session->get('usu_token');
+        }
             $client = new Client();
             $response = $client->createRequest()
             ->setMethod('put')
             ->setUrl('http://152.70.212.112/sub-categorias/delete?id='.$id)
+            ->addHeaders(['content-type' => 'application/json',
+                    'Authorization' => 'Bearer ' . $token,
+            ])->send();
+
+            return $this->redirect(['index']);
+
+    }
+
+    public function actionActivate()
+    {
+        $id = $_POST["id"];
+        if (Yii::$app->session->isActive) {
+            $token = Yii::$app->session->get('usu_token');
+        }
+            $client = new Client();
+            $response = $client->createRequest()
+            ->setMethod('put')
+            ->setUrl('http://152.70.212.112/sub-categorias/activar?id='.$id)
             ->addHeaders(['content-type' => 'application/json',
                     'Authorization' => 'Bearer ' . $token,
             ])->send();
@@ -135,7 +155,9 @@ class SubcategoriaController extends Controller
     {
         $url = 'http://152.70.212.112/sub-categorias';
         $client = new Client();
-        $token = Yii::$app->request->post('token');
+        if (Yii::$app->session->isActive) {
+            $token = Yii::$app->session->get('usu_token');
+        }
         if ($httpMethod === 'PUT') {
             $url .= '/update';
             $response = $client->createRequest()
