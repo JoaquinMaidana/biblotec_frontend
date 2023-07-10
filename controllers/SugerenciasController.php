@@ -68,10 +68,37 @@ class SugerenciasController extends Controller{
         if ($this->request->post()) {
             $sug_sugerencia = $_POST['sugerencia'];
           //  var_dump(Yii::$app->request->post('sug_sugerencia'), "yii POST", $sug_sugerencia, "Post");exit;
-            $this->saveSug();
+            
         }
         
         return $this->render('crearSugerencia');
+    }
+
+
+    public function actionCreate2(){
+        $url = 'http://152.70.212.112/sugerencias';
+        $client = new Client();
+        //var_dump($httpMethod='post');exit;
+        if (Yii::$app->session->isActive) {      
+            $token = Yii::$app->session->get('usu_token');          
+        }
+
+        $response = $client->createRequest()
+        ->setMethod('post')
+        ->setUrl('http://152.70.212.112/sugerencias')
+        ->send();
+
+        if ($response->isOk) {
+            
+            // Decodificar el contenido JSON en un array asociativo 
+            $data = json_decode($response->getContent(), true);
+            
+            $sugerencias =$data;
+            
+
+        } 
+
+
     }
 
     public function actionNew()
@@ -88,7 +115,28 @@ class SugerenciasController extends Controller{
 
     public function actionView()
     {
-        $sugerencias = $this->findSugerencias();
+
+        if (Yii::$app->session->isActive) {
+           
+            $usu_id =  Yii::$app->session->get('usu_id');
+        }
+        $client = new Client();
+        $response = $client->createRequest()
+            ->setMethod('get')
+            ->setUrl('http://152.70.212.112/sugerencias/obtener-de-usuario?id='.$usu_id)
+            ->send();
+
+        if ($response->isOk) {
+            
+            // Decodificar el contenido JSON en un array asociativo 
+            $data = json_decode($response->getContent(), true);
+            
+            $sugerencias =$data;
+            
+
+        } 
+
+        
 
         return $this->render('misSugerencias', [
             'sugerencias' => json_encode($sugerencias),

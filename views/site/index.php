@@ -480,13 +480,6 @@ var highlightedDates = ['2023-07-10', '2023-07-11', '2023-07-12'];
                      $('#libroId').val(id);
                     $('#modalReserva').modal('show');
                    
-                },
-                
-                error: function(xhr, status, error) {
-                    // Código a ejecutar cuando ocurre un error
-                    $('#libroId').val(id);
-                    $('#modalReserva').modal('show');
-                    console.log('Error:', error);
                 }
             });
       
