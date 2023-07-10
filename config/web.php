@@ -16,6 +16,10 @@ $config = [
             'class' => 'yii\i18n\Formatter',
             'defaultTimeZone' => 'America/Argentina/Buenos_Aires',
         ],
+        'session' => [
+            'class' => 'yii\web\Session',
+            // Configuraciones adicionales de la sesión
+        ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => '5dGvEsmb3Y8oJhxj-JoLiWFrH-roomeS',
@@ -25,7 +29,7 @@ $config = [
         ],
         'user' => [
             'identityClass' => 'app\models\User',
-            'enableAutoLogin' => true,
+            'enableAutoLogin' => false,
             'identityCookie' => [
                 'name' => '_identity',
                 'httpOnly' => true,
@@ -52,14 +56,14 @@ $config = [
             ],
         ],
         'db' => $db,
-        /*
+        
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
             ],
         ],
-        */
+        
         'view' => [
             'class' => 'yii\web\View',
             'renderers' => [
@@ -93,15 +97,16 @@ if (YII_ENV_DEV) {
     //        // ... otros paneles ...
     //    ],
         // uncomment the following to add your IP if you are not connecting from localhost.
-        //'allowedIPs' => ['127.0.0.1', '::1'],
+         'allowedIPs' => [],
+
     ];
 
-    $config['bootstrap'][] = 'gii';
-    $config['modules']['gii'] = [
-        'class' => 'yii\gii\Module',
+ //   $config['bootstrap'][] = 'gii';
+ //   $config['modules']['gii'] = [
+//        'class' => 'yii\gii\Module',
         // uncomment the following to add your IP if you are not connecting from localhost.
         //'allowedIPs' => ['127.0.0.1', '::1'],
-    ];
+ //   ];
 }
 
 return $config;

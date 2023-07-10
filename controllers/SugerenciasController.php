@@ -36,7 +36,7 @@ class SugerenciasController extends Controller{
         $client = new Client();
         $response = $client->createRequest()
             ->setMethod('get')
-            ->setUrl('http://152.70.212.112/sugerencias')
+            ->setUrl('http://152.70.212.112/sugerencias/listado')
             ->send();
 
         if ($response->isOk) {
