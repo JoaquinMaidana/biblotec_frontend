@@ -19,10 +19,10 @@ class LibroController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['create'],
+                'only' => ['create','index'],
                 'rules' => [
                     [
-                        'actions' => ['create'],
+                        'actions' => ['create','index'],
                         'allow' => true,
                         //'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {

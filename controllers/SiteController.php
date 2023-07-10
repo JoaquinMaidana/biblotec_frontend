@@ -215,7 +215,7 @@ class SiteController extends Controller
 
 
             // Renderizar la vista 'index' y ejecutar el script de JavaScript
-            $this->redirect('Index');
+            $this->redirect('index');
         }
 
 

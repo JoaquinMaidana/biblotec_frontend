@@ -147,7 +147,7 @@ if (Yii::$app->session->isActive) {
                     }
                 },
                 {
-                    data: 'sug_usu_id'
+                    data: 'usu_nombre_apellido'
                 },
                 {
                     data: function(data) {

@@ -6,28 +6,57 @@ use Yii;
 use yii\web\Controller;
 use yii\httpclient\Client;
 use yii\helpers\Json;
-
+use yii\filters\AccessControl;
 class UsuarioController extends Controller
 {
+    
+     /**
+     * {@inheritdoc}
+     */
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'only' => ['index'],
+                'rules' => [
+                    [
+                        'actions' => ['index'],
+                        'allow' => true,
+                        'matchCallback' => function ($rule, $action) {
+                            if (true) {
+                                return $this->redirect(['site/index']);
+                            }
+                            return true;
+                        },
+                        //'roles' => ['@'],
+                    ],
+                ],
+            ],
+            
+        ];
+    }
+   
     public function actionIndex()
     {   
-        if (Yii::$app->session->isActive) {      
+        if (Yii::$app->session->isActive && Yii::$app->session->get('usu_tipo_usuario') && Yii::$app->session->get('usu_tipo_usuario')=='Administrador') {      
             $token = Yii::$app->session->get('usu_token');    
                 
+            $client = new Client();
+            $response = $client->createRequest()
+                ->setMethod('get')
+                ->setUrl('http://152.70.212.112/usuarios/listado')
+                ->addHeaders(['Authorization' => 'Bearer ' . $token])
+                ->send();
+
+                $usuarios = json_decode($response->getContent(), true);
+                $usuarios_json = json_encode($usuarios['data']);
+
+                return $this->render('index', [
+                    'usuarios' => $usuarios_json
+                ]);
         }
-        $client = new Client();
-        $response = $client->createRequest()
-            ->setMethod('get')
-            ->setUrl('http://152.70.212.112/usuarios/listado')
-            ->addHeaders(['Authorization' => 'Bearer ' . $token])
-            ->send();
-
-            $usuarios = json_decode($response->getContent(), true);
-            $usuarios_json = json_encode($usuarios['data']);
-
-        return $this->render('index', [
-            'usuarios' => $usuarios_json
-        ]);
+        
     }
 
     public function actionCreate()

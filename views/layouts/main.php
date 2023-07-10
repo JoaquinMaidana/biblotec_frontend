@@ -11,9 +11,11 @@ use app\assets\AppAsset;
 if (Yii::$app->session->getCount() == 1) {
     Yii::$app->session->close();
 }
-
+    
 if (Yii::$app->session->isActive) {
     $isAdmin = Yii::$app->session->get('usu_tipo_usuario');
+}else{
+    $isAdmin=null;
 }
 ?>
 
@@ -149,7 +151,7 @@ if (Yii::$app->session->isActive) {
 
             <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto ms-5">
-                    <?php if (isset($isAdmin) && $isAdmin === 'Administrador') { ?>
+                    <?php if (isset($isAdmin) && $isAdmin === 'Administrador' || $isAdmin === 'Estudiante') { ?>
                         <li class="nav-item active">
                             <a class="nav-link" href="<?= Url::toRoute(['libro/index']); ?>">Libros</a>
                         </li>
@@ -189,13 +191,13 @@ if (Yii::$app->session->isActive) {
                         <li class="nav-item active">
                             <a class="nav-link" href="<?= Url::toRoute(['favoritos/index']); ?>">Libros Favoritos</a>
                         </li>
-
+                        
 
                     <?php } ?>
                 </ul>
                 <ul class="navbar-nav mr-auto">
 
-                    <?php if (Yii::$app->session->isActive) { ?>
+                    <?php if (Yii::$app->session->isActive && Yii::$app->session->get('usu_tipo_usuario')) { ?>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <?= Yii::$app->session->get('usu_nombre') . " " . Yii::$app->session->get('usu_apellido') ?>
@@ -213,6 +215,7 @@ if (Yii::$app->session->isActive) {
                         <li class="nav-item active">
                             <a class="nav-link" href="<?= Url::toRoute(['site/login']); ?>">Iniciar sesión</a>
                         </li>
+                        
                     <?php } ?>
 
                 </ul>

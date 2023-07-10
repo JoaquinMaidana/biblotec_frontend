@@ -9,9 +9,53 @@ use Faker\Provider\DateTime;
 use yii\helpers\Json;
 use yii\web\Controller;
 use yii\httpclient\Client;
-
+use yii\filters\AccessControl;
 class ReservaController extends Controller
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'only' => ['create'],
+                'rules' => [
+                //    [
+                //        'actions' => ['index'],
+                //        'allow' => true,
+                //        //'roles' => ['@'],
+                 //      'matchCallback' => function ($rule, $action) {
+                //            if (!Yii::$app->session->get('usu_tipo_usuario') ) {
+                //                return $this->redirect(['site/index']);
+                 //           }
+                 //           return true;
+                 //       },
+//
+//
+                 //   ],
+                    [
+                        'actions' => ['create'],
+                        'allow' => true,
+                        //'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            if (!Yii::$app->session->get('usu_tipo_usuario') || Yii::$app->session->get('usu_tipo_usuario') != 'Administrador') {
+                                return $this->redirect(['site/index']);
+                            }
+                            return true;
+                        },
+
+
+                    ],
+
+                ],
+            ],
+
+        ];
+    }
+
+
     public function actionIndex()
     {
         if (Yii::$app->session->isActive) {
@@ -84,7 +128,7 @@ class ReservaController extends Controller
 
         $cantidad_reserva = count($reservasFiltradas);
 
-        if($stock == $cantidad_reserva){
+        if( $cantidad_reserva >= $stock){
             
             foreach ($reservasFiltradas as $reserva) {
                 $fechaDesde = strtotime($reserva->resv_fecha_desde);

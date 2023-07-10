@@ -14,7 +14,9 @@ if (isset($libros_Array)) {
     });
 
 }
-
+if (Yii::$app->session->isActive) {
+    $isAdmin = Yii::$app->session->get('usu_tipo_usuario');
+}
 
 if (isset($favoritos) && !empty($favoritos)) {
     $ids = array_column($favoritos, 'id');
@@ -180,15 +182,17 @@ if (isset($favoritos) && !empty($favoritos)) {
                                 </p>
                             </div>
                         </div>
-                        <div class="row mt-2">
-                            <div class="col-auto text-start">
-                                <a class='' id="favorito_<?= $libro['id'] ?>" onclick='agregarFavorito(this.id)'><i
-                                        id="estrella_<?= $libro['id'] ?>"
-                                        class="<?= (isset($favoritos) && !empty($favoritos) && in_array($libro['id'], $ids)) ? 'fa-solid fa-star' : 'fa-regular fa-star' ?>"></i></a>
+                        <?php if(isset($isUser)){ ?>
+                            <div class="row mt-2">
+                                <div class="col-auto text-start">
+                                    <a class='' id="favorito_<?= $libro['id'] ?>" onclick='agregarFavorito(this.id)'><i
+                                            id="estrella_<?= $libro['id'] ?>"
+                                            class="<?= (isset($favoritos) && !empty($favoritos) && in_array($libro['id'], $ids)) ? 'fa-solid fa-star' : 'fa-regular fa-star' ?>"></i></a>
+                                </div>
+
+
                             </div>
-
-
-                        </div>
+                        <?php } ?>
                         <div class="row mt-2">
                             <?php if ($libro['vigencia'] == 'Si') { ?>
                                 <div class="col">                                    
@@ -222,7 +226,7 @@ if (isset($favoritos) && !empty($favoritos)) {
             </div>
 
             <div class="modal-body">
-                <input type="text" id="libroId"></input>
+                <input type="hidden" id="libroId"></input>
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-3">
@@ -476,6 +480,13 @@ var highlightedDates = ['2023-07-10', '2023-07-11', '2023-07-12'];
                      $('#libroId').val(id);
                     $('#modalReserva').modal('show');
                    
+                },
+                
+                error: function(xhr, status, error) {
+                    // Código a ejecutar cuando ocurre un error
+                    $('#libroId').val(id);
+                    $('#modalReserva').modal('show');
+                    console.log('Error:', error);
                 }
             });
       
@@ -506,12 +517,14 @@ var highlightedDates = ['2023-07-10', '2023-07-11', '2023-07-12'];
                         $("#resultado").text("Error en los datos enviados ");
                     }
                     else if (result == 3) {
+                        console.log(result);
+                        console.log("llega por aca por token");
                         $("#resultado").text("Para reservar debe iniciar sesión o registrarse. ");
                     }
                     else {
                         if (result) {
                             let errors = JSON.parse(result);
-
+                            console.log("llega por aca join");
                             // Generar el contenido HTML de los errores con saltos de línea
                             let html = errors.join("<br>");
                             $("#resultado").html(html);
@@ -521,7 +534,14 @@ var highlightedDates = ['2023-07-10', '2023-07-11', '2023-07-12'];
 
                     }
                     $("#modalResultado").modal("show");
+                },
+                error: function(xhr, status, error) {
+                    // Código a ejecutar cuando ocurre un error
+                    $("#resultado").text("Hubo un error");
+                    $("#modalResultado").modal("show");
+                    console.log('Error:', error);
                 }
+                
             });
 
         } else {
