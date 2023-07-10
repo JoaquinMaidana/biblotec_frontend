@@ -73,7 +73,7 @@ use yii\helpers\Html;
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
-                <?= Html::beginForm(['sugerencias/create'], 'post') ?>
+                <?= Html::beginForm(['sugerencias/createe'], 'post') ?>
                 <input type="hidden" name="id" id="idSugerenciaRevisar"></input>
                 <div class="modal-body">
                     <div class="container-fluid">

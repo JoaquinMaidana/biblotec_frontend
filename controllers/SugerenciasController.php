@@ -75,28 +75,28 @@ class SugerenciasController extends Controller{
     }
 
 
-    public function actionCreate2(){
+    public function actionCreatee(){
         $url = 'http://152.70.212.112/sugerencias';
         $client = new Client();
         //var_dump($httpMethod='post');exit;
         if (Yii::$app->session->isActive) {      
-            $token = Yii::$app->session->get('usu_token');          
+            $token = Yii::$app->session->get('usu_token');      
+            $usu_id =  Yii::$app->session->get('usu_id');    
         }
 
         $response = $client->createRequest()
         ->setMethod('post')
-        ->setUrl('http://152.70.212.112/sugerencias')
+        ->setUrl($url)
+        ->addHeaders(['content-type' => 'application/json',
+        'Authorization' => 'Bearer ' . $token])
+        ->setContent(Json::encode([
+            "sug_sugerencia"=>Yii::$app->request->post('sug_sugerencia'),
+            "sug_usu_id" => $usu_id
+          
+        ])) 
         ->send();
 
-        if ($response->isOk) {
-            
-            // Decodificar el contenido JSON en un array asociativo 
-            $data = json_decode($response->getContent(), true);
-            
-            $sugerencias =$data;
-            
-
-        } 
+        $this->redirect('view');
 
 
     }

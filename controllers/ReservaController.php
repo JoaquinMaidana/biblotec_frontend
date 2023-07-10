@@ -257,7 +257,7 @@ class ReservaController extends Controller
                     "resv_fecha_hora" => $currentDateTime,
                     "resv_fecha_desde" => $fecha_desde_convertida,
                     "resv_fecha_hasta" => $fecha_hasta_convertida,
-                    "resv_usu_id" => $usu_id,
+                  
                     "resv_estado" => $estado,
                     "resv_lib_id" => $libro_id
 
