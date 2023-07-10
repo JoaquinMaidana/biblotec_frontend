@@ -24,7 +24,7 @@ class UsuarioController extends Controller
                         'actions' => ['index'],
                         'allow' => true,
                         'matchCallback' => function ($rule, $action) {
-                            if (true) {
+                            if (Yii::$app->session->get('usu_tipo_usuario') != 'Administrador') {
                                 return $this->redirect(['site/index']);
                             }
                             return true;
