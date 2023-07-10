@@ -90,8 +90,9 @@ class SugerenciasController extends Controller{
         ->addHeaders(['content-type' => 'application/json',
         'Authorization' => 'Bearer ' . $token])
         ->setContent(Json::encode([
-            "sug_sugerencia"=>Yii::$app->request->post('sug_sugerencia'),
-            "sug_usu_id" => $usu_id
+            "sug_sugerencia"=>Yii::$app->request->post('sugerencia'),
+            "sug_usu_id" => $usu_id,
+            "sug_nombre_libro" => "-"
           
         ])) 
         ->send();
@@ -131,7 +132,7 @@ class SugerenciasController extends Controller{
             // Decodificar el contenido JSON en un array asociativo 
             $data = json_decode($response->getContent(), true);
             
-            $sugerencias =$data;
+            $sugerencias =$data['sugerencias'];
             
 
         } 

@@ -40,7 +40,7 @@ class ReservaController extends Controller
                         'allow' => true,
                         //'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
-                            if (!Yii::$app->session->get('usu_tipo_usuario') || Yii::$app->session->get('usu_tipo_usuario') != 'Administrador') {
+                            if (!Yii::$app->session->get('usu_tipo_usuario')) {
                                 return $this->redirect(['site/index']);
                             }
                             return true;

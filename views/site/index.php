@@ -505,6 +505,8 @@ var highlightedDates = ['2023-07-10', '2023-07-11', '2023-07-12'];
                     console.log(result);
                     if (result == 1) {
                         $("#resultado").text("Libro reservado con exito.");
+                        $("#modalResultado").modal("show");
+                        console.log(result);
                     }
                     else if (result == 2) {
                         $("#resultado").text("Error en los datos enviados ");
@@ -527,12 +529,6 @@ var highlightedDates = ['2023-07-10', '2023-07-11', '2023-07-12'];
 
                     }
                     $("#modalResultado").modal("show");
-                },
-                error: function(xhr, status, error) {
-                    // Código a ejecutar cuando ocurre un error
-                    $("#resultado").text("Hubo un error");
-                    $("#modalResultado").modal("show");
-                    console.log('Error:', error);
                 }
                 
             });
