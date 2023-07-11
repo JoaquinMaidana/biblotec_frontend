@@ -94,20 +94,22 @@ class FavoritosController extends Controller
 
                 ]))
                 ->send();
+
+                return $this->redirect(['get-favoritos']);
         } else {
             $client = new Client();
             $response = $client->createRequest()
                 ->setMethod('delete')
-                ->setUrl('http://152.70.212.112/favoritos/delete?id=' . $idLibro)
+                ->setUrl('http://152.70.212.112/favoritos/quitar?id=' . $idLibro)
                 ->addHeaders([
                     'content-type' => 'application/json',
                     'Authorization' => 'Bearer ' . $token,
                 ])
                 ->send();
-                var_dump($response->getContent());exit;
+                
         }
 
-        return $this->redirect(['get-favoritos']);
+       
     }
 
     public function actionBaja()

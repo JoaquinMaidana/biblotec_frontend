@@ -83,7 +83,7 @@ class SiteController extends Controller
         $libros = $libroController->runAction('get-libros');
         $categorias = $categoriaController->runAction('get-categorias');
 
-        if (isset($isAdmin) && $isAdmin === 'Administrador') {
+        if (isset($isAdmin) && $isAdmin === 'Administrador' || $isAdmin === 'Estudiante') {
             $favoritosController = new FavoritosController(Yii::$app->id, Yii::$app);
 
             $favoritos = $favoritosController->runAction('get-favoritos');
@@ -306,19 +306,41 @@ class SiteController extends Controller
             if ($response->isOk) {
 
                 $respuesta = json_decode($response->getContent(), true);
-                if ($respuesta['codigo'] == '0') {
+                if($respuesta == null){
+                    $res = $response->getContent();
+                    
 
-                    $this->usuario = $respuesta['data']['datosUsuario'];
-                    $this->token = $respuesta['data']['token'];
-                    return $this->actionLogin();
-                } else {
-                    global $mensaje;
-                    $mensaje = $respuesta['mensaje'];
+                    if(strpos($res, '["usu_mail"]') !== false){
+                        $mensaje = "El correo ya existe";
+                    }
+                    if(strpos($res, '["usu_documento"]') !== false){
+                        $mensaje = "El documento ya existe";
+                    }
+                    if(strpos($res, '["usu_telefono"]') !== false){
+                        $mensaje = "El telefono ya existe";
+                    }
+                   
                 }
+                
+                else{
+                    if ($respuesta['codigo'] == '0') {
+
+                        $this->usuario = $respuesta['data']['datosUsuario'];
+                        $this->token = $respuesta['data']['token'];
+                        return $this->actionLogin();
+                    } else {
+                        global $mensaje;
+                        $mensaje = $respuesta['mensaje'];
+                    }
+                }
+                
             } else {
                 return false;
             }
         }
-        return $this->render('registro');
+        return $this->render('registro', [
+            
+            'mensaje' => $mensaje
+        ]);
     }
 }

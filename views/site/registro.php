@@ -13,11 +13,18 @@ use yii\widgets\ActiveForm;
   }
 </style>
 
-<div class="container-fluid">
+<div class="container-fluid col-7">
 
   <?php ActiveForm::begin(['action' => ['site/registro'], 'options' => ['enctype' => 'multipart/form-data']]); ?>
 
   <div class="row justify-content-center">
+
+  <?php if (isset($mensaje) && !empty($mensaje)) : ?>
+  <div class="alert alert-primary alert-dismissible fade show mb-3 co-3" role="info">
+    <strong>Mensaje</strong> Descripcion: <?php echo $mensaje; ?>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+<?php endif; ?>
     <div class="col-3 text-end">
       <label>Nombre:<span class="text-danger">*<span></label>
     </div>

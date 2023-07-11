@@ -182,7 +182,7 @@ if (isset($favoritos) && !empty($favoritos)) {
                                 </p>
                             </div>
                         </div>
-                        <?php if(isset($isUser)){ ?>
+                        <?php if(isset($isAdmin)){ ?>
                             <div class="row mt-2">
                                 <div class="col-auto text-start">
                                     <a class='' id="favorito_<?= $libro['id'] ?>" onclick='agregarFavorito(this.id)'><i
@@ -565,7 +565,7 @@ var highlightedDates = ['2023-07-10', '2023-07-11', '2023-07-12'];
     function validarDiaSemana(input) {
         var dateValue = new Date(input.value);
         var dayOfWeek = dateValue.getDay();
-        if (dayOfWeek === 0 || dayOfWeek === 5) {
+        if (dayOfWeek === 6 || dayOfWeek === 5) {
             input.value = ''; // Limpiar el valor del campo
             $("#modalReserva").modal("hide");
             $("#advContenido").text("No se puede seleccionar los sabados y domingos")

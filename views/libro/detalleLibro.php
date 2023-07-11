@@ -22,6 +22,10 @@ use yii\helpers\Url;
     p {
         color: white;
     }
+
+    blockquote p{
+        color: black;
+    }
 </style>
 
 <div class="container-fluid">
@@ -181,7 +185,7 @@ use yii\helpers\Url;
             <?php foreach ($comentarios as $comentario) { ?>
                 <div class="row mt-3">
 
-                    <div class="col-12 mb-2">
+                    <div class="col-12 mb-2 ">
                         <?= $this->render('_comentario', array('documento' => $comentario['usu_nombre'],'comentario' => $comentario['comet_comentario'], 'usuario' => $comentario['comet_usu'], 'fecha' => $comentario['comet_fecha_hora'], 'hijos' => $comentario['comentariosHijos'], 'id' => $comentario['comet_id'], 'referencia' => $comentario['comet_referencia_id'], 'padre' => $comentario['comet_padre_id'])); ?>
                     </div>
 

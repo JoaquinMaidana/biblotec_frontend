@@ -5,8 +5,39 @@ use Yii;
 use yii\web\Controller;
 use yii\httpclient\Client;
 use yii\helpers\Json;
-
+use yii\filters\AccessControl;
 class SugerenciasController extends Controller{
+
+
+    /**
+     * {@inheritdoc}
+     */
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'only' => ['index'],
+                'rules' => [
+                    [
+                        'actions' => ['index'],
+                        'allow' => true,
+                        //'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            if (Yii::$app->session->get('usu_tipo_usuario') != 'Administrador') {
+                                return $this->redirect(['site/index']);
+                            }
+                            return true;
+                        },
+
+
+                    ],
+                ],
+            ],
+
+        ];
+    }
+
     
     public function actionIndex()
     { 

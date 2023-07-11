@@ -105,7 +105,7 @@ use yii\widgets\ActiveForm;
         <div class="col">
           <?= Html::dropDownList(
             'categoria',
-            null,
+             $libro['categorias'][0][0]['categoria'] ,
             \yii\helpers\ArrayHelper::map($categorias, 'id', 'nombre'),
             ['id' => 'categoria-dropdown', 'prompt' => 'Seleccione una categoría', 'class' => 'form-control', 'required' => true]
           ) ?>
