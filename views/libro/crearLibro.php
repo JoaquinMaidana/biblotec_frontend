@@ -297,7 +297,7 @@ if (isset($categorias)) {
           <label>Stock:<span class="text-danger">*<span></label>
         </div>
         <div class="col-9">
-          <?= Html::textInput('lib_stock', null, ['class' => 'form-control']) ?>
+          <?= Html::textInput('lib_stock', 1, ['class' => 'form-control']) ?>
         </div>
       </div>
 

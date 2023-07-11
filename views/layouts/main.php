@@ -151,7 +151,7 @@ if (Yii::$app->session->isActive) {
 
             <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto ms-5">
-                    <?php if (isset($isAdmin) && $isAdmin === 'Administrador' || $isAdmin === 'Estudiante') { ?>
+                    <?php if (isset($isAdmin) && $isAdmin === 'Administrador' ) { ?>
                         <li class="nav-item active">
                             <a class="nav-link" href="<?= Url::toRoute(['libro/index']); ?>">Libros</a>
                         </li>
@@ -178,6 +178,9 @@ if (Yii::$app->session->isActive) {
                         </li>
                         <li class="nav-item active">
                             <a class="nav-link" href="<?= Url::toRoute(['subcategoria/index']); ?>">Sub categorias</a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="<?= Url::toRoute(['reporte/index']); ?>">Reportes</a>
                         </li>
                     <?php } else if (isset($isAdmin) && $isAdmin === 'Estudiante') { ?>
                         <li class="nav-item active">

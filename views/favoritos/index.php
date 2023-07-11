@@ -16,6 +16,13 @@ $this->title = 'Mis favoritos';
     .card button {
         width: 100%;
     }
+
+    .highlight {
+        background-color: red !important;
+        ;
+        color: white !important;
+
+    }
 </style>
 
 <div class="container-fluid">
@@ -77,7 +84,7 @@ $this->title = 'Mis favoritos';
                         <div class="row mt-2">
                             <?php if ($libro['vigencia'] == 'Si') { ?>
                                 <div class="col">
-                                <button onclick="$('#modalReserva').modal('show');$('#libroId').val(<?= $libro['id'] ?>)" class="btn btn-primary">Reservar</button>
+                                <button onclick="abrirReserva(<?= $libro['id'] ?>)"  class="btn btn-primary">Reservar</button>
                                 </div>
                             <?php } ?>
                         </div>
@@ -114,7 +121,7 @@ $this->title = 'Mis favoritos';
                             <label>Desde:</label>
                         </div>
                         <div class="col">
-                            <input type="date" id="desde" class="form-control"></input>
+                            <input  id="desde" placeholder="Ingrese la fecha de inicio" class="form-control"></input>
                         </div>
                     </div>
 
@@ -123,7 +130,7 @@ $this->title = 'Mis favoritos';
                             <label>Hasta:</label>
                         </div>
                         <div class="col">
-                            <input type="date" id="hasta" class="form-control"></input>
+                            <input  id="hasta" placeholder="Ingrese la fecha de fin" class="form-control"></input>
                         </div>
                     </div>
                 </div>
@@ -208,6 +215,73 @@ $this->title = 'Mis favoritos';
         });
     }
 
+    var blockedDates = ["2023-07-18","2023-07-19","2023-07-20","2023-07-12","2023-07-13","2023-07-14","2023-07-25","2023-07-26","2023-07-27","2023-07-28"];
+    var highlightedDates = ["2023-07-18","2023-07-19","2023-07-20","2023-07-12","2023-07-13","2023-07-14","2023-07-25","2023-07-26","2023-07-27","2023-07-28"];
+    $(function () {
+        $.datepicker.regional['es'] = {
+        closeText: 'Cerrar',
+        prevText: '< Ant',
+        nextText: 'Sig >',
+        currentText: 'Hoy',
+        monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+        monthNamesShort: ['Ene','Feb','Mar','Abr', 'May','Jun','Jul','Ago','Sep', 'Oct','Nov','Dic'],
+        dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+        dayNamesShort: ['Dom','Lun','Mar','Mié','Juv','Vie','Sáb'],
+        dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sá'],
+        weekHeader: 'Sm',
+        dateFormat: 'yy-mm-dd',
+        firstDay: 1,
+        isRTL: false,
+        showMonthAfterYear: false,
+        yearSuffix: ''
+        };
+        $.datepicker.setDefaults($.datepicker.regional['es']);
+
+        
+
+        $("#desde").datepicker({
+            beforeShowDay: function (date) {
+                var stringDate = $.datepicker.formatDate('yy-mm-dd', date);
+                var day = date.getDay();
+                var isWeekend = (day === 0 || day === 6);
+                //var blockedDates = ['2023-07-10', '2023-07-11', '2023-07-12'];
+               // var highlightedDates = ['2023-07-10', '2023-07-11', '2023-07-12'];
+
+                var isBlocked = (blockedDates.indexOf(stringDate) !== -1);
+                var isHighlighted = (highlightedDates.indexOf(stringDate) !== -1);
+
+                return [
+                    !isBlocked && !isWeekend, // Habilitar o deshabilitar el día
+                    (isHighlighted ? 'highlight' : '') // Clase CSS para días resaltados
+                ];
+            },
+            minDate: new Date()
+            
+            
+        });
+
+        $("#hasta").datepicker({
+            beforeShowDay: function (date) {
+                var stringDate = $.datepicker.formatDate('yy-mm-dd', date);
+                var day = date.getDay();
+                var isWeekend = (day === 0 || day === 6);
+                //var blockedDates = ['2023-07-10', '2023-07-11', '2023-07-12'];
+               // var highlightedDates = ['2023-07-10', '2023-07-11', '2023-07-12'];
+
+                var isBlocked = (blockedDates.indexOf(stringDate) !== -1);
+                var isHighlighted = (highlightedDates.indexOf(stringDate) !== -1);
+
+                return [
+                    !isBlocked && !isWeekend, // Habilitar o deshabilitar el día
+                    (isHighlighted ? 'highlight' : '') // Clase CSS para días resaltados
+                ];
+            },
+            minDate: new Date()
+            
+            
+        });
+    });
+
     function reservarLibro() {
         hoy = Date.now();
 
@@ -254,5 +328,29 @@ $this->title = 'Mis favoritos';
             $("#modalReserva").modal("hide");
             $("#modalAdvertencia").modal("show");
         }
+    }
+
+    function abrirReserva(id){
+        $.ajax({
+                method: "GET",
+                url: "<?= Url::toRoute(['reserva/fechas-bloqueadas']); ?>",
+                data: {
+                    _csrf: "<?= Yii::$app->request->csrfToken; ?>",
+                    id: id 
+                },
+                success: function (result) {
+                    console.log(result)
+                    let fechasBloqueadas = JSON.parse(result);
+
+                     blockedDates = fechasBloqueadas;
+                     highlightedDates = fechasBloqueadas;
+                    
+                     $('#libroId').val(id);
+                    $('#modalReserva').modal('show');
+                   
+                }
+            });
+      
+
     }
 </script>

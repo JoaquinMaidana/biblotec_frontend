@@ -316,8 +316,8 @@ if (isset($favoritos) && !empty($favoritos)) {
 
 <script>
 
-var blockedDates = ['2023-07-10', '2023-07-11', '2023-07-12'];
-var highlightedDates = ['2023-07-10', '2023-07-11', '2023-07-12'];
+var blockedDates = [''];
+var highlightedDates = [''];
     $(function () {
         $.datepicker.regional['es'] = {
         closeText: 'Cerrar',

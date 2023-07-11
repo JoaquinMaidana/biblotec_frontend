@@ -26,6 +26,17 @@ use yii\helpers\Url;
     blockquote p{
         color: black;
     }
+
+    .highlight {
+        background-color: red !important;
+        ;
+        color: white !important;
+
+    }
+
+     .labelReserva{
+        color: black ;
+    }
 </style>
 
 <div class="container-fluid">
@@ -157,7 +168,7 @@ use yii\helpers\Url;
                         <a href="<?= Url::toRoute([$vuelta]); ?>" class="btn btn-primary">Volver</a>
                     </div>
                     <div class="col-auto">
-                         <button onclick="$('#modalReserva').modal('show');$('#libroId').val(<?= $libro['lib_id'] ?>)" class="btn btn-primary">Reservar</button>
+                    <button onclick="abrirReserva(<?= $libro['lib_id'] ?>)"  class="btn btn-primary">Reservar</button>
                     </div>
                 </div>
             </div>
@@ -218,19 +229,19 @@ use yii\helpers\Url;
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-3">
-                            <label>Desde:</label>
+                            <label class="labelReserva">Desde:</label>
                         </div>
                         <div class="col">
-                            <input type="date" id="desde" class="form-control"></input>
+                            <input  id="desde" placeholder="Ingrese la fecha de inicio" class="form-control"></input>
                         </div>
                     </div>
 
                     <div class="row mt-3">
                         <div class="col-3">
-                            <label>Hasta:</label>
+                            <label class="labelReserva">Hasta:</label>
                         </div>
                         <div class="col">
-                            <input type="date" id="hasta" class="form-control"></input>
+                            <input  id="hasta" placeholder="Ingrese la fecha de fin" class="form-control"></input>
                         </div>
                     </div>
                 </div>
@@ -479,6 +490,73 @@ use yii\helpers\Url;
 </script>
 
 <script>
+    var blockedDates = ["2023-07-18","2023-07-19","2023-07-20","2023-07-12","2023-07-13","2023-07-14","2023-07-25","2023-07-26","2023-07-27","2023-07-28"];
+    var highlightedDates = ["2023-07-18","2023-07-19","2023-07-20","2023-07-12","2023-07-13","2023-07-14","2023-07-25","2023-07-26","2023-07-27","2023-07-28"];
+    $(function () {
+        $.datepicker.regional['es'] = {
+        closeText: 'Cerrar',
+        prevText: '< Ant',
+        nextText: 'Sig >',
+        currentText: 'Hoy',
+        monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+        monthNamesShort: ['Ene','Feb','Mar','Abr', 'May','Jun','Jul','Ago','Sep', 'Oct','Nov','Dic'],
+        dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+        dayNamesShort: ['Dom','Lun','Mar','Mié','Juv','Vie','Sáb'],
+        dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sá'],
+        weekHeader: 'Sm',
+        dateFormat: 'yy-mm-dd',
+        firstDay: 1,
+        isRTL: false,
+        showMonthAfterYear: false,
+        yearSuffix: ''
+        };
+        $.datepicker.setDefaults($.datepicker.regional['es']);
+
+        
+
+        $("#desde").datepicker({
+            beforeShowDay: function (date) {
+                var stringDate = $.datepicker.formatDate('yy-mm-dd', date);
+                var day = date.getDay();
+                var isWeekend = (day === 0 || day === 6);
+                //var blockedDates = ['2023-07-10', '2023-07-11', '2023-07-12'];
+               // var highlightedDates = ['2023-07-10', '2023-07-11', '2023-07-12'];
+
+                var isBlocked = (blockedDates.indexOf(stringDate) !== -1);
+                var isHighlighted = (highlightedDates.indexOf(stringDate) !== -1);
+
+                return [
+                    !isBlocked && !isWeekend, // Habilitar o deshabilitar el día
+                    (isHighlighted ? 'highlight' : '') // Clase CSS para días resaltados
+                ];
+            },
+            minDate: new Date()
+            
+            
+        });
+
+        $("#hasta").datepicker({
+            beforeShowDay: function (date) {
+                var stringDate = $.datepicker.formatDate('yy-mm-dd', date);
+                var day = date.getDay();
+                var isWeekend = (day === 0 || day === 6);
+                //var blockedDates = ['2023-07-10', '2023-07-11', '2023-07-12'];
+               // var highlightedDates = ['2023-07-10', '2023-07-11', '2023-07-12'];
+
+                var isBlocked = (blockedDates.indexOf(stringDate) !== -1);
+                var isHighlighted = (highlightedDates.indexOf(stringDate) !== -1);
+
+                return [
+                    !isBlocked && !isWeekend, // Habilitar o deshabilitar el día
+                    (isHighlighted ? 'highlight' : '') // Clase CSS para días resaltados
+                ];
+            },
+            minDate: new Date()
+            
+            
+        });
+    });
+
     let tokenElements = document.querySelectorAll('[name="token"]');
 
     if (tokenElements.length > 0) {
@@ -490,6 +568,30 @@ use yii\helpers\Url;
         } else {
             console.log('El token no está disponible.');
         }
+    }
+
+    function abrirReserva(id){
+        $.ajax({
+                method: "GET",
+                url: "<?= Url::toRoute(['reserva/fechas-bloqueadas']); ?>",
+                data: {
+                    _csrf: "<?= Yii::$app->request->csrfToken; ?>",
+                    id: id 
+                },
+                success: function (result) {
+                    console.log(result)
+                    let fechasBloqueadas = JSON.parse(result);
+
+                     blockedDates = fechasBloqueadas;
+                     highlightedDates = fechasBloqueadas;
+                    
+                     $('#libroId').val(id);
+                    $('#modalReserva').modal('show');
+                   
+                }
+            });
+      
+
     }
 </script>
 
@@ -538,6 +640,17 @@ use yii\helpers\Url;
 
         } else {
             $("#modalReserva").modal("hide");
+            $("#modalAdvertencia").modal("show");
+        }
+    }
+
+    function validarDiaSemana(input) {
+        var dateValue = new Date(input.value);
+        var dayOfWeek = dateValue.getDay();
+        if (dayOfWeek === 6 || dayOfWeek === 5) {
+            input.value = ''; // Limpiar el valor del campo
+            $("#modalReserva").modal("hide");
+            $("#advContenido").text("No se puede seleccionar los sabados y domingos")
             $("#modalAdvertencia").modal("show");
         }
     }

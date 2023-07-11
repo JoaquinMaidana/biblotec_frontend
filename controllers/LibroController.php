@@ -197,7 +197,7 @@ class LibroController extends Controller
                 $libro = [
                     "lib_isbn" => $isbn,
                     "lib_titulo"=> $datoslibro['details']['title'],
-                    "lib_descripcion"=> isset($datoslibro['details']['description']) ? $datoslibro['details']['description'] : '',
+                    "lib_descripcion"=> isset($datoslibro['details']['description']) ? $datoslibro['details']['description'] : '-',
                     "lib_imagen"=> $lib_imagen,
                     "lib_autores"=> $autores_concatenados,
                     "lib_url"=>$datoslibro['info_url'],
@@ -361,7 +361,7 @@ class LibroController extends Controller
     } else {
         $response = $client->createRequest()
         ->setMethod('post')
-        ->setUrl($url.'/create')
+        ->setUrl($url.'create')
         ->addHeaders(['content-type' => 'application/x-www-form-urlencoded'])
         ->setContent(http_build_query([
             "Libro[isbn]" => Yii::$app->request->post('lib_isbn'),
