@@ -179,9 +179,7 @@ if (Yii::$app->session->isActive) {
                         <li class="nav-item active">
                             <a class="nav-link" href="<?= Url::toRoute(['subcategoria/index']); ?>">Sub categorias</a>
                         </li>
-                        <li class="nav-item active">
-                            <a class="nav-link" href="<?= Url::toRoute(['reporte/index']); ?>">Reportes</a>
-                        </li>
+                       
                     <?php } else if (isset($isAdmin) && $isAdmin === 'Estudiante') { ?>
                         <li class="nav-item active">
                             <a class="nav-link" href="<?= Url::toRoute(['reserva/index']); ?>">Mis Reservas</a>

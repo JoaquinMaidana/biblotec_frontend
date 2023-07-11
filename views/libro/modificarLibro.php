@@ -105,7 +105,7 @@ use yii\widgets\ActiveForm;
         <div class="col">
           <?= Html::dropDownList(
             'categoria',
-             $libro['categorias'][0][0]['categoria'] ,
+             $libro['categorias'][0][0]['id'] ,
             \yii\helpers\ArrayHelper::map($categorias, 'id', 'nombre'),
             ['id' => 'categoria-dropdown', 'prompt' => 'Seleccione una categoría', 'class' => 'form-control', 'required' => true]
           ) ?>
@@ -118,7 +118,7 @@ use yii\widgets\ActiveForm;
           <label>Sub Categoría:<span class="text-danger">*<span></label>
         </div>
         <div class="col">
-          <?= Html::dropDownList('sub_categoria',  null, [], ['prompt' => 'Seleccione una subcategoría', 'class' => 'form-control', 'required' => true, 'id' => 'subcategoria']) ?>
+          <?= Html::dropDownList('sub_categoria',   null , [], ['prompt' => 'Seleccione una subcategoría', 'class' => 'form-control', 'required' => true, 'id' => 'subcategoria']) ?>
         </div>
       </div>
 
@@ -223,7 +223,9 @@ use yii\widgets\ActiveForm;
 
     // Evento de cambio de selección de categoría
     categoriaDropdown.addEventListener("change", llenarSubcategorias);
-
+    
     // Llamar a la función para llenar el dropdown por primera vez
     llenarSubcategorias();
+
+    
   </script>
