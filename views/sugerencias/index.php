@@ -48,6 +48,7 @@ if (Yii::$app->session->isActive) {
 
                 <?= Html::beginForm(['sugerencias/update'], 'post') ?>
                 <input type="hidden" name="id" id="idSugerenciaRevisar"></input>
+                
                 <div class="modal-body">
                     <div class="container-fluid">
                         <div class="row justify-content-center">
@@ -157,6 +158,8 @@ if (Yii::$app->session->isActive) {
                 {
                     data: function(data) {
                         if (data.sug_vigente == 'S') {
+                            return "<a class='me-2' onclick='$(`#idSugerenciaRevisar`).val(`" + data.sug_id + "`);$(`#modalRevisarSugerencia`).modal(`show`)'><i class='fa-solid fa-check'></i></a>"
+                        }else{
                             return "<a class='me-2' onclick='$(`#idSugerenciaRevisar`).val(`" + data.sug_id + "`);$(`#modalRevisarSugerencia`).modal(`show`)'><i class='fa-solid fa-check'></i></a>"
                         }
                     }

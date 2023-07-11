@@ -247,7 +247,7 @@ class SugerenciasController extends Controller{
         if ($httpMethod === 'PUT') {
             //var_dump(Yii::$app->request->post('nuevoEstado'),"get",Yii::$app->request->get('sugerencia')['id'] );exit;
             $url .= '/modificar-estado' ;
-            $newEstado = Yii::$app->request->post('nuevo_e');
+            $newEstado = 'N';
             
             //var_dump($url, $newEstado); exit;
             $response = $client->createRequest()
