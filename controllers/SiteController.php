@@ -154,14 +154,16 @@ class SiteController extends Controller
                 }
             }
 
-
+            $token3=$this->token2;
             $session = Yii::$app->session;
             $session->open();
             if (isset($user['usu_id'])) {
                 $session->set('usu_id', $user['usu_id']);
             }
             if (isset($this->usuario)) {
-
+                //registro
+                global $token;
+               
                 $session->set('usu_documento', $user['documento']);
                 $session->set('usu_nombre', $user['nombre']);
                 $session->set('usu_apellido', $user['apellido']);
@@ -169,7 +171,7 @@ class SiteController extends Controller
                 $session->set('usu_clave', $user['clave']);
                 $session->set('usu_telefono', $user['telefono']);
                 $session->set('usu_tipo_usuario', 'Estudiante');
-                $session->set('usu_token', $this->token2);
+                $session->set('usu_token', $this->usuario['token']);
                 $script = <<< JS
                   <script>
                       if (!localStorage.getItem('TokenBibliotec_$user[documento]')) {
@@ -185,7 +187,7 @@ class SiteController extends Controller
                 $session->set('usu_mail', $user['usu_mail']);
                 $session->set('usu_clave', $user['usu_clave']);
                 $session->set('usu_telefono', $user['usu_telefono']);
-                $session->set('usu_token', $this->token2);
+                $session->set('usu_token', $token3);
                 if ($user['usu_tipo_usuario'] == 1) {
                     $session->set('usu_tipo_usuario', 'Administrador');
                 } else {
@@ -327,6 +329,7 @@ class SiteController extends Controller
 
                         $this->usuario = $respuesta['data']['datosUsuario'];
                         $this->token = $respuesta['data']['token'];
+                        $this->usuario['token'] = $respuesta['data']['token'];
                         return $this->actionLogin();
                     } else {
                         global $mensaje;
